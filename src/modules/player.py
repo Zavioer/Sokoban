@@ -4,7 +4,7 @@ from .functions import load_png
 
 class Player(pygame.sprite.Sprite):
     """
-    Class witch represent player. Loads image, and set up instance 
+    Class which represents a player. Loads image and sets up instance
     in coordinate system.
 
     Parameters
@@ -41,7 +41,7 @@ class Player(pygame.sprite.Sprite):
         self.movey = 0
 
     """
-    Change object position in coordinate system to given offset.
+    Changes object position in coordinate system to given offset.
 
     Parameters
     ----------
@@ -55,7 +55,7 @@ class Player(pygame.sprite.Sprite):
             self.direction = 'east'
         elif x < 0:
             self.direction = 'west'
-        
+
         if y > 0:
             self.direction = 'south'
         elif y < 0:
@@ -81,7 +81,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.collidelist(object_list) != -1:
             self.rect.x -= self.movex
             self.rect.y -= self.movey
-            
+
             self.movex = 0
             self.movey = 0
 
