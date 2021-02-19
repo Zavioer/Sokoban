@@ -16,14 +16,14 @@ try:
     from pygame.locals import *
     from src.modules.functions import load_png
 except ImportError:
-    print(f"Could not load module. {ImportError}")
+    print(f"Could not load module: {ImportError}")
     sys.exit(2)
 
-# def set_difficulty(value, difficulty):
-#     # Do the job here!
-#     pass
+def set_difficulty(value, difficulty):
+    #Do the job here!
+      pass
 
-screen = pygame.display.set_mode((500, 500))
+screen = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption('Sokoban Alpha 0')
 pygame.init()
 pygame.font.init()
@@ -32,7 +32,6 @@ myFont = pygame.font.SysFont('Montserrat', 30)
 time = timer.Timer()
 time.start()
 
-
 def start_the_game():
     # Initial sprites groups and map floor
     walls = pygame.sprite.Group()
@@ -40,10 +39,10 @@ def start_the_game():
     box_sprites = pygame.sprite.Group()
     destinations = pygame.sprite.Group()
     background = pygame.Surface(screen.get_size())
-    floor_img = pygame.image.load(os.path.join('src/img/', 'floor.png'))
+    floor_img = pygame.image.load(os.path.join('src/img/', 'Wall_Black.png'))
 
     # Load and place objects on map
-    with open('./src/boards/1.txt', 'r') as fd:
+    with open('./src/boards/5.txt', 'r') as fd:
         board = fd.readlines()
         start_y = 0
 
@@ -52,14 +51,14 @@ def start_the_game():
             for column in rows:
                 background.blit(floor_img, (start_x, start_y))
 
-                if column == '#':
+                if column == 'X':
                     walls.add(wall.Wall(start_x, start_y))
-                elif column == '$':
+                elif column == '@':
                     storekeeper = player.Player(start_x, start_y)
                     storekeepers.add(storekeeper)
-                elif column == '+':
-                    box_sprites.add(box.Box(start_x, start_y))
                 elif column == '*':
+                    box_sprites.add(box.Box(start_x, start_y))
+                elif column == '.':
                     destinations.add(destination.Destination(start_x, start_y))
 
                 start_x += 50
@@ -132,10 +131,11 @@ def start_the_game():
 
 def main():
     # Initialize screen
-    menu = pygame_menu.Menu(500, 500, 'Sokoban', theme = pygame_menu.themes.THEME_BLUE)
+    menu = pygame_menu.Menu(720, 1280, 'SOKOBAN 1.0.0', theme = pygame_menu.themes.THEME_SOLARIZED)
     name = menu.add_text_input('NAME: ', default='')
     menu.add_button('PLAY', start_the_game)
     menu.add_button('QUIT', pygame_menu.events.EXIT)
+    menu.add_button('CHOOSE LEVEL', set_difficulty)
     menu.mainloop(screen)
 
 

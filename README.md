@@ -1,2 +1,2 @@
 # Sokoban
-Motorola Science Cup projekt.
+Motorola Science Cup project.
