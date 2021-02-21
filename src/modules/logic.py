@@ -1,9 +1,12 @@
 import pygame
 import os
-from src.modules import player, wall, box, destination, timer
+from src.modules import player, wall, box, destination, timer, menu
 from pygame.locals import *
 
-
+def set_difficulty(value, difficulty):
+    #Do the job here!
+      pass
+      
 def start_the_game(screen, lvl_name):
     pygame.init()
     my_font = pygame.font.SysFont('Montserrat', 30)
@@ -90,7 +93,7 @@ def start_the_game(screen, lvl_name):
 
         if len(placed_boxes) == destinations_amount:
             print("You won the level!")
-            pygame.quit()
+            menu.draw_menu(screen)
 
         # Updating and drawing sprites groups
         storekeepers.update()
@@ -106,4 +109,3 @@ def start_the_game(screen, lvl_name):
 
         pygame.display.update()
         pygame.display.flip()
-        print(f"Amount of ticks: {pygame.time.get_ticks()}")
