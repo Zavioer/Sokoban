@@ -40,7 +40,9 @@ def start_the_game(screen, lvl_name):
                 start_x += 50
             start_y += 50
 
+    destinations_amount = len(destinations.sprites())
     gamer_timer = pygame.sprite.Group(timer.Timer(my_font, pygame.time.get_ticks()))
+
     # Event loop
     while 1:
         clock.tick(60)
@@ -82,6 +84,13 @@ def start_the_game(screen, lvl_name):
                 destination_sprite.state = 'full'
             else:
                 destination_sprite.state = 'empty'
+
+        # Check if all boxes collide with destinations
+        placed_boxes = pygame.sprite.groupcollide(box_sprites, destinations, False, False)
+
+        if len(placed_boxes) == destinations_amount:
+            print("You won the level!")
+            pygame.quit()
 
         # Updating and drawing sprites groups
         storekeepers.update()
