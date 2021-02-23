@@ -1,0 +1,140 @@
+import pygame
+import os
+from .functions import load_png
+
+
+class Player(pygame.sprite.Sprite):
+    """
+    Class which represents a player. Loads image and sets up instance
+    in coordinate system.
+    """
+    def __init__(self, x, y):
+        """
+        :attributes
+        image: pygame.Image
+            Image that represent player instance.
+        rect: pygame.Rect
+            Pygame Rect class of player instance.
+        direction: string
+            Direction in which player moves. Allowed values(north, east, south,
+            west)
+        box_collision: bool
+            State of checking in player collide with Box instance.
+
+        :param
+        x: int, required
+            Player initial x coordinate.
+        y: int, required
+            Player initial y coordinate.
+        """
+
+        pygame.sprite.Sprite.__init__(self)
+        self.image, self.rect = load_png('player.png')
+        self.rect.x = x
+        self.rect.y = y
+        self.image = pygame.transform.scale(self.image, (50, 50))
+        self.rect.width = 50
+        self.rect.height = 50
+        self.movex = 0
+        self.movey = 0
+        self.direction = 'none'
+        self.box_collision = False
+
+    def update(self):
+        """
+        Method that update player position in every frame.
+        """
+        self.box_collision = False
+
+        self.rect.x += self.movex
+        self.rect.y += self.movey
+
+        self.movex = 0
+        self.movey = 0
+
+    def move(self, x, y):
+        """
+        Changes object position in coordinate system to given offset.
+
+        :param
+        x: int, required
+            Offset to move in x-axis.
+        y: int, required
+            Offset to move in y-axis.
+        """
+        if x > 0:
+            self.direction = 'east'
+        elif x < 0:
+            self.direction = 'west'
+
+        if y > 0:
+            self.direction = 'south'
+        elif y < 0:
+            self.direction = 'north'
+
+        self.change_position(self.direction)
+
+        self.movex += x
+        self.movey += y
+
+    def collision(self, object_list):
+        """
+        Check if next player position will collide with object in list.
+
+        :param
+        object_list: list, required
+            List of objects which probable collision.
+        """
+        self.rect.x += self.movex
+        self.rect.y += self.movey
+
+        if self.rect.collidelist(object_list) != -1:
+            self.rect.x -= self.movex
+            self.rect.y -= self.movey
+
+            self.movex = 0
+            self.movey = 0
+
+        self.rect.x -= self.movex
+        self.rect.y -= self.movey
+
+    def collision_box(self, box):
+        """
+        Check if instance collide with box.
+
+        :param
+        box: pygame.Rect
+            Rectangle that represent Box instance.
+        """
+        self.rect.x += self.movex
+        self.rect.y += self.movey
+
+        if self.rect.colliderect(box):
+            self.box_collision = True
+
+        self.rect.x -= self.movex
+        self.rect.y -= self.movey
+
+    def change_position(self, direction):
+        """
+        Change player's move animation on move.
+
+        :param
+        direction: string, required
+            Direction in which player moves.
+        """
+        if direction == 'north':
+            self.image = pygame.image.load(os.path.join('src/img/', 'player_north.png'))
+            self.image = pygame.transform.scale(self.image, (50, 50))
+        elif direction == 'east':
+            self.image = pygame.image.load(os.path.join('src/img/', 'player_east.png'))
+            self.image = pygame.transform.scale(self.image, (50, 50))
+        elif direction == 'south':
+            self.image = pygame.image.load(os.path.join('src/img/', 'player.png'))
+            self.image = pygame.transform.scale(self.image, (50, 50))
+        elif direction == 'west':
+            self.image = pygame.image.load(os.path.join('src/img/', 'player_west.png'))
+            self.image = pygame.transform.scale(self.image, (50, 50))
+        else:
+            self.image = pygame.image.load(os.path.join('src/img/', 'player.png'))
+            self.image = pygame.transform.scale(self.image, (50, 50))
