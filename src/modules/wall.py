@@ -1,5 +1,6 @@
 import pygame
 from .functions import load_png
+from .settings import *
 
 
 class Wall(pygame.sprite.Sprite):
@@ -16,8 +17,9 @@ class Wall(pygame.sprite.Sprite):
         """
         pygame.sprite.Sprite.__init__(self)
         self.image, self.rect = load_png('CrateDark_Black.png')
-        self.image = pygame.transform.scale(self.image, (50, 50))
+        self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
+        self.rect.width = TILE_WIDTH
+        self.rect.height = TILE_HEIGHT
         self.rect.x = x
         self.rect.y = y
-        self.rect.width = 50
-        self.rect.height = 50
+

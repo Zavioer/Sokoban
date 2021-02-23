@@ -1,6 +1,7 @@
 import pygame
 import os
 from .functions import load_png
+from .settings import *
 
 
 class Player(pygame.sprite.Sprite):
@@ -27,14 +28,13 @@ class Player(pygame.sprite.Sprite):
         y: int, required
             Player initial y coordinate.
         """
-
         pygame.sprite.Sprite.__init__(self)
         self.image, self.rect = load_png('player.png')
+        self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
+        self.rect.width = TILE_WIDTH
+        self.rect.height = TILE_HEIGHT
         self.rect.x = x
         self.rect.y = y
-        self.image = pygame.transform.scale(self.image, (50, 50))
-        self.rect.width = 50
-        self.rect.height = 50
         self.movex = 0
         self.movey = 0
         self.direction = 'none'
@@ -125,16 +125,16 @@ class Player(pygame.sprite.Sprite):
         """
         if direction == 'north':
             self.image = pygame.image.load(os.path.join('src/img/', 'player_north.png'))
-            self.image = pygame.transform.scale(self.image, (50, 50))
+            self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
         elif direction == 'east':
             self.image = pygame.image.load(os.path.join('src/img/', 'player_east.png'))
-            self.image = pygame.transform.scale(self.image, (50, 50))
+            self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
         elif direction == 'south':
             self.image = pygame.image.load(os.path.join('src/img/', 'player.png'))
-            self.image = pygame.transform.scale(self.image, (50, 50))
+            self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
         elif direction == 'west':
             self.image = pygame.image.load(os.path.join('src/img/', 'player_west.png'))
-            self.image = pygame.transform.scale(self.image, (50, 50))
+            self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
         else:
             self.image = pygame.image.load(os.path.join('src/img/', 'player.png'))
-            self.image = pygame.transform.scale(self.image, (50, 50))
+            self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))

@@ -15,7 +15,7 @@ myTheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
 def draw_menu(screen):
     menu = pygame_menu.Menu(720, 1280, 'SOKOBAN 1.0.0', theme=pygame_menu.themes.THEME_SOLARIZED)
     name = menu.add_text_input('NAME: ', default='')
-    menu.add_button('PLAY', logic.start_the_game, screen, '61.txt')
+    menu.add_button('PLAY', logic.start_the_game, screen, '20.txt')
     menu.add_button('QUIT', pygame_menu.events.EXIT)
     menu.add_button('CHOOSE LEVEL', pygame_menu.events.EXIT)
     menu.mainloop(screen)

@@ -1,6 +1,6 @@
 import pygame
 from .functions import load_png
-
+from .settings import *
 
 class Box(pygame.sprite.Sprite):
     """
@@ -38,13 +38,13 @@ class Box(pygame.sprite.Sprite):
         """
         pygame.sprite.Sprite.__init__(self)
         self.image, self.rect = load_png('box.png')
-        self.image = pygame.transform.scale(self.image, (50, 50))
+        self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
+        self.rect.width = TILE_WIDTH
+        self.rect.height = TILE_HEIGHT
         self.rect.x = x
         self.rect.y = y
         self.movex = 0
         self.movey = 0
-        self.rect.height = 50
-        self.rect.width = 50
         self.blocked = False
         self.blocked_direction = 'none'
         self.blocked_by_box = False
@@ -120,12 +120,12 @@ class Box(pygame.sprite.Sprite):
         :return:
         """
         if direction == 'north':
-            self.movey -= 50
+            self.movey -= STOREKEEPER_MOVE
         elif direction == 'south':
-            self.movey += 50
+            self.movey += STOREKEEPER_MOVE
         elif direction == 'east':
-            self.movex += 50
+            self.movex += STOREKEEPER_MOVE
         elif direction == 'west':
-            self.movex -= 50
+            self.movex -= STOREKEEPER_MOVE
 
         self.blocked_direction = direction
