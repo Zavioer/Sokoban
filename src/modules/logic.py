@@ -3,10 +3,7 @@ import os
 from src.modules import player, wall, box, destination, timer, menu
 from pygame.locals import *
 
-def set_difficulty(value, difficulty):
-    #Do the job here!
-      pass
-      
+# FEATURE TO RELEASE -> HOW TO PASS THE MODULE FROM THE LEVELMENU CLASS?
 def start_the_game(screen, lvl_name):
     pygame.init()
     my_font = pygame.font.SysFont('Montserrat', 30)
@@ -17,7 +14,7 @@ def start_the_game(screen, lvl_name):
     box_sprites = pygame.sprite.Group()
     destinations = pygame.sprite.Group()
     background = pygame.Surface(screen.get_size())
-    floor_img = pygame.image.load(os.path.join('src/img/', 'Wall_Black.png'))
+    floor_img = pygame.image.load(os.path.join('src/img/floor', 'floor_2.png'))
     clock = pygame.time.Clock()
 
     # Load and place objects on map
@@ -93,7 +90,7 @@ def start_the_game(screen, lvl_name):
 
         if len(placed_boxes) == destinations_amount:
             print("You won the level!")
-            menu.draw_menu(screen)
+            menu.MainMenu.display_menu()
 
         # Updating and drawing sprites groups
         storekeepers.update()

@@ -4,7 +4,7 @@ from .functions import load_png
 
 class Wall(pygame.sprite.Sprite):
     """
-    Class for warehouse walls which blocks player.
+    Class for warehouse walls that block player.
     """
     def __init__(self, x, y):
         """
@@ -15,7 +15,7 @@ class Wall(pygame.sprite.Sprite):
             Initial value in y-axis.
         """
         pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = load_png('CrateDark_Black.png')
+        self.image, self.rect = load_png('wall/wall.png')
         self.image = pygame.transform.scale(self.image, (50, 50))
         self.rect.x = x
         self.rect.y = y
