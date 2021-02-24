@@ -2,7 +2,7 @@ import pygame, sys
 from src.modules import logic
 
 
-class Menu():
+class Menu:
     """
     Class which represents the menu.
     """
@@ -36,6 +36,7 @@ class Menu():
         self.game.window.blit(self.game.display, (0, 0))
         pygame.display.update()
         self.game.reset_keys()
+
 
 class MainMenu(Menu):
     """
@@ -84,7 +85,7 @@ class MainMenu(Menu):
         """
         if self.game.START_KEY == True:
             if self.state == 'Start':
-                logic.start_the_game(self.game.display, "61.txt")
+                logic.start_the_game(self.game.window, "61.txt")
             if self.state == 'Quit':
                 sys.exit()
         if self.game.DOWN_KEY:

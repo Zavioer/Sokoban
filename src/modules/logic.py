@@ -5,9 +5,7 @@ from pygame.locals import *
 from .settings import *
 
 
-
 # FEATURE TO RELEASE -> HOW TO PASS THE MODULE FROM THE LEVELMENU CLASS?
-
 def start_the_game(screen, lvl_name):
     pygame.init()
     my_font = pygame.font.SysFont('Montserrat', 30)
@@ -84,12 +82,6 @@ def start_the_game(screen, lvl_name):
                     storekeeper.move(-storekeeper.movex, -storekeeper.movey)
 
                 storekeeper.box_collision = False
-
-        for destination_sprite in destinations.sprites():
-            if destination_sprite.collide(boxes.sprites()):
-                destination_sprite.state = 'full'
-            else:
-                destination_sprite.state = 'empty'
 
         # Check if all boxes collide with destinations
         placed_boxes = pygame.sprite.groupcollide(boxes, destinations, False, False)
