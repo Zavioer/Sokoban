@@ -16,10 +16,9 @@ class Wall(pygame.sprite.Sprite):
             Initial value in y-axis.
         """
         pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = load_png('wall/wall.png')
+        self.image, self.rect = load_png('wall/wall2.png')
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
         self.rect.width = TILE_WIDTH
         self.rect.height = TILE_HEIGHT
         self.rect.x = x
         self.rect.y = y
-

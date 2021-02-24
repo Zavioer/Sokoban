@@ -1,11 +1,13 @@
 import pygame
 import os
 from src.modules import player, wall, box, destination, floor, timer, menu, camera
+from .game import *
 from pygame.locals import *
 from .settings import *
 
 
 # FEATURE TO RELEASE -> HOW TO PASS THE MODULE FROM THE LEVELMENU CLASS?
+
 def start_the_game(screen, lvl_name):
     pygame.init()
     my_font = pygame.font.SysFont('Montserrat', 30)
@@ -83,12 +85,19 @@ def start_the_game(screen, lvl_name):
 
                 storekeeper.box_collision = False
 
+        for destination_sprite in destinations.sprites():
+            if destination_sprite.collide(boxes.sprites()):
+                destination_sprite.state = 'full'
+            else:
+                destination_sprite.state = 'empty'
+
         # Check if all boxes collide with destinations
         placed_boxes = pygame.sprite.groupcollide(boxes, destinations, False, False)
 
         if len(placed_boxes) == destinations_amount:
             print("You won the level!")
-            menu.MainMenu.display_menu()
+            self.game.curr_menu = self.game.main_menu
+            self.game.Game.curr_menu.display_menu()
 
         # Updating and drawing sprites groups
         storekeepers.update()

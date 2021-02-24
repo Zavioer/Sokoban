@@ -4,7 +4,9 @@
 # A simple game with realistic physics and AI
 # Released as a part of the Motorola 2020 competition
 
+import sys, random, math, os, getopt, pygame
 from src.modules.game import Game
+from pygame.locals import *
 
 
 def main():
