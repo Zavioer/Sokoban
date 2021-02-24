@@ -5,10 +5,8 @@ from pygame.locals import *
 from .settings import *
 
 
-def set_difficulty(value, difficulty):
-    #Do the job here!
-      pass
 
+# FEATURE TO RELEASE -> HOW TO PASS THE MODULE FROM THE LEVELMENU CLASS?
 
 def start_the_game(screen, lvl_name):
     pygame.init()
@@ -19,6 +17,7 @@ def start_the_game(screen, lvl_name):
     storekeepers = pygame.sprite.Group()
     boxes = pygame.sprite.Group()
     destinations = pygame.sprite.Group()
+
     floors = pygame.sprite.Group()
     clock = pygame.time.Clock()
 
@@ -97,7 +96,7 @@ def start_the_game(screen, lvl_name):
 
         if len(placed_boxes) == destinations_amount:
             print("You won the level!")
-            menu.draw_menu(screen)
+            menu.MainMenu.display_menu()
 
         # Updating and drawing sprites groups
         storekeepers.update()

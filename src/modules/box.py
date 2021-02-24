@@ -37,7 +37,7 @@ class Box(pygame.sprite.Sprite):
             Instance start value of y-axis.
         """
         pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = load_png('box.png')
+        self.image, self.rect = load_png('crate/crate_black_dark.png')
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
         self.rect.width = TILE_WIDTH
         self.rect.height = TILE_HEIGHT

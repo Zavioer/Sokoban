@@ -1,5 +1,4 @@
-import pygame
-import os
+import pygame, os
 from .functions import load_png
 from .settings import *
 
@@ -13,14 +12,14 @@ class Player(pygame.sprite.Sprite):
         """
         :attributes
         image: pygame.Image
-            Image that represent player instance.
+            Image that represents player instance.
         rect: pygame.Rect
             Pygame Rect class of player instance.
         direction: string
             Direction in which player moves. Allowed values(north, east, south,
             west)
         box_collision: bool
-            State of checking in player collide with Box instance.
+            State of checking if player collides with Box instance.
 
         :param
         x: int, required

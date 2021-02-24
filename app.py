@@ -4,19 +4,18 @@
 # A simple game with realistic physics and AI
 # Released as a part of the Motorola 2020 competition
 
-
-import pygame
-from src.modules import menu
-from src.modules.settings import *
+import sys, random, math, os, getopt, pygame
+from src.modules.game import Game
+from pygame.locals import *
+# from src.modules import logic, menu
+# from src.modules.functions import load_png
 
 
 def main():
-    # Initialization
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption('Sokoban Alpha 0')
-
-    pygame.init()
-    menu.draw_menu(screen)
+    game = Game()
+    while game.running:
+        game.curr_menu.display_menu()
+        game.game_loop()
 
 
 if __name__ == '__main__':
