@@ -1,8 +1,9 @@
-import pygame, sys
+import sys
+import pygame
 from src.modules import logic
 
 
-class Menu():
+class Menu:
     """
     Class which represents the menu.
     """
@@ -36,6 +37,7 @@ class Menu():
         self.game.window.blit(self.game.display, (0, 0))
         pygame.display.update()
         self.game.reset_keys()
+
 
 class MainMenu(Menu):
     """
@@ -85,7 +87,7 @@ class MainMenu(Menu):
         """
         if self.game.START_KEY == True:
             if self.state == 'Start':
-                logic.start_the_game(self.game.window, "61.txt")
+                logic.start_the_game(self.game.window, "61.txt", self.game)
             if self.state == 'Quit':
                 sys.exit()
         if self.game.DOWN_KEY:
@@ -139,6 +141,7 @@ class MainMenu(Menu):
             elif self.state == 'Quit':
                 pass
             self.run_display = False
+
 
 class LevelMenu(Menu):
     """
@@ -224,6 +227,7 @@ class LevelMenu(Menu):
                 self.pointer_rect.midtop = (self.secondx + self.offset, self.secondy)
                 self.state = 'Two'
 
+
 class CreditsMenu(Menu):
     """
     Class which represents the credits menu, inheriting from the Menu class.
@@ -269,6 +273,7 @@ class CreditsMenu(Menu):
 
             self.blit_screen()
 
+
 class InstructionsMenu(Menu):
     """
     Class which represents the instructions menu, inheriting from the Menu class.
@@ -306,6 +311,7 @@ class InstructionsMenu(Menu):
             self.game.draw_text('IN ORDER TO MOVE YOUR STOREKEEPER', 55, self.textx + 150, self.texty, self.game.WHITE, self.game.font_name)
 
             self.blit_screen()
+
 
 class LegendMenu(Menu):
     """

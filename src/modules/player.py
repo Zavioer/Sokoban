@@ -1,4 +1,5 @@
-import pygame, os
+import os
+import pygame
 from .functions import load_png
 from .settings import *
 

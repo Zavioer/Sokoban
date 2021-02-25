@@ -2,6 +2,7 @@ import pygame
 from .functions import load_png
 from .settings import *
 
+
 class Box(pygame.sprite.Sprite):
     """
     A box that will move across the screen moved by a warehouse worker.
@@ -129,3 +130,62 @@ class Box(pygame.sprite.Sprite):
             self.movex -= STOREKEEPER_MOVE
 
         self.blocked_direction = direction
+
+
+class Wall(pygame.sprite.Sprite):
+    """
+    Class for warehouse walls that block player.
+    """
+    def __init__(self, x, y):
+        """
+        :param
+        x: int
+            Initial value in x-axis.
+        y: int
+            Initial value in y-axis.
+        """
+        pygame.sprite.Sprite.__init__(self)
+        self.image, self.rect = load_png('wall/wall2.png')
+        self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
+        self.rect.width = TILE_WIDTH
+        self.rect.height = TILE_HEIGHT
+        self.rect.x = x
+        self.rect.y = y
+
+
+class Floor(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image, self.rect = load_png('floor/floor_2.png')
+        self.rect.x = x
+        self.rect.y = y
+        self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
+        self.rect.width = TILE_WIDTH
+        self.rect.height = TILE_HEIGHT
+
+
+class Destination(pygame.sprite.Sprite):
+    """
+    Target for box instances
+    """
+    def __init__(self, x, y):
+        """
+        :attributes
+        state: string
+            Tells if the box is inside instance or not.
+
+        :param
+        x: int
+            Initial value in x-axis.
+        y: int
+            Initial value in y-axis.
+        """
+        pygame.sprite.Sprite.__init__(self)
+        self.image, self.rect = load_png('floor/destination2.png')
+        self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
+        self.rect.width = TILE_WIDTH
+        self.rect.height = TILE_HEIGHT
+        self.rect.x = x
+        self.rect.y = y
+
+
