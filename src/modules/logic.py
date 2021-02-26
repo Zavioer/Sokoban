@@ -2,13 +2,12 @@ import pygame
 import os
 from pygame.locals import *
 from .blocks import Floor, Box, Destination, Wall
-from .camera import Camera
 from .player import Player
 from .hud import HUD
 from .hud import Timer
 from .game import *
 from .settings import *
-from src.modules import menu
+
 
 def start_the_game(screen, lvl_name, game):
     my_font = pygame.font.SysFont('Montserrat', 30)
@@ -49,8 +48,6 @@ def start_the_game(screen, lvl_name, game):
     gamer_timer = Timer(pygame.time.get_ticks(), my_font)
     hud = HUD(gamer_timer)
     all_sprites = pygame.sprite.Group(floors, walls, destinations, boxes, storekeepers)
-    player_camera = Camera(1080, 720)
-
 
     # Event loop
     while 1:
@@ -96,11 +93,11 @@ def start_the_game(screen, lvl_name, game):
             # Correct needed stuck in lvl game
             game.curr_menu = game.main_menu
             game.curr_menu.display_menu()
+            break
 
         # Updating and drawing sprites groups
         storekeepers.update()
         boxes.update()
-        player_camera.update(storekeeper)
 
         screen.fill(BLACK)
 
