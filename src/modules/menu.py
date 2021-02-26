@@ -1,6 +1,6 @@
 import sys
 import pygame
-from src.modules import logic
+from src.modules import logic, menu
 
 
 class Menu:
@@ -61,6 +61,7 @@ class MainMenu(Menu):
         self.creditsx, self.creditsy = self.mid_w, self.mid_h + 200
         self.quitx, self.quity = self.mid_w, self.mid_h + 280
         self.pointer_rect.midtop = (self.startx + self.offset, self.starty)
+        self.module = 0
 
     def display_menu(self):
         """
@@ -87,7 +88,18 @@ class MainMenu(Menu):
         """
         if self.game.START_KEY == True:
             if self.state == 'Start':
-                logic.start_the_game(self.game.window, "61.txt", self.game)
+                if self.module == 0 and self.state == 'Start':
+                    self.state = 'Level'
+                elif module == 1:
+                    pass
+                    # TODO: CHOOSE LEVEL: e/m/h
+                elif module == 2:
+                    self.level = 0
+                    while self.level <= 20:
+                        self.level += 1
+                        start_the_game(screen, str(self.level) + ".txt", game)
+                # elif module == 3:
+                    # TODO: Function that creates a map.
             if self.state == 'Quit':
                 sys.exit()
         if self.game.DOWN_KEY:
@@ -135,7 +147,6 @@ class MainMenu(Menu):
                 self.game.curr_menu = self.game.level
             elif self.state == 'Instructions':
                 self.game.curr_menu = self.game.instructions
-                pass
             elif self.state == 'Credits':
                 self.game.curr_menu = self.game.credits
             elif self.state == 'Quit':
@@ -167,7 +178,7 @@ class LevelMenu(Menu):
         self.secondx, self.secondy = self.mid_w, self.mid_h + 100
         self.thirdx, self.thirdy = self.mid_w, self.mid_h + 200
         self.pointer_rect.midtop = (self.firstx + self.offset, self.firsty)
-        self.level = ''
+        self.module = 0
 
     def display_menu(self):
         """
@@ -198,10 +209,10 @@ class LevelMenu(Menu):
             self.game.curr_menu = self.game.main_menu
             self.run_display = False
         if self.game.START_KEY == True:
-            self.level = self.state
             self.game.curr_menu = self.game.main_menu
             self.run_display = False
-
+            MainMenu.module = self.module
+            print(MainMenu.module)
     def move_pointer(self):
         """
         Method that includes pointer's movement logic. Moreover, it includes an end event handler.
@@ -210,23 +221,28 @@ class LevelMenu(Menu):
             if self.state == 'One':
                 self.pointer_rect.midtop = (self.secondx + self.offset, self.secondy)
                 self.state = 'Two'
+                self.module = 2
             elif self.state == 'Two':
                 self.pointer_rect.midtop = (self.thirdx + self.offset, self.thirdy)
                 self.state = 'Three'
+                self.module = 3
             elif self.state == 'Three':
                 self.pointer_rect.midtop = (self.firstx + self.offset, self.firsty)
                 self.state = 'One'
+                self.module = 1
         elif self.game.UP_KEY:
             if self.state == 'One':
                 self.pointer_rect.midtop = (self.thirdx + self.offset, self.thirdy)
                 self.state = 'Three'
+                self.module = 3
             if self.state == 'Two':
                 self.pointer_rect.midtop = (self.firstx + self.offset, self.firsty)
                 self.state = 'One'
+                self.module = 1
             if self.state == 'Three':
                 self.pointer_rect.midtop = (self.secondx + self.offset, self.secondy)
                 self.state = 'Two'
-
+                self.module = 2
 
 class CreditsMenu(Menu):
     """

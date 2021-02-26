@@ -8,7 +8,7 @@ from .hud import HUD
 from .hud import Timer
 from .game import *
 from .settings import *
-
+from src.modules import menu
 
 def start_the_game(screen, lvl_name, game):
     my_font = pygame.font.SysFont('Montserrat', 30)
