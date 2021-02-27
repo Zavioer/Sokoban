@@ -4,7 +4,14 @@ from .settings import *
 
 
 class HUD(pygame.sprite.Sprite):
+    """
+    Class for HUD which displays information about current game.
+    """
     def __init__(self, timer):
+        """
+        :param timer: Timer
+            Timer object for time handling.
+        """
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((HUD_SIZE, WIDTH))
         self.image.fill(RED)

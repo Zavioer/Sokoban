@@ -1,5 +1,6 @@
 import pygame
 import os
+import shelve
 from pygame.locals import *
 from .blocks import Floor, Box, Destination, Wall
 from .player import Player
@@ -31,14 +32,14 @@ def start_the_game(screen, lvl_name, game):
             for column in rows:
                 floors.add(Floor(start_x, start_y))
 
-                if column == 'X':
+                if column == WALL_CHAR:
                     walls.add(Wall(start_x, start_y))
-                elif column == '@':
+                elif column == STOREKEEPER_CHAR:
                     storekeeper = Player(start_x, start_y)
                     storekeepers.add(storekeeper)
-                elif column == '*':
+                elif column == BOX_CHAR:
                     boxes.add(Box(start_x, start_y))
-                elif column == '.':
+                elif column == DESTINATION_CHAR:
                     destinations.add(Destination(start_x, start_y))
 
                 start_x += TILE_WIDTH
@@ -47,7 +48,7 @@ def start_the_game(screen, lvl_name, game):
     destinations_amount = len(destinations.sprites())
     gamer_timer = Timer(pygame.time.get_ticks(), my_font)
     hud = HUD(gamer_timer)
-    all_sprites = pygame.sprite.Group(floors, walls, destinations, boxes, storekeepers)
+    all_sprites = pygame.sprite.Group(walls, destinations, boxes, storekeepers)
 
     # Event loop
     while 1:
@@ -65,6 +66,8 @@ def start_the_game(screen, lvl_name, game):
                     storekeeper.move(-STOREKEEPER_MOVE, 0)
                 elif event.key == K_d:
                     storekeeper.move(STOREKEEPER_MOVE, 0)
+                elif event.key == K_g:
+                    save_board(22, 11, all_sprites, gamer_timer.passed_time)
 
         storekeeper.collision(walls.sprites())
 
@@ -101,6 +104,7 @@ def start_the_game(screen, lvl_name, game):
 
         screen.fill(BLACK)
 
+        floors.draw(screen)
         all_sprites.draw(screen)
         hud.display_timer(pygame.time.get_ticks())
         hud.display_lvl(lvl_name)
@@ -108,3 +112,41 @@ def start_the_game(screen, lvl_name, game):
 
         pygame.display.update()
         pygame.display.flip()
+
+
+def save_board(width, height, sprites, time, player_name, lvl_name):
+    """
+    Function for saving current playing lvl and additional information in to
+    shelve file.
+
+    :param width: int
+        Current map width.
+    :param height: int
+        Current map height.
+    :param sprites: pygame.sprite.Group
+        Group of all sprites in level.
+    :param time:
+        Time passed from beginning.
+    :param player_name: str
+        Current playing player name.
+    :param lvl_name: str
+
+
+    :return:
+        None
+    """
+    empty_board = []
+
+    for h in range(height):
+        empty_board.append([' '] * width)
+
+    for sprite in sprites:
+        empty_board[int(sprite.rect.y / TILE_HEIGHT)][int(sprite.rect.x / TILE_WIDTH)] = sprite.char
+
+    shel_file = shelve.open(os.path.join('./src/saves', 'test'))
+    shel_file['mainBoardVar'] = empty_board
+    shel_file['timeVar'] = time
+    shel_file.close()
+
+
+

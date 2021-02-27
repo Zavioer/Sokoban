@@ -49,6 +49,7 @@ class Box(pygame.sprite.Sprite):
         self.blocked = False
         self.blocked_direction = 'none'
         self.blocked_by_box = False
+        self.char = BOX_CHAR
 
     def update(self):
         """
@@ -151,6 +152,7 @@ class Wall(pygame.sprite.Sprite):
         self.rect.height = TILE_HEIGHT
         self.rect.x = x
         self.rect.y = y
+        self.char = WALL_CHAR
 
 
 class Floor(pygame.sprite.Sprite):
@@ -162,6 +164,7 @@ class Floor(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
         self.rect.width = TILE_WIDTH
         self.rect.height = TILE_HEIGHT
+        self.char = FLOOR_CHAR
 
 
 class Destination(pygame.sprite.Sprite):
@@ -187,5 +190,6 @@ class Destination(pygame.sprite.Sprite):
         self.rect.height = TILE_HEIGHT
         self.rect.x = x
         self.rect.y = y
+        self.char = DESTINATION_CHAR
 
 

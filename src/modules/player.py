@@ -39,6 +39,7 @@ class Player(pygame.sprite.Sprite):
         self.movey = 0
         self.direction = 'none'
         self.box_collision = False
+        self.char = STOREKEEPER_CHAR
 
     def update(self):
         """
