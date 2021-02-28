@@ -150,8 +150,6 @@ def save_board(width, height, sprites, time, player_name, lvl_name):
     shel_file.close()
 
 
-
-
 def create_map():
     pass
 

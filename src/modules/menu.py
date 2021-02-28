@@ -2,6 +2,7 @@ import pygame
 from src.modules import logic
 from random import randrange
 
+
 class Menu:
     """
     Class which represents the menu.
@@ -191,22 +192,21 @@ class LevelMenu(Menu):
             self.game.curr_menu = self.game.main_menu
             self.run_display = False
         if self.game.START_KEY:
-            self.game.curr_menu = self.game.main_menu
+            if self.state == 'One':
+                self.game.curr_menu = self.game.diff_menu
+            elif self.state == 'Two':
+                logic.start_the_game(self.game.window, str(self.game.gameLevel) + ".txt", self.game)
+            elif self.state == 'Three':
+                # logic.create_map()
+                pass
+            else:
+                self.game.curr_menu = self.game.main_menu
             self.run_display = False
 
     def move_pointer(self):
         """
         Method that includes pointer's movement logic. Moreover, it includes an end event handler.
         """
-        if self.game.START_KEY:
-            if self.state == 'One':
-                self.game.curr_menu = self.game.diff_menu
-                self.game.curr_menu.display_menu()
-            elif self.state == 'Two':
-                logic.start_the_game(self.game.window, str(self.game.gameLevel) + ".txt", self.game)
-            elif self.state == 'Three':
-                logic.create_map()
-
         if self.game.DOWN_KEY:
             if self.state == 'One':
                 self.pointer_rect.midtop = (self.secondx + self.offset, self.secondy)
@@ -361,6 +361,7 @@ class LegendMenu(Menu):
             self.game.draw_text('WE WISH YOU GOOD LUCK!', 45, self.textx, self.texty + 500, self.game.WHITE, self.game.font_name)
 
             self.blit_screen()
+
 
 class DiffMenu(Menu):
     """
