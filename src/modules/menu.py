@@ -1,6 +1,6 @@
 import pygame
 from src.modules import logic
-
+from random import randrange
 
 class Menu:
     """
@@ -160,6 +160,7 @@ class LevelMenu(Menu):
         self.secondx, self.secondy = self.mid_w, self.mid_h + 100
         self.thirdx, self.thirdy = self.mid_w, self.mid_h + 200
         self.pointer_rect.midtop = (self.firstx + self.offset, self.firsty)
+        self.level = 1
 
     def display_menu(self):
         """
@@ -192,8 +193,6 @@ class LevelMenu(Menu):
         if self.game.START_KEY:
             self.game.curr_menu = self.game.main_menu
             self.run_display = False
-            MainMenu.module = self.module
-            print(MainMenu.module)
 
     def move_pointer(self):
         """
@@ -201,13 +200,12 @@ class LevelMenu(Menu):
         """
         if self.game.START_KEY:
             if self.state == 'One':
-                pass
+                self.game.curr_menu = self.game.diff_menu
+                self.game.curr_menu.display_menu()
             elif self.state == 'Two':
-                level = 1
-
-                logic.start_the_game(self.game.window, str(level) + ".txt", self.game)
+                logic.start_the_game(self.game.window, str(self.game.gameLevel) + ".txt", self.game)
             elif self.state == 'Three':
-                pass
+                logic.create_map()
 
         if self.game.DOWN_KEY:
             if self.state == 'One':
@@ -363,3 +361,98 @@ class LegendMenu(Menu):
             self.game.draw_text('WE WISH YOU GOOD LUCK!', 45, self.textx, self.texty + 500, self.game.WHITE, self.game.font_name)
 
             self.blit_screen()
+
+class DiffMenu(Menu):
+    """
+    Class which represents the diffMenu, inheriting from the Menu class.
+    """
+    def __init__(self, game):
+        """
+        :attributes
+        titlex, easyx, mediumx, hardx - Buttons initial x coordinates.
+        titley, easy, mediumy, hardy - Buttons initial y coordinates.
+
+        :param
+        game: class, required
+            Game class
+        """
+        Menu.__init__(self, game)
+        self.titlex, self.titley = self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200
+        self.easyx, self.easyy = self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2
+        self.mediumx, self.mediumy = self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 100
+        self.hardx, self.hardy = self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 200
+        self.pointer_rect.midtop = (self.easyx + self.offset, self.easyy)
+        self.state = 'Easy'
+
+    def display_menu(self):
+        """
+        Method that displays the menu. It prints 4 buttons thanks to the draw_text() method.
+        It also blits the screen every single frame.
+        """
+        self.run_display = True
+        while self.run_display:
+            self.game.check_events()
+            self.check_input()
+            if self.game.START_KEY or self.game.BACK_KEY or self.game.ESC_PRESSED:
+                self.game.curr_menu = self.game.main_menu
+                self.run_display = False
+            self.game.display.fill((0, 0, 0))
+            self.game.draw_text('SELECT YOUR DIFFICULTY', 85, self.titlex, self.titley, self.game.WHITE, self.game.font_name)
+            self.game.draw_text('EASY', 80, self.easyx, self.easyy, self.game.WHITE, self.game.font_name)
+            self.game.draw_text('MEDIUM', 80, self.mediumx, self.mediumy, self.game.WHITE, self.game.font_name)
+            self.game.draw_text('HARD', 80, self.hardx, self.hardy, self.game.WHITE, self.game.font_name)
+            self.draw_pointer()
+            self.blit_screen()
+
+    def check_input(self):
+        """
+        Method that handles changing the currently displayed menu.
+        """
+        self.move_pointer()
+        if self.game.BACK_KEY:
+            self.game.curr_menu = self.game.main_menu
+            self.run_display = False
+        if self.game.ESC_PRESSED:
+            self.game.curr_menu = self.game.main_menu
+            self.run_display = False
+        if self.game.START_KEY:
+            self.game.curr_menu = self.game.main_menu
+            self.run_display = False
+
+    def move_pointer(self):
+        """
+        Method that includes pointer's movement logic. Moreover, it includes an end event handler.
+        """
+        if self.game.START_KEY:
+            if self.state == 'Easy':
+                logic.start_the_game(self.game.window, str(randrange(1, 20)) + ".txt", self.game)
+            elif self.state == 'Medium':
+                logic.start_the_game(self.game.window, str(randrange(21, 40)) + ".txt", self.game)
+            else:
+                logic.start_the_game(self.game.window, str(randrange(41, 60)) + ".txt", self.game)
+
+        if self.game.DOWN_KEY:
+            if self.state == 'Easy':
+                self.pointer_rect.midtop = (self.mediumx + self.offset, self.mediumy)
+                self.state = 'Medium'
+
+            elif self.state == 'Medium':
+                self.pointer_rect.midtop = (self.hardx + self.offset, self.hardy)
+                self.state = 'Hard'
+
+            elif self.state == 'Hard':
+                self.pointer_rect.midtop = (self.easyx + self.offset, self.easyy)
+                self.state = 'Easy'
+
+        elif self.game.UP_KEY:
+            if self.state == 'Easy':
+                self.pointer_rect.midtop = (self.hardx + self.offset, self.hardy)
+                self.state = 'Hard'
+
+            if self.state == 'Medium':
+                self.pointer_rect.midtop = (self.easyx + self.offset, self.easyy)
+                self.state = 'Easy'
+
+            if self.state == 'Hard':
+                self.pointer_rect.midtop = (self.mediumx + self.offset, self.mediumy)
+                self.state = 'Medium'
