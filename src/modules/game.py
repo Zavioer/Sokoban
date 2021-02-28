@@ -13,6 +13,7 @@ class Game:
         self.font_title = "src/fonts/Future TimeSplitters.otf"
         self.font_name = "src/fonts/gomarice_no_continue.ttf"
         self.main_menu = MainMenu(self)
+        self.diff_menu = DiffMenu(self)
         self.level = LevelMenu(self)
         self.legend_menu = LegendMenu(self)
         self.instructions = InstructionsMenu(self)
@@ -20,6 +21,7 @@ class Game:
         self.curr_menu = self.main_menu
         self.ESC_PRESSED = False
         self.BLACK, self.WHITE, self.RED = BLACK, WHITE, RED
+        self.gameLevel = 1
 
     def game_loop(self):
         while self.playing:

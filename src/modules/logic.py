@@ -8,7 +8,7 @@ from .hud import HUD
 from .hud import Timer
 from .game import *
 from .settings import *
-
+from src.modules import menu
 
 def start_the_game(screen, lvl_name, game):
     my_font = pygame.font.SysFont('Montserrat', 30)
@@ -96,6 +96,7 @@ def start_the_game(screen, lvl_name, game):
             # Correct needed stuck in lvl game
             game.curr_menu = game.main_menu
             game.curr_menu.display_menu()
+            game.gameLevel += 1
             break
 
         # Updating and drawing sprites groups
@@ -149,4 +150,8 @@ def save_board(width, height, sprites, time, player_name, lvl_name):
     shel_file.close()
 
 
+
+
+def create_map():
+    pass
 
