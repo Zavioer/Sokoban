@@ -19,7 +19,7 @@ class Player(pygame.sprite.Sprite):
         direction: string
             Direction in which player moves. Allowed values(north, east, south,
             west)
-        box_collision: bool
+        boxCollision: bool
             State of checking if player collides with Box instance.
 
         :param
@@ -35,23 +35,23 @@ class Player(pygame.sprite.Sprite):
         self.rect.height = TILE_HEIGHT
         self.rect.x = x
         self.rect.y = y
-        self.movex = 0
-        self.movey = 0
+        self.moveX = 0
+        self.moveY = 0
         self.direction = 'none'
-        self.box_collision = False
+        self.boxCollision = False
         self.char = STOREKEEPER_CHAR
 
     def update(self):
         """
         Method that update player position in every frame.
         """
-        self.box_collision = False
+        self.boxCollision = False
 
-        self.rect.x += self.movex
-        self.rect.y += self.movey
+        self.rect.x += self.moveX
+        self.rect.y += self.moveY
 
-        self.movex = 0
-        self.movey = 0
+        self.moveX = 0
+        self.moveY = 0
 
     def move(self, x, y):
         """
@@ -75,8 +75,8 @@ class Player(pygame.sprite.Sprite):
 
         self.change_position(self.direction)
 
-        self.movex += x
-        self.movey += y
+        self.moveX += x
+        self.moveY += y
 
     def collision(self, object_list):
         """
@@ -86,18 +86,18 @@ class Player(pygame.sprite.Sprite):
         object_list: list, required
             List of objects which probable collision.
         """
-        self.rect.x += self.movex
-        self.rect.y += self.movey
+        self.rect.x += self.moveX
+        self.rect.y += self.moveY
 
         if self.rect.collidelist(object_list) != -1:
-            self.rect.x -= self.movex
-            self.rect.y -= self.movey
+            self.rect.x -= self.moveX
+            self.rect.y -= self.moveY
 
-            self.movex = 0
-            self.movey = 0
+            self.moveX = 0
+            self.moveY = 0
 
-        self.rect.x -= self.movex
-        self.rect.y -= self.movey
+        self.rect.x -= self.moveX
+        self.rect.y -= self.moveY
 
     def collision_box(self, box):
         """
@@ -107,14 +107,14 @@ class Player(pygame.sprite.Sprite):
         box: pygame.Rect
             Rectangle that represent Box instance.
         """
-        self.rect.x += self.movex
-        self.rect.y += self.movey
+        self.rect.x += self.moveX
+        self.rect.y += self.moveY
 
         if self.rect.colliderect(box):
-            self.box_collision = True
+            self.boxCollision = True
 
-        self.rect.x -= self.movex
-        self.rect.y -= self.movey
+        self.rect.x -= self.moveX
+        self.rect.y -= self.moveY
 
     def change_position(self, direction):
         """

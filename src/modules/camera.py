@@ -9,7 +9,7 @@ class Camera:
         self.height = height
 
     def apply(self, target):
-        return target.rect.move(self.camera.topleft)
+        return target.rect.move(self.camera.topLeft)
 
     def update(self, target):
         x = -target.rect.x + int(WIDTH / 2)

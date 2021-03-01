@@ -15,10 +15,10 @@ class Box(pygame.sprite.Sprite):
         rect: pygame.Rect
             Instance of pygame.Rect object.
 
-        movex: int
+        moveX: int
             Placeholder for x-axis offset to move object in update() method.
 
-        movey: int
+        moveY: int
             Placeholder for y-axis offset to move object in update() method.
 
         blocked: bool
@@ -44,22 +44,22 @@ class Box(pygame.sprite.Sprite):
         self.rect.height = TILE_HEIGHT
         self.rect.x = x
         self.rect.y = y
-        self.movex = 0
-        self.movey = 0
+        self.moveX = 0
+        self.moveY = 0
         self.blocked = False
-        self.blocked_direction = 'none'
-        self.blocked_by_box = False
+        self.blockedDirection = 'none'
+        self.blockedByBox = False
         self.char = BOX_CHAR
 
     def update(self):
         """
         Change box position in every frame.
         """
-        self.rect.x += self.movex
-        self.rect.y += self.movey
+        self.rect.x += self.moveX
+        self.rect.y += self.moveY
 
-        self.movex = 0
-        self.movey = 0
+        self.moveX = 0
+        self.moveY = 0
 
     def collision_wall(self, object_list):
         """
@@ -71,21 +71,21 @@ class Box(pygame.sprite.Sprite):
 
         :return:
         """
-        self.rect.x += self.movex
-        self.rect.y += self.movey
+        self.rect.x += self.moveX
+        self.rect.y += self.moveY
 
         if self.rect.collidelist(object_list) != -1:
-            self.rect.x -= self.movex
-            self.rect.y -= self.movey
+            self.rect.x -= self.moveX
+            self.rect.y -= self.moveY
 
-            self.movex = 0
-            self.movey = 0
+            self.moveX = 0
+            self.moveY = 0
             self.blocked = True
         else:
-            self.blocked_direction = 'none'
+            self.blockedDirection = 'none'
 
-        self.rect.x -= self.movex
-        self.rect.y -= self.movey
+        self.rect.x -= self.moveX
+        self.rect.y -= self.moveY
 
     def collision_box(self, group_box):
         """
@@ -97,18 +97,18 @@ class Box(pygame.sprite.Sprite):
 
         :return:
         """
-        self.rect.x += self.movex
-        self.rect.y += self.movey
+        self.rect.x += self.moveX
+        self.rect.y += self.moveY
 
         if self.rect.collidelist(group_box) != -1:
-            self.rect.x -= self.movex
-            self.rect.y -= self.movey
-            self.movex = 0
-            self.movey = 0
-            self.blocked_by_box = True
+            self.rect.x -= self.moveX
+            self.rect.y -= self.moveY
+            self.moveX = 0
+            self.moveY = 0
+            self.blockedByBox = True
 
-        self.rect.x -= self.movex
-        self.rect.y -= self.movey
+        self.rect.x -= self.moveX
+        self.rect.y -= self.moveY
 
     def move(self, direction):
         """
@@ -122,15 +122,15 @@ class Box(pygame.sprite.Sprite):
         :return:
         """
         if direction == 'north':
-            self.movey -= STOREKEEPER_MOVE
+            self.moveY -= STOREKEEPER_MOVE
         elif direction == 'south':
-            self.movey += STOREKEEPER_MOVE
+            self.moveY += STOREKEEPER_MOVE
         elif direction == 'east':
-            self.movex += STOREKEEPER_MOVE
+            self.moveX += STOREKEEPER_MOVE
         elif direction == 'west':
-            self.movex -= STOREKEEPER_MOVE
+            self.moveX -= STOREKEEPER_MOVE
 
-        self.blocked_direction = direction
+        self.blockedDirection = direction
 
 
 class Wall(pygame.sprite.Sprite):
@@ -191,5 +191,3 @@ class Destination(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.char = DESTINATION_CHAR
-
-
