@@ -10,6 +10,7 @@ from .game import *
 from .settings import *
 from src.modules import menu
 
+
 def start_the_game(screen, lvl_name, game):
     my_font = pygame.font.SysFont('Montserrat', 30)
 
@@ -150,6 +151,24 @@ def save_board(width, height, sprites, time, player_name, lvl_name):
     shel_file.close()
 
 
-def create_map():
-    pass
+def create_map(screen, player_name):
+    canvas = pygame.Surface((400, 400))
 
+    canvas.fill(RED)
+
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            return
+        elif event.type == KEYDOWN:
+            pass
+
+    for x in range(0, 400, 20):
+        pygame.draw.line(canvas, WHITE, (x, 0), (x, 400))
+
+    for y in range(0, 400, 20):
+        pygame.draw.line(canvas, WHITE, (0, y), (400, y))
+
+    while True:
+        screen.blit(canvas, (200, 200))
+        pygame.display.update()
+        pygame.display.flip()
