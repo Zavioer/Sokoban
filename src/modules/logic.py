@@ -6,6 +6,9 @@ from .blocks import Floor, Box, Destination, Wall
 from .player import Player
 from .hud import HUD
 from .hud import Timer
+from .creator import Tile
+from .creator import Mouse
+from .creator import Board
 from .game import *
 from .settings import *
 from src.modules import menu
@@ -153,14 +156,13 @@ def save_board(width, height, sprites, time, player_name, lvl_name):
 
 def create_map(screen, player_name):
     canvas = pygame.Surface((400, 400))
-
     canvas.fill(RED)
+    clock = pygame.time.Clock()
 
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            return
-        elif event.type == KEYDOWN:
-            pass
+    mouse = Mouse()
+    mouseGrup = pygame.sprite.GroupSingle(mouse)
+    allTiles = pygame.sprite.Group()
+    playerBoard = Board(20, 20)
 
     for x in range(0, 400, 20):
         pygame.draw.line(canvas, WHITE, (x, 0), (x, 400))
@@ -168,7 +170,33 @@ def create_map(screen, player_name):
     for y in range(0, 400, 20):
         pygame.draw.line(canvas, WHITE, (0, y), (400, y))
 
+    for x in range(0, 400, 20):
+        for y in range(0, 400, 20):
+            allTiles.add(Tile(x, y))
+
+    playerBoard.empty_map()
     while True:
-        screen.blit(canvas, (200, 200))
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                return
+            elif event.type == MOUSEBUTTONDOWN:
+                for sprite in pygame.sprite.spritecollide(mouseGrup.sprite, allTiles, False):
+                    print(f'Collision with rect position ({sprite.rect.x}, {sprite.rect.y})')
+                    sprite.change_color(BLUE)
+                    playerBoard.place_tile(int(sprite.rect.x / 20), int(sprite.rect.y / 20),
+                                            mouse.get_tile())
+                playerBoard.draw_map()
+            elif event.type == KEYDOWN and event.key == K_s:
+                playerBoard.save_board()
+
+        mouseGrup.update()
+
+
+        screen.blit(canvas, (0, 0))
+        allTiles.update()
+        allTiles.draw(canvas)
+        mouseGrup.draw(canvas)
+
         pygame.display.update()
         pygame.display.flip()
