@@ -9,6 +9,7 @@ from .hud import Timer
 from .creator import Tile
 from .creator import Mouse
 from .creator import Board
+from .creator import Toolbox
 from .game import *
 from .settings import *
 from src.modules import menu
@@ -155,48 +156,75 @@ def save_board(width, height, sprites, time, player_name, lvl_name):
 
 
 def create_map(screen, player_name):
-    canvas = pygame.Surface((400, 400))
+    canvas = pygame.Surface((BOARD_WIDTH, BOARD_HEIGHT))
     canvas.fill(RED)
+    canvasCenter = canvas.get_rect(center=((screen.get_width() - TOOLBOX_WIDTH) / 2,
+                                           screen.get_height() / 2))
     clock = pygame.time.Clock()
 
     mouse = Mouse()
     mouseGrup = pygame.sprite.GroupSingle(mouse)
     allTiles = pygame.sprite.Group()
-    playerBoard = Board(20, 20)
+    playerBoard = Board(30, 20)
+    toolbox = Toolbox(TOOLBOX_WIDTH, HEIGHT)
 
-    for x in range(0, 400, 20):
-        pygame.draw.line(canvas, WHITE, (x, 0), (x, 400))
+    for x in range(0, BOARD_WIDTH, BLOCK_SIZE):
+        pygame.draw.line(canvas, WHITE, (x, 0), (x, BOARD_WIDTH))
 
-    for y in range(0, 400, 20):
-        pygame.draw.line(canvas, WHITE, (0, y), (400, y))
+    for y in range(0, BOARD_HEIGHT, BLOCK_SIZE):
+        pygame.draw.line(canvas, WHITE, (0, y), (BOARD_WIDTH, y))
 
-    for x in range(0, 400, 20):
-        for y in range(0, 400, 20):
+    for x in range(0, BOARD_WIDTH, BLOCK_SIZE):
+        for y in range(0, BOARD_HEIGHT, BLOCK_SIZE):
             allTiles.add(Tile(x, y))
 
+    toolbox.add_button('Wall', WALL_CHAR, BLUE)
+    toolbox.add_button('Player', STOREKEEPER_CHAR, RED)
+    toolbox.add_button('Box', BOX_CHAR, WHITE)
+    toolbox.add_button('Destination', DESTINATION_CHAR, BLACK)
+    toolbox.place_buttons()
+
+    screen.fill(BLACK)
     playerBoard.empty_map()
+
     while True:
         clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == QUIT:
                 return
             elif event.type == MOUSEBUTTONDOWN:
-                for sprite in pygame.sprite.spritecollide(mouseGrup.sprite, allTiles, False):
-                    print(f'Collision with rect position ({sprite.rect.x}, {sprite.rect.y})')
-                    sprite.change_color(BLUE)
-                    playerBoard.place_tile(int(sprite.rect.x / 20), int(sprite.rect.y / 20),
-                                            mouse.get_tile())
-                playerBoard.draw_map()
+                for sprite in allTiles:
+                    mousex, mousey = pygame.mouse.get_pos()
+                    x, y = canvasCenter.topleft
+                    print(f'{x} <> {y}')
+                    mousex -= x
+                    mousey -= y
+                    if sprite.rect.collidepoint(mousex, mousey):
+                        mouse.currColor = mouse.currColor
+                        sprite.change_color(mouse.currColor)
+                        playerBoard.place_tile(int(sprite.rect.x / BLOCK_SIZE),
+                                                   int(sprite.rect.y / BLOCK_SIZE),
+                                                   mouse.get_tile())
+
+                for button in toolbox.buttonsSprites:
+                    mousex, mousey = pygame.mouse.get_pos()
+                    mousex -= (WIDTH - TOOLBOX_WIDTH)
+                    print(mousex)
+                    if button.rect.collidepoint(mousex, mousey):
+                        mouseGrup.sprite.currColor = button.color
+                        mouseGrup.sprite.currBlock = button.attribute
+
+                        print(f'Current color {mouseGrup.sprite.currColor} '
+                              f'Current attribute {mouseGrup.sprite.currBlock}')
             elif event.type == KEYDOWN and event.key == K_s:
                 playerBoard.save_board()
 
         mouseGrup.update()
 
-
-        screen.blit(canvas, (0, 0))
+        screen.blit(canvas, canvasCenter)
         allTiles.update()
         allTiles.draw(canvas)
-        mouseGrup.draw(canvas)
-
+        mouseGrup.draw(screen)
+        screen.blit(toolbox.image, (WIDTH - 200, 0))
         pygame.display.update()
         pygame.display.flip()
