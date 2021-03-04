@@ -39,11 +39,14 @@ class HUD(pygame.sprite.Sprite):
         text = font.render(f'Points: {passedPoints}', 1, WHITE)
         pointsPosition = text.get_rect(y = 75, centerx= self.image.get_width() / 2)
         self.image.blit(text, pointsPosition)
-        
+
     def display_playerName(self, passedName):
         font = pygame.font.Font(None, 30)
         text = font.render(f'Nick: {passedName}', 1, WHITE)
+        
         playerNamePosition = text.get_rect(y = 100, centerx=self.image.get_width() / 2)
+
+        self.image.blit(text, playerNamePosition)
 
 class Timer(pygame.sprite.Sprite):
     """

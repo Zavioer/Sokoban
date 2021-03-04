@@ -52,11 +52,11 @@ def start_the_game(screen, lvlName, game, points):
     # Event loop
     while 1:
         clock.tick(FPS)
-
+        game.check_events()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                game.check_events()
                 game.playing = False
+                game.check_events()
                 pygame.display.update()
                 game.levelMenu.monitCheckInput()
                 game.display.fill((0, 0, 0))
@@ -121,7 +121,7 @@ def start_the_game(screen, lvlName, game, points):
         hud.display_timer(pygame.time.get_ticks())
         hud.display_lvl(lvlName)
         hud.display_points(points)
-        # hud.display_playerName(playerName)
+        hud.display_playerName(game.playerName)
         screen.blit(hud.image, hud.rect)
 
         pygame.display.update()

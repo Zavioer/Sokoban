@@ -38,7 +38,7 @@ class Box(pygame.sprite.Sprite):
             Instance start value of y-axis.
         """
         pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = load_png('crate/crate_black_dark.png')
+        self.image, self.rect = load_png('crate/crate_yellow_dark.png')
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
         self.rect.width = TILE_WIDTH
         self.rect.height = TILE_HEIGHT
@@ -146,7 +146,7 @@ class Wall(pygame.sprite.Sprite):
             Initial value in y-axis.
         """
         pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = load_png('wall/wall2.png')
+        self.image, self.rect = load_png('wall/wall.png')
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
         self.rect.width = TILE_WIDTH
         self.rect.height = TILE_HEIGHT
@@ -158,7 +158,7 @@ class Wall(pygame.sprite.Sprite):
 class Floor(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = load_png('floor/floor_2.png')
+        self.image, self.rect = load_png('floor/floor_0.png')
         self.rect.x = x
         self.rect.y = y
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
@@ -184,7 +184,7 @@ class Destination(pygame.sprite.Sprite):
             Initial value in y-axis.
         """
         pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = load_png('floor/destination2.png')
+        self.image, self.rect = load_png('floor/destination0.png')
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
         self.rect.width = TILE_WIDTH
         self.rect.height = TILE_HEIGHT

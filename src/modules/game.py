@@ -5,13 +5,24 @@ from .settings import *
 class Game:
     def __init__(self):
         pygame.init()
-        self.running, self.playing = True, False
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.RIGHT_KEY, self.LEFT_KEY = False, False, False, False, False, False
+        self.running = True
+        self.playing = False
+        self.UP_KEY = False
+        self.DOWN_KEY = False
+        self.START_KEY = False
+        self.BACK_KEY = False
+        self.ESC_PRESSED = False
+        self.RIGHT_KEY = False
+        self.LEFT_KEY = False
+        self.S_KEY = False
+        self.W_KEY = False
+
         self.display = pygame.Surface((WIDTH, HEIGHT))
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
         self.fontTitle = 'src/fonts/Future TimeSplitters.otf'
         self.fontName = 'src/fonts/gomarice_no_continue.ttf'
         self.mainMenu = MainMenu(self)
+        self.inputMenu = InputName(self)
         self.diffMenu = DiffMenu(self)
         self.levelMenu = LevelMenu(self)
         self.legendMenu = LegendMenu(self)
@@ -22,7 +33,8 @@ class Game:
         self.BLACK, self.WHITE, self.RED = BLACK, WHITE, RED
         self.gameLevel = 1
         self.gamePoints = 0
-        
+        self.playerName = ''
+
     def game_loop(self):
         while self.playing:
             self.check_events()
@@ -52,9 +64,21 @@ class Game:
                     self.RIGHT_KEY = True
                 if event.key == pygame.K_LEFT:
                     self.LEFT_KEY = True
+                if event.key == pygame.K_s:
+                    self.S_KEY = True
+                if event.key == pygame.K_w:
+                    self.W_KEY = True
 
     def reset_keys(self):
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_PRESSED, self.RIGHT_KEY, self.LEFT_KEY = False, False, False, False, False, False, False
+        self.UP_KEY = False
+        self.DOWN_KEY = False
+        self.START_KEY = False
+        self.BACK_KEY = False
+        self.ESC_PRESSED = False
+        self.RIGHT_KEY = False
+        self.LEFT_KEY = False
+        self.S_KEY = False
+        self.W_KEY = False
 
     def draw_text(self, text, size, x, y, color, fontName):
         font = pygame.font.Font(fontName, size)
