@@ -1,3 +1,4 @@
+import time
 import pygame
 from src.modules import logic, functions
 from random import randrange
@@ -23,14 +24,14 @@ class Menu:
         self.runDisplay = True
         self.pointerRect = pygame.Rect(0, 0, 20, 20)
         self.offset = -100
+        self.storekeeperImg = pygame.image.load('./src/img/player.png')
+        self.storekeeperImg = pygame.transform.scale(self.storekeeperImg, (70, 70))
 
     def draw_pointer(self):
         """
         Method that draws the pointer on the display.
         """
-        storekeeperImg = pygame.image.load('./src/img/player.png')
-        storekeeperImg = pygame.transform.scale(storekeeperImg, (70, 70))
-        self.game.display.blit(storekeeperImg, (self.pointerRect.x - 200, self.pointerRect.y - 30))
+        self.game.display.blit(self.storekeeperImg, (self.pointerRect.x - 200, self.pointerRect.y - 30))
 
     def blit_screen(self):
         """
@@ -39,6 +40,7 @@ class Menu:
         self.game.window.blit(self.game.display, (0, 0))
         pygame.display.update()
         self.game.reset_keys()
+
 
 class MainMenu(Menu):
     """
@@ -452,7 +454,7 @@ class DiffMenu(Menu):
                 self.game.currentMenu = self.game.mainMenu
                 self.runDisplay = False
 
-            self.game.display.fill((0, 0, 0))
+            self.game.display.fill(BLACK)
             self.game.draw_text('SELECT YOUR DIFFICULTY', 85, self.diffTitleX, self.diffTitleY, self.game.WHITE, self.game.fontName)
             self.game.draw_text('EASY', 80, self.easyX, self.easyY, self.game.WHITE, self.game.fontName)
             self.game.draw_text('MEDIUM', 80, self.mediumX, self.mediumY, self.game.WHITE, self.game.fontName)
@@ -482,10 +484,14 @@ class DiffMenu(Menu):
         """
         if self.game.START_KEY:
             if self.state == 'Easy':
-                logic.start_the_game(self.game.window, str(randrange(1, 20)) + ".txt", self.game, self.game.gamePoints)
+                self.game.running = False
+                self.runDisplay = False
+                logic.start_the_game(self.game.window,  "19.txt", self.game, self.game.gamePoints)
             elif self.state == 'Medium':
+                self.game.running = False
                 logic.start_the_game(self.game.window, str(randrange(21, 40)) + ".txt", self.game, self.game.gamePoints)
             else:
+                self.game.running = False
                 logic.start_the_game(self.game.window, str(randrange(41, 60)) + ".txt", self.game, self.game.gamePoints)
 
         if self.game.DOWN_KEY:
@@ -514,6 +520,7 @@ class DiffMenu(Menu):
                 self.pointerRect.midtop = (self.mediumX + self.offset, self.mediumY)
                 self.state = 'Medium'
 
+
 class InputName(Menu):
     def __init__(self, game):
         """
@@ -535,42 +542,54 @@ class InputName(Menu):
         if len(self.game.playerName) > 0 and self.game.START_KEY:
             self.runDisplay = False
             self.game.currentMenu = self.game.levelMenu
+            self.game.running = True
             self.game.currentMenu.display_menu()
 
         elif self.game.ESC_PRESSED:
             self.game.playerName = ''
             self.runDisplay = False
             self.game.currentMenu = self.game.mainMenu
+            self.game.running = True
             self.game.currentMenu.display_menu()
 
     def input_name(self):
+        self.game.running = False
         event = pygame.event.poll()
         keys = pygame.key.get_pressed()
 
         if event.type == pygame.KEYDOWN:
             key = pygame.key.name(event.key)  # Returns string id of pressed key.
+
             if len(key) == 1:  # This covers all letters and numbers not on numpad.
                 if (keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]) and len(self.game.playerName) < 25:
                     self.game.playerName += key.upper()
                 elif len(self.game.playerName) < 25:
                     self.game.playerName += key
-
-            elif key == "backspace":
+            elif key == 'backspace':
                 self.game.playerName = self.game.playerName[:len(self.game.playerName) - 1]
+            elif key == 'return':
+                self.game.START_KEY = True
+            elif key == 'escape':
+                self.game.ESC_PRESSED = True
 
-        self.game.draw_text(self.game.playerName, 60, self.inputNameX, self.inputNameY + 300, self.game.RED, self.game.fontName)
-        self.game.draw_text('Chars used: ' + str(len(self.game.playerName)), 30, self.inputNameX, self.inputNameY + 400, self.game.WHITE, self.game.fontName)
+        self.game.draw_text(self.game.playerName, 60, self.inputNameX, self.inputNameY + 300, self.game.RED,
+                            self.game.fontName)
+        self.game.draw_text('Chars used: ' + str(len(self.game.playerName)), 30, self.inputNameX, self.inputNameY + 400,
+                            self.game.WHITE, self.game.fontName)
 
     def display_menu(self):
         """
         Method that displays the menu. It prints 7 buttons thanks to the draw_text() method.
         It also blits the screen every single frame.
         """
-        self.game.check_events()
-        self.check_input()
-        self.game.display.fill((0, 0, 0))
-        self.game.draw_text('TYPE IN YOUR NICKNAME [25]', 95, self.inputNameX, self.inputNameY + 100, self.game.WHITE, self.game.fontName)
-        self.game.draw_text('AND PRESS ENTER TO CONFIRM', 70, self.inputNameX, self.inputNameY + 200, self.game.WHITE, self.game.fontName)
+        self.runDisplay = True
 
-        self.input_name()
-        self.blit_screen()
+        while self.runDisplay:
+            self.game.display.fill(BLACK)
+            self.game.draw_text('TYPE IN YOUR NICKNAME [25]', 95, self.inputNameX, self.inputNameY + 100, self.game.WHITE,
+                                self.game.fontName)
+            self.game.draw_text('AND PRESS ENTER TO CONFIRM', 70, self.inputNameX, self.inputNameY + 200, self.game.WHITE,
+                                self.game.fontName)
+            self.input_name()
+            self.check_input()
+            self.blit_screen()

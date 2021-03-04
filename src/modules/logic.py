@@ -50,9 +50,9 @@ def start_the_game(screen, lvlName, game, points):
     allSprites = pygame.sprite.Group(walls, destinations, boxes, storekeepers)
 
     # Event loop
-    while 1:
+    while True:
         clock.tick(FPS)
-        game.check_events()
+        # game.check_events()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game.playing = False

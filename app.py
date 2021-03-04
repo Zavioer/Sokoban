@@ -12,7 +12,6 @@ def main():
     game = Game()
     while game.running:
         game.currentMenu.display_menu()
-        game.game_loop()
 
 
 if __name__ == '__main__':
