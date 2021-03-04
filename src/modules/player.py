@@ -29,7 +29,8 @@ class Player(pygame.sprite.Sprite):
             Player initial y coordinate.
         """
         pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = load_png('player.png')
+        self.image = STOREKEEPER_IMG.convert_alpha()
+        self.rect = self.image.get_rect()
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
         self.rect.width = TILE_WIDTH
         self.rect.height = TILE_HEIGHT

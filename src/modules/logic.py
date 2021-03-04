@@ -1,5 +1,6 @@
 import pygame
 import os
+import time
 import shelve
 from pygame.locals import *
 from .blocks import Floor, Box, Destination, Wall
@@ -10,8 +11,15 @@ from .settings import *
 from src.modules import menu
 
 def start_the_game(screen, lvlName, game, points):
+    start = time.time()
     myFont = pygame.font.SysFont('Montserrat', 30)
 
+    # Map center
+    w = 28 * TILE_WIDTH
+    h = 20 * TILE_HEIGHT
+    canvas = pygame.Surface((w, h))
+    canvasPos = canvas.get_rect(center=((WIDTH - HUD_SIZE) / 2,
+                                        HEIGHT / 2))
     # Initial sprites groups and map floor
     walls = pygame.sprite.Group()
     storekeepers = pygame.sprite.Group()
@@ -23,24 +31,27 @@ def start_the_game(screen, lvlName, game, points):
 
     # Load and place objects on the map
     with open(os.path.join('./src/boards/', lvlName), 'r') as fd:
-        board = fd.readlines()
         startY = 0
 
-        for rows in board:
+        for rows in fd:
             startX = 0
             for column in rows:
-                floors.add(Floor(startX, startY))
+                # floors.add(Floor(startX, startY))
 
                 if column == WALL_CHAR:
                     walls.add(Wall(startX, startY))
                 elif column == STOREKEEPER_CHAR:
                     storekeeper = Player(startX, startY)
                     storekeepers.add(storekeeper)
+                    floors.add(Floor(startX, startY))
                 elif column == BOX_CHAR:
                     boxes.add(Box(startX, startY))
+                    floors.add(Floor(startX, startY))
                 elif column == DESTINATION_CHAR:
                     destinations.add(Destination(startX, startY))
-
+                    floors.add(Floor(startX, startY))
+                elif column == 'a':
+                    floors.add(Floor(startX, startY))
                 startX += TILE_WIDTH
             startY += TILE_HEIGHT
 
@@ -49,6 +60,8 @@ def start_the_game(screen, lvlName, game, points):
     hud = HUD(gamerTimer)
     allSprites = pygame.sprite.Group(walls, destinations, boxes, storekeepers)
 
+    end = time.time()
+    print(f'Set up total time: {end - start}')
     # Event loop
     while True:
         clock.tick(FPS)
@@ -115,15 +128,16 @@ def start_the_game(screen, lvlName, game, points):
         boxes.update()
 
         screen.fill(BLACK)
+        canvas.fill(RED)
 
-        floors.draw(screen)
-        allSprites.draw(screen)
+        allSprites.draw(canvas)
         hud.display_timer(pygame.time.get_ticks())
         hud.display_lvl(lvlName)
         hud.display_points(points)
         hud.display_playerName(game.playerName)
         screen.blit(hud.image, hud.rect)
 
+        screen.blit(canvas, canvasPos)
         pygame.display.update()
         pygame.display.flip()
 
@@ -165,3 +179,11 @@ def saveBoard(width, height, sprites, time, playerName, lvlName):
 
 def createMap():
     pass
+
+
+def tester(screen, window):
+    screen.fill(RED)
+    while 1:
+        window.blit(screen, (0, 0))
+        pygame.display.update()
+        pygame.display.flip()

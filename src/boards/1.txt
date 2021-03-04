@@ -1,4 +1,4 @@
-    XXXXXXXXXXXXXXXXXXXXXXXX*
+    XXXXXXXXXXXXXXXXXXXX
     X   X
     X*  X
   XXX  *XXX
@@ -9,12 +9,3 @@ X      *          * .  X
 XXXXX XXXX X@      *.  X
     X      XXXXXXXXXXXXX
     XXXXXXXX
-    X
-    X
-    X
-    X
-    X
-    X
-    X
-    X
-    *
