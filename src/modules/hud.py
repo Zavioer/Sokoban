@@ -31,7 +31,6 @@ class HUD(pygame.sprite.Sprite):
         self.image.fill(RED)
         self.timer.set_position(self.image.get_width() / 2, self.padding * 2)
         self.timer.update(passedTicks)
-
         self.image.blit(self.timer.image, self.timer.rect)
 
     def display_points(self, passedPoints):
@@ -43,7 +42,7 @@ class HUD(pygame.sprite.Sprite):
     def display_playerName(self, passedName):
         font = pygame.font.Font(None, 30)
         text = font.render(f'Nick: {passedName}', 1, WHITE)
-        
+
         playerNamePosition = text.get_rect(y = 100, centerx=self.image.get_width() / 2)
 
         self.image.blit(text, playerNamePosition)
@@ -62,6 +61,19 @@ class Timer(pygame.sprite.Sprite):
 
     def update(self, ticks):
         self.passedTime = math.ceil((ticks - self.start) / 1000)
+        minutes = int(self.passedTime / 60)
+        seconds = int(self.passedTime % 60)
+        if minutes < 10:
+            minutes = "0" + str(minutes)
+        elif minutes > 60:
+            hours = int(self.passedTime / 3600)
+            if hours < 10:
+                hours = "0" + str(hours)
+            self.passedTime = str(hours) + ":" + str(minutes) + ":" + str(seconds)
+        if seconds < 10:
+            seconds = "0" + str(seconds)
+        self.passedTime = str(minutes) + ":" + str(seconds)
+
         self.image = self.fontName.render(f'Time: {self.passedTime}', 1, WHITE)
         self.rect = self.image.get_rect()
         self.rect.centerx = self.x

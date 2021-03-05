@@ -16,6 +16,7 @@ class Game:
         self.LEFT_KEY = False
         self.S_KEY = False
         self.W_KEY = False
+        self.logicState = True
 
         self.display = pygame.Surface((WIDTH, HEIGHT))
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -25,6 +26,7 @@ class Game:
         self.mainMenu = MainMenu(self)
         self.inputMenu = InputName(self)
         self.diffMenu = DiffMenu(self)
+        self.rankMenu = RankMenu(self)
         self.levelMenu = LevelMenu(self)
         self.legendMenu = LegendMenu(self)
         self.instructionsMenu = InstructionsMenu(self)
@@ -79,4 +81,3 @@ class Game:
         textRect = textSurface.get_rect()
         textRect.center = (x, y)
         self.display.blit(textSurface, textRect)
-

@@ -12,6 +12,7 @@ from src.modules import menu
 
 
 def start_the_game(screen, lvlName, game, points):
+
     start = time.time()
     myFont = pygame.font.SysFont('Montserrat', 30)
 
@@ -65,23 +66,13 @@ def start_the_game(screen, lvlName, game, points):
     end = time.time()
     print(f'Set up total time: {end - start}')
     # Event loop
-    while True:
+
+    while game.logicState == True:
         clock.tick(FPS)
         # game.check_events()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                game.playing = False
-                game.check_events()
-                pygame.display.update()
-                game.levelMenu.monitCheckInput()
-                game.display.fill(BLACK)
-                game.draw_text('DO YOU WANT TO QUIT AND SAVE YOUR SCORE?', 85, midWidth, midHeight - 200, game.WHITE, game.fontName)
-                game.draw_text('YES', 70, game.levelMenu.firstModuleX - 100, game.levelMenu.firstModuleY, game.WHITE, game.fontName)
-                game.draw_text('NO', 70, game.levelMenu.secondModuleX + 100, game.levelMenu.secondModuleY, game.WHITE, game.fontName)
-
-                game.levelMenu.draw_pointer()
-                game.levelMenu.blit_screen()
-
+                pass
             elif event.type == KEYDOWN:
                 if event.key == K_w:
                     storekeeper.move(0, -STOREKEEPER_MOVE)
@@ -93,6 +84,7 @@ def start_the_game(screen, lvlName, game, points):
                     storekeeper.move(STOREKEEPER_MOVE, 0)
                 elif event.key == K_g:
                     saveBoard(w, h, allSprites, gamerTimer.passed_time)
+
 
         storekeeper.collision(walls.sprites())
 
@@ -143,6 +135,16 @@ def start_the_game(screen, lvlName, game, points):
         pygame.display.update()
         pygame.display.flip()
 
+    while game.logicState == False:
+        game.display.fill(BLACK)
+        game.draw_text('DO YOU WANT TO QUIT AND SAVE YOUR SCORE?', 65, midWidth, midHeight - 300, game.WHITE, game.fontName)
+        game.draw_text('YES', 60, game.levelMenu.firstModuleX, game.levelMenu.firstModuleY, game.WHITE, game.fontName)
+        game.draw_text('NO', 60, game.levelMenu.secondModuleX, game.levelMenu.secondModuleY, game.WHITE, game.fontName)
+        game.levelMenu.draw_pointer()
+        game.levelMenu.monitCheckInput()
+        game.levelMenu.movePointerQuit()
+
+        game.levelMenu.blit_screen()
 
 def saveBoard(width, height, sprites, time, playerName, lvlName):
     """
