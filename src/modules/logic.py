@@ -10,16 +10,12 @@ from .game import *
 from .settings import *
 from src.modules import menu
 
+
 def start_the_game(screen, lvlName, game, points):
     start = time.time()
     myFont = pygame.font.SysFont('Montserrat', 30)
 
-    # Map center
-    w = 28 * TILE_WIDTH
-    h = 20 * TILE_HEIGHT
-    canvas = pygame.Surface((w, h))
-    canvasPos = canvas.get_rect(center=((WIDTH - HUD_SIZE) / 2,
-                                        HEIGHT / 2))
+
     # Initial sprites groups and map floor
     walls = pygame.sprite.Group()
     storekeepers = pygame.sprite.Group()
@@ -31,6 +27,8 @@ def start_the_game(screen, lvlName, game, points):
 
     # Load and place objects on the map
     with open(os.path.join('./src/boards/', lvlName), 'r') as fd:
+        w = int(fd.readline())
+        h = int(fd.readline())
         startY = 0
 
         for rows in fd:
@@ -55,10 +53,14 @@ def start_the_game(screen, lvlName, game, points):
                 startX += TILE_WIDTH
             startY += TILE_HEIGHT
 
+    # Map center
+    canvas = pygame.Surface((w * TILE_WIDTH, h * TILE_HEIGHT))
+    canvasPos = canvas.get_rect(center=((WIDTH - HUD_SIZE) / 2,
+                                        HEIGHT / 2))
     destinationsAmount = len(destinations.sprites())
     gamerTimer = Timer(pygame.time.get_ticks(), myFont)
     hud = HUD(gamerTimer)
-    allSprites = pygame.sprite.Group(walls, destinations, boxes, storekeepers)
+    allSprites = pygame.sprite.Group(floors, walls, destinations, boxes, storekeepers)
 
     end = time.time()
     print(f'Set up total time: {end - start}')
@@ -72,7 +74,7 @@ def start_the_game(screen, lvlName, game, points):
                 game.check_events()
                 pygame.display.update()
                 game.levelMenu.monitCheckInput()
-                game.display.fill((0, 0, 0))
+                game.display.fill(BLACK)
                 game.draw_text('DO YOU WANT TO QUIT AND SAVE YOUR SCORE?', 85, midWidth, midHeight - 200, game.WHITE, game.fontName)
                 game.draw_text('YES', 70, game.levelMenu.firstModuleX - 100, game.levelMenu.firstModuleY, game.WHITE, game.fontName)
                 game.draw_text('NO', 70, game.levelMenu.secondModuleX + 100, game.levelMenu.secondModuleY, game.WHITE, game.fontName)
@@ -90,7 +92,7 @@ def start_the_game(screen, lvlName, game, points):
                 elif event.key == K_d:
                     storekeeper.move(STOREKEEPER_MOVE, 0)
                 elif event.key == K_g:
-                    saveBoard(22, 11, allSprites, gamerTimer.passed_time)
+                    saveBoard(w, h, allSprites, gamerTimer.passed_time)
 
         storekeeper.collision(walls.sprites())
 
@@ -128,7 +130,7 @@ def start_the_game(screen, lvlName, game, points):
         boxes.update()
 
         screen.fill(BLACK)
-        canvas.fill(RED)
+        canvas.fill(BLACK)
 
         allSprites.draw(canvas)
         hud.display_timer(pygame.time.get_ticks())

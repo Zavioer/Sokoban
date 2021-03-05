@@ -486,7 +486,7 @@ class DiffMenu(Menu):
             if self.state == 'Easy':
                 self.game.running = False
                 self.runDisplay = False
-                logic.start_the_game(self.game.window,  "19.txt", self.game, self.game.gamePoints)
+                logic.start_the_game(self.game.window,  "2.txt", self.game, self.game.gamePoints)
             elif self.state == 'Medium':
                 self.game.running = False
                 logic.start_the_game(self.game.window, str(randrange(21, 40)) + ".txt", self.game, self.game.gamePoints)

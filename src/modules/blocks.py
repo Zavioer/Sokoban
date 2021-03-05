@@ -38,7 +38,7 @@ class Box(pygame.sprite.Sprite):
             Instance start value of y-axis.
         """
         pygame.sprite.Sprite.__init__(self)
-        self.image = BOX_IMG.convert()
+        self.image = BOX_IMG.convert_alpha()
         self.rect = self.image.get_rect()
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
         self.rect.width = TILE_WIDTH
@@ -147,7 +147,7 @@ class Wall(pygame.sprite.Sprite):
             Initial value in y-axis.
         """
         pygame.sprite.Sprite.__init__(self)
-        self.image = WALL_IMG.convert()
+        self.image = WALL_IMG.convert_alpha()
         self.rect = self.image.get_rect()
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
 
