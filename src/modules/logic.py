@@ -1,5 +1,6 @@
 import pygame
 import os
+import time
 import shelve
 from pygame.locals import *
 from .blocks import Floor, Box, Destination, Wall
@@ -15,8 +16,10 @@ from .settings import *
 from src.modules import menu
 
 
-def start_the_game(screen, lvl_name, game):
-    my_font = pygame.font.SysFont('Montserrat', 30)
+def start_the_game(screen, lvlName, game, points):
+
+    start = time.time()
+    myFont = pygame.font.SysFont('Montserrat', 30)
 
     # Initial sprites groups and map floor
     walls = pygame.sprite.Group()
@@ -28,40 +31,52 @@ def start_the_game(screen, lvl_name, game):
     clock = pygame.time.Clock()
 
     # Load and place objects on the map
-    with open(os.path.join('./src/boards/', lvl_name), 'r') as fd:
-        board = fd.readlines()
-        start_y = 0
+    with open(os.path.join('./src/boards/', lvlName), 'r') as fd:
+        w = int(fd.readline())
+        h = int(fd.readline())
+        startY = 0
 
-        for rows in board:
-            start_x = 0
+        for rows in fd:
+            startX = 0
             for column in rows:
-                floors.add(Floor(start_x, start_y))
+                # floors.add(Floor(startX, startY))
 
                 if column == WALL_CHAR:
-                    walls.add(Wall(start_x, start_y))
+                    walls.add(Wall(startX, startY))
                 elif column == STOREKEEPER_CHAR:
-                    storekeeper = Player(start_x, start_y)
+                    storekeeper = Player(startX, startY)
                     storekeepers.add(storekeeper)
+                    floors.add(Floor(startX, startY))
                 elif column == BOX_CHAR:
-                    boxes.add(Box(start_x, start_y))
+                    boxes.add(Box(startX, startY))
+                    floors.add(Floor(startX, startY))
                 elif column == DESTINATION_CHAR:
-                    destinations.add(Destination(start_x, start_y))
+                    destinations.add(Destination(startX, startY))
+                    floors.add(Floor(startX, startY))
+                elif column == 'a':
+                    floors.add(Floor(startX, startY))
+                startX += TILE_WIDTH
+            startY += TILE_HEIGHT
 
-                start_x += TILE_WIDTH
-            start_y += TILE_HEIGHT
+    # Map center
+    canvas = pygame.Surface((w * TILE_WIDTH, h * TILE_HEIGHT))
+    canvasPos = canvas.get_rect(center=((WIDTH - HUD_SIZE) / 2,
+                                        HEIGHT / 2))
+    destinationsAmount = len(destinations.sprites())
+    gamerTimer = Timer(pygame.time.get_ticks(), myFont)
+    hud = HUD(gamerTimer)
+    allSprites = pygame.sprite.Group(floors, walls, destinations, boxes, storekeepers)
 
-    destinations_amount = len(destinations.sprites())
-    gamer_timer = Timer(pygame.time.get_ticks(), my_font)
-    hud = HUD(gamer_timer)
-    all_sprites = pygame.sprite.Group(walls, destinations, boxes, storekeepers)
-
+    end = time.time()
+    print(f'Set up total time: {end - start}')
     # Event loop
-    while 1:
-        clock.tick(FPS)
 
+    while game.logicState == True:
+        clock.tick(FPS)
+        # game.check_events()
         for event in pygame.event.get():
-            if event.type == QUIT:
-                return
+            if event.type == pygame.QUIT:
+                pass
             elif event.type == KEYDOWN:
                 if event.key == K_w:
                     storekeeper.move(0, -STOREKEEPER_MOVE)
@@ -72,36 +87,38 @@ def start_the_game(screen, lvl_name, game):
                 elif event.key == K_d:
                     storekeeper.move(STOREKEEPER_MOVE, 0)
                 elif event.key == K_g:
-                    save_board(22, 11, all_sprites, gamer_timer.passed_time)
+                    saveBoard(w, h, allSprites, gamerTimer.passed_time)
+
 
         storekeeper.collision(walls.sprites())
 
-        for box_sprite in boxes.sprites():
-            boxes_copy = boxes.copy()
-            boxes_copy.remove(box_sprite)
-            storekeeper.collision_box(box_sprite)
+        for boxSprite in boxes.sprites():
+            boxesCopy = boxes.copy()
+            boxesCopy.remove(boxSprite)
+            storekeeper.collision_box(boxSprite)
 
-            if storekeeper.box_collision:
-                box_sprite.move(storekeeper.direction)
+            if storekeeper.boxCollision:
+                boxSprite.move(storekeeper.direction)
 
-                box_sprite.collision_wall(walls.sprites())
-                box_sprite.collision_box(boxes_copy.sprites())
+                boxSprite.collision_wall(walls.sprites())
+                boxSprite.collision_box(boxesCopy.sprites())
 
-                if box_sprite.blocked_by_box:
-                    storekeeper.move(-storekeeper.movex, -storekeeper.movey)
-                if box_sprite.blocked and storekeeper.direction == box_sprite.blocked_direction:
-                    storekeeper.move(-storekeeper.movex, -storekeeper.movey)
+                if boxSprite.blockedByBox:
+                    storekeeper.move(-storekeeper.moveX, -storekeeper.moveY)
+                if boxSprite.blocked and storekeeper.direction == boxSprite.blockedDirection:
+                    storekeeper.move(-storekeeper.moveX, -storekeeper.moveY)
 
-                storekeeper.box_collision = False
+                storekeeper.boxCollision = False
 
         # Check if all boxes collide with destinations
         placed_boxes = pygame.sprite.groupcollide(boxes, destinations, False, False)
 
-        if len(placed_boxes) == destinations_amount:
+        if len(placed_boxes) == destinationsAmount:
             # Correct needed stuck in lvl game
-            game.curr_menu = game.main_menu
-            game.curr_menu.display_menu()
+            game.currentMenu = game.mainMenu
+            game.currentMenu.display_menu()
             game.gameLevel += 1
+            game.gamePoints += 1
             break
 
         # Updating and drawing sprites groups
@@ -109,18 +126,31 @@ def start_the_game(screen, lvl_name, game):
         boxes.update()
 
         screen.fill(BLACK)
+        canvas.fill(BLACK)
 
-        floors.draw(screen)
-        all_sprites.draw(screen)
+        allSprites.draw(canvas)
         hud.display_timer(pygame.time.get_ticks())
-        hud.display_lvl(lvl_name)
+        hud.display_lvl(lvlName)
+        hud.display_points(points)
+        hud.display_playerName(game.playerName)
         screen.blit(hud.image, hud.rect)
 
+        screen.blit(canvas, canvasPos)
         pygame.display.update()
         pygame.display.flip()
 
+    while game.logicState == False:
+        game.display.fill(BLACK)
+        game.draw_text('DO YOU WANT TO QUIT AND SAVE YOUR SCORE?', 65, midWidth, midHeight - 300, game.WHITE, game.fontName)
+        game.draw_text('YES', 60, game.levelMenu.firstModuleX, game.levelMenu.firstModuleY, game.WHITE, game.fontName)
+        game.draw_text('NO', 60, game.levelMenu.secondModuleX, game.levelMenu.secondModuleY, game.WHITE, game.fontName)
+        game.levelMenu.draw_pointer()
+        game.levelMenu.monitCheckInput()
+        game.levelMenu.movePointerQuit()
 
-def save_board(width, height, sprites, time, player_name, lvl_name):
+        game.levelMenu.blit_screen()
+
+def saveBoard(width, height, sprites, time, playerName, lvlName):
     """
     Function for saving current playing lvl and additional information in to
     shelve file.
@@ -133,26 +163,26 @@ def save_board(width, height, sprites, time, player_name, lvl_name):
         Group of all sprites in level.
     :param time:
         Time passed from beginning.
-    :param player_name: str
+    :param playerName: str
         Current playing player name.
-    :param lvl_name: str
+    :param lvlName: str
 
 
     :return:
         None
     """
-    empty_board = []
+    emptyBoard = []
 
     for h in range(height):
-        empty_board.append([' '] * width)
+        emptyBoard.append([' '] * width)
 
     for sprite in sprites:
-        empty_board[int(sprite.rect.y / TILE_HEIGHT)][int(sprite.rect.x / TILE_WIDTH)] = sprite.char
+        emptyBoard[int(sprite.rect.y / TILE_HEIGHT)][int(sprite.rect.x / TILE_WIDTH)] = sprite.char
 
-    shel_file = shelve.open(os.path.join('./src/saves', 'test'))
-    shel_file['mainBoardVar'] = empty_board
-    shel_file['timeVar'] = time
-    shel_file.close()
+    shelfFile = shelve.open(os.path.join('./src/saves', 'test'))
+    shelfFile['mainBoardVar'] = emptyBoard
+    shelfFile['timeVar'] = time
+    shelfFile.close()
 
 
 def create_map(screen, player_name):
@@ -226,5 +256,6 @@ def create_map(screen, player_name):
         allTiles.draw(canvas)
         mouseGrup.draw(screen)
         screen.blit(toolbox.image, (WIDTH - 200, 0))
+
         pygame.display.update()
         pygame.display.flip()

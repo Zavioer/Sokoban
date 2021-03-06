@@ -1,7 +1,13 @@
+import pygame
+import os
+
+
 # Game settings
 FPS = 60
 WIDTH = 1280
 HEIGHT = 720
+midWidth = WIDTH / 2
+midHeight = HEIGHT / 2
 
 # Tiles settings
 TILE_HEIGHT = 36
@@ -12,6 +18,13 @@ FLOOR_CHAR = ' '
 STOREKEEPER_CHAR = '@'
 BOX_CHAR = '*'
 DESTINATION_CHAR = '.'
+
+# Images
+STOREKEEPER_IMG = pygame.image.load(os.path.join('./src/img/', 'player.png'))
+WALL_IMG = pygame.image.load(os.path.join('./src/img/wall/', 'wall.png'))
+BOX_IMG = pygame.image.load(os.path.join('./src/img/crate/', 'crate_beige.png'))
+FLOOR_IMG = pygame.image.load(os.path.join('./src/img/floor/', 'floor_0.png'))
+DESTINATION_IMG = pygame.image.load(os.path.join('./src/img/floor/', 'destination0.png'))
 
 # Colors
 BLACK = (0, 0, 0)

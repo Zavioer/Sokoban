@@ -11,8 +11,7 @@ from src.modules.game import Game
 def main():
     game = Game()
     while game.running:
-        game.curr_menu.display_menu()
-        game.game_loop()
+        game.currentMenu.display_menu()
 
 
 if __name__ == '__main__':
