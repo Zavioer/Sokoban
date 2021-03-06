@@ -5,6 +5,7 @@ from random import randrange
 from .settings import *
 from .player import *
 
+
 class Menu:
     """
     Class which represents the menu.
@@ -215,12 +216,15 @@ class LevelMenu(Menu):
         """
         self.game.check_events()
         if self.game.START_KEY and self.saveMonit == 'Yes':
+            # TODO
+            # Passing arguments
             logic.saveBoard(22, 11, allSprites, hud.Timer.passedTime, self.game.playerName, self.game.gameLevel)
             self.game.currentMenu = self.game.mainMenu
             self.runDisplay = False
         elif self.game.ESC_PRESSED or self.game.BACK_KEY or (self.game.START_KEY and self.saveMonit == 'No'):
             self.runDisplay = False
             self.game.logicState = True
+
     def display_menu(self):
         """
         Method that displays the menu. It prints 4 buttons thanks to the draw_text() method.
@@ -261,8 +265,8 @@ class LevelMenu(Menu):
                 while self.game.gameLevel <= 20 and self.game.BACK_KEY == False or self.game.ESC_PRESSED == False:
                     logic.start_the_game(self.game.window, str(self.game.gameLevel) + ".txt", self.game, self.game.gamePoints)
             elif self.state == 'Three':
-                # logic.createMap()
-                pass
+                self.run_display = False
+                logic.create_map(self.game.window, 'user_name')
             else:
                 self.game.currentMenu = self.game.mainMenu
             self.runDisplay = False

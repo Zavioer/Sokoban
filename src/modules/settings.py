@@ -1,5 +1,7 @@
 import pygame
 import os
+
+
 # Game settings
 FPS = 60
 WIDTH = 1280
@@ -23,10 +25,19 @@ WALL_IMG = pygame.image.load(os.path.join('./src/img/wall/', 'wall.png'))
 BOX_IMG = pygame.image.load(os.path.join('./src/img/crate/', 'crate_beige.png'))
 FLOOR_IMG = pygame.image.load(os.path.join('./src/img/floor/', 'floor_0.png'))
 DESTINATION_IMG = pygame.image.load(os.path.join('./src/img/floor/', 'destination0.png'))
+
 # Colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
 
 # In game HUD
 HUD_SIZE = 200
+
+# Create map
+BLOCK_SIZE = 25
+BOARD_WIDTH = BLOCK_SIZE * 30
+BOARD_HEIGHT = BLOCK_SIZE * 20
+TOOLBOX_WIDTH = 200
