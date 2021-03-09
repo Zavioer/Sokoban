@@ -182,33 +182,47 @@ def saveBoard(width, height, sprites, time, playerName, lvlName):
     shelfFile.close()
 
 
-def create_map(screen, player_name):
-    canvas = pygame.Surface((BOARD_WIDTH, BOARD_HEIGHT))
-    canvas.fill(RED)
+def create_map(screen, player_name, width, height):
+    """
+    Function for module III which allows player to create own map.
+    :param screen:
+        Surface on which will draw canvas to draw map.
+    :param player_name:
+        Creator's map nick.
+    :param width:
+        Given map width. Max number 30.
+    :param: height:
+        Given map height. Max number 20.
+    :return:
+    """
+    boardWidth = BLOCK_SIZE * width
+    boardHeight = BLOCK_SIZE * height
+    canvas = pygame.Surface((boardWidth, boardHeight))
+    # canvas.fill(RED)
     canvasCenter = canvas.get_rect(center=((screen.get_width() - TOOLBOX_WIDTH) / 2,
                                            screen.get_height() / 2))
     clock = pygame.time.Clock()
 
     mouse = Mouse()
     allTiles = pygame.sprite.Group()
-    playerBoard = Board(30, 20)
+    playerBoard = Board(width, height)
     toolbox = Toolbox(TOOLBOX_WIDTH, HEIGHT)
 
-    for x in range(0, BOARD_WIDTH, BLOCK_SIZE):
+    for x in range(0, boardWidth, BLOCK_SIZE):
         pygame.draw.line(canvas, WHITE, (x, 0), (x, BOARD_WIDTH))
 
-    for y in range(0, BOARD_HEIGHT, BLOCK_SIZE):
+    for y in range(0, boardHeight, BLOCK_SIZE):
         pygame.draw.line(canvas, WHITE, (0, y), (BOARD_WIDTH, y))
 
-    for x in range(0, BOARD_WIDTH, BLOCK_SIZE):
-        for y in range(0, BOARD_HEIGHT, BLOCK_SIZE):
+    for x in range(0, boardWidth, BLOCK_SIZE):
+        for y in range(0, boardHeight, BLOCK_SIZE):
             allTiles.add(Tile(x, y))
 
     toolbox.add_button('Wall', WALL_CHAR, WALL_IMG)
     toolbox.add_button('Player', STOREKEEPER_CHAR, STOREKEEPER_IMG)
     toolbox.add_button('Box', BOX_CHAR, BOX_IMG)
     toolbox.add_button('Destination', DESTINATION_CHAR, DESTINATION_IMG)
-    # toolbox.add_button('Rubber', EMPTY_CHAR, EMPTY_IMG)
+    toolbox.add_button('Rubber / Floor', FLOOR_CHAR, FLOOR_IMG)
     toolbox.place_buttons()
 
     screen.fill(BLACK)
@@ -216,6 +230,7 @@ def create_map(screen, player_name):
 
     while True:
         clock.tick(FPS)
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 return
@@ -227,30 +242,46 @@ def create_map(screen, player_name):
                     mousey -= y
 
                     if sprite.rect.collidepoint(mousex, mousey):
-                        mouse.currentImage = mouse.currentImage
+                        if mouse.currentImage == STOREKEEPER_IMG and not playerBoard.availablePlayer:
+                            break
+
+                        if not playerBoard.availablePlayer:
+                            if sprite.character == STOREKEEPER_CHAR:
+                                playerBoard.availablePlayer = True
+
                         sprite.set_image(mouse.currentImage)
+                        sprite.character = mouse.get_tile()
                         playerBoard.place_tile(int(sprite.rect.x / BLOCK_SIZE),
                                                int(sprite.rect.y / BLOCK_SIZE),
                                                mouse.get_tile())
+
+                        if mouse.currentImage == STOREKEEPER_IMG and playerBoard.availablePlayer:
+                            playerBoard.availablePlayer = False
 
                 for button in toolbox.buttonsSprites:
                     mousex, mousey = pygame.mouse.get_pos()
                     mousex -= (WIDTH - TOOLBOX_WIDTH)
 
                     if button.rect.collidepoint(mousex, mousey):
+                        if button.tileImage == STOREKEEPER_IMG and not playerBoard.availablePlayer:
+                            break
+
                         mouse.currentImage = button.tileImage
                         mouse.currBlock = button.attribute
 
             elif event.type == KEYDOWN and event.key == K_s:
-                playerBoard.save_board()
+                playerBoard.save_board(player_name)
 
-        screen.blit(canvas, canvasCenter)
+
         allTiles.update()
         allTiles.draw(canvas)
+        screen.blit(canvas, canvasCenter)
+
         screen.blit(toolbox.image, (WIDTH - 200, 0))
 
         pygame.display.update()
         pygame.display.flip()
+
 
 def resetMap(screen, lvlName, game, points):
     game.logicState = True

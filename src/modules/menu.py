@@ -265,7 +265,7 @@ class LevelMenu(Menu):
                     logic.start_the_game(self.game.window, str(self.game.gameLevel) + ".txt", self.game, self.game.gamePoints)
             elif self.state == 'Three':
                 self.run_display = False
-                logic.create_map(self.game.window, 'user_name')
+                logic.create_map(self.game.window, self.game.playerName, 15, 15)
             else:
                 self.game.currentMenu = self.game.mainMenu
             self.runDisplay = False

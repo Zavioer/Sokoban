@@ -1,20 +1,15 @@
-                              
-                              
-                              
-                              
-                              
-                              
-  XXXXXX  XXXXX        XXXX   
-       X  X    X          XX  
-       X  X    X          XXXX
- *   * X  X  * X       *  X  X
-       X  X    X          X@ X
-       X  X    X          X  X
-  X    X  X    X          X  X
-   XXXXX  XXXXX      X    XXXX
-                     XXXXXX   
-                      XXXX    
-                              
-                              
-                              
-                              
+XXXXXXXaaaaaaaa
+Xaaaaaaaaaaaaaa
+XXa@aaaaaaaaaaX
+aaaaaa*aaaa*aaa
+aaaaaaaaaaaaaaX
+aa*aaaaXaaaaaaX
+aaaa*aaaaaaXaaa
+aaaaaaaaaaaaaaa
+aa*aaa*aa*aaaaX
+aaaaaaaaaaaaaaa
+aaaaaaXaaaXaXaX
+.aa*aaaaaaaaaXX
+..aaaaaaaaaXXXX
+..aaaa*aaaXaXXX
+..aaaaaaaaXXXXX
