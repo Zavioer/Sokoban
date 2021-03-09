@@ -1,29 +1,22 @@
-import pygame
 import os
 import time
 import shelve
+import pygame
 from pygame.locals import *
 from .blocks import Floor, Box, Destination, Wall
 from .player import Player
-from .hud import HUD
-from .hud import Timer
-from .creator import Tile
-from .creator import Mouse
-from .creator import Board
-from .creator import Toolbox
+from .hud import HUD, Timer
+from .creator import Tile, Mouse, Board, Toolbox
 from .game import *
 from .settings import *
-from src.modules import menu
 
 
 def start_the_game(screen, lvlName, game, points):
-
     start = time.time()
     myFont = pygame.font.SysFont('Montserrat', 30)
 
     # Initial sprites groups and map floor
     walls = pygame.sprite.Group()
-    storekeepers = pygame.sprite.Group()
     boxes = pygame.sprite.Group()
     destinations = pygame.sprite.Group()
 
@@ -32,20 +25,17 @@ def start_the_game(screen, lvlName, game, points):
 
     # Load and place objects on the map
     with open(os.path.join('./src/boards/', lvlName), 'r') as fd:
-        w = int(fd.readline())
-        h = int(fd.readline())
-        startY = 0
+        mapWidth = int(fd.readline())
+        mapHeight = int(fd.readline())
 
+        startY = 0
         for rows in fd:
             startX = 0
             for column in rows:
-                # floors.add(Floor(startX, startY))
-
                 if column == WALL_CHAR:
                     walls.add(Wall(startX, startY))
                 elif column == STOREKEEPER_CHAR:
                     storekeeper = Player(startX, startY)
-                    storekeepers.add(storekeeper)
                     floors.add(Floor(startX, startY))
                 elif column == BOX_CHAR:
                     boxes.add(Box(startX, startY))
@@ -53,27 +43,29 @@ def start_the_game(screen, lvlName, game, points):
                 elif column == DESTINATION_CHAR:
                     destinations.add(Destination(startX, startY))
                     floors.add(Floor(startX, startY))
-                elif column == 'a':
+                elif column == FLOOR_CHAR:
                     floors.add(Floor(startX, startY))
                 startX += TILE_WIDTH
             startY += TILE_HEIGHT
 
     # Map center
-    canvas = pygame.Surface((w * TILE_WIDTH, h * TILE_HEIGHT))
+    canvas = pygame.Surface((mapWidth * TILE_WIDTH, mapHeight * TILE_HEIGHT))
     canvasPos = canvas.get_rect(center=((WIDTH - HUD_SIZE) / 2,
                                         HEIGHT / 2))
+
     destinationsAmount = len(destinations.sprites())
     gamerTimer = Timer(pygame.time.get_ticks(), myFont)
     hud = HUD(gamerTimer)
-    allSprites = pygame.sprite.Group(floors, walls, destinations, boxes, storekeepers)
+
+    allSprites = pygame.sprite.Group(floors, walls, destinations, boxes, storekeeper)
 
     end = time.time()
     print(f'Set up total time: {end - start}')
-    # Event loop
 
-    while game.logicState == True:
+    # Event loop
+    while game.logicState:
         clock.tick(FPS)
-        # game.check_events()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pass
@@ -87,7 +79,11 @@ def start_the_game(screen, lvlName, game, points):
                 elif event.key == K_d:
                     storekeeper.move(STOREKEEPER_MOVE, 0)
                 elif event.key == K_g:
-                    saveBoard(w, h, allSprites, gamerTimer.passed_time)
+                    saveBoard(mapWidth, mapHeight, allSprites, gamerTimer.passedTime,
+                              lvlName)
+                elif event.key == K_r:
+                    game.logicState = False
+                    resetMap(game.window, game.currentLevel, game, game.gamePoints)
 
 
         storekeeper.collision(walls.sprites())
@@ -122,7 +118,7 @@ def start_the_game(screen, lvlName, game, points):
             break
 
         # Updating and drawing sprites groups
-        storekeepers.update()
+        storekeeper.update()
         boxes.update()
 
         screen.fill(BLACK)
@@ -139,16 +135,17 @@ def start_the_game(screen, lvlName, game, points):
         pygame.display.update()
         pygame.display.flip()
 
-    while game.logicState == False:
-        game.display.fill(BLACK)
-        game.draw_text('DO YOU WANT TO QUIT AND SAVE YOUR SCORE?', 65, midWidth, midHeight - 300, game.WHITE, game.fontName)
-        game.draw_text('YES', 60, game.levelMenu.firstModuleX, game.levelMenu.firstModuleY, game.WHITE, game.fontName)
-        game.draw_text('NO', 60, game.levelMenu.secondModuleX, game.levelMenu.secondModuleY, game.WHITE, game.fontName)
-        game.levelMenu.draw_pointer()
-        game.levelMenu.monitCheckInput()
-        game.levelMenu.movePointerQuit()
+    # while game.logicState == False:
+    #     game.display.fill(BLACK)
+    #     game.draw_text('DO YOU WANT TO QUIT AND SAVE YOUR SCORE?', 65, midWidth, midHeight - 300, game.WHITE, game.fontName)
+    #     game.draw_text('YES', 60, game.levelMenu.firstModuleX, game.levelMenu.firstModuleY, game.WHITE, game.fontName)
+    #     game.draw_text('NO', 60, game.levelMenu.secondModuleX, game.levelMenu.secondModuleY, game.WHITE, game.fontName)
+    #     game.levelMenu.draw_pointer()
+    #     game.levelMenu.monitCheckInput()
+    #     game.levelMenu.movePointerQuit()
+    #
+    #     game.levelMenu.blit_screen()
 
-        game.levelMenu.blit_screen()
 
 def saveBoard(width, height, sprites, time, playerName, lvlName):
     """
@@ -193,7 +190,6 @@ def create_map(screen, player_name):
     clock = pygame.time.Clock()
 
     mouse = Mouse()
-    mouseGrup = pygame.sprite.GroupSingle(mouse)
     allTiles = pygame.sprite.Group()
     playerBoard = Board(30, 20)
     toolbox = Toolbox(TOOLBOX_WIDTH, HEIGHT)
@@ -208,10 +204,11 @@ def create_map(screen, player_name):
         for y in range(0, BOARD_HEIGHT, BLOCK_SIZE):
             allTiles.add(Tile(x, y))
 
-    toolbox.add_button('Wall', WALL_CHAR, BLUE)
-    toolbox.add_button('Player', STOREKEEPER_CHAR, RED)
-    toolbox.add_button('Box', BOX_CHAR, WHITE)
-    toolbox.add_button('Destination', DESTINATION_CHAR, BLACK)
+    toolbox.add_button('Wall', WALL_CHAR, WALL_IMG)
+    toolbox.add_button('Player', STOREKEEPER_CHAR, STOREKEEPER_IMG)
+    toolbox.add_button('Box', BOX_CHAR, BOX_IMG)
+    toolbox.add_button('Destination', DESTINATION_CHAR, DESTINATION_IMG)
+    # toolbox.add_button('Rubber', EMPTY_CHAR, EMPTY_IMG)
     toolbox.place_buttons()
 
     screen.fill(BLACK)
@@ -226,36 +223,35 @@ def create_map(screen, player_name):
                 for sprite in allTiles:
                     mousex, mousey = pygame.mouse.get_pos()
                     x, y = canvasCenter.topleft
-                    print(f'{x} <> {y}')
                     mousex -= x
                     mousey -= y
+
                     if sprite.rect.collidepoint(mousex, mousey):
-                        mouse.currColor = mouse.currColor
-                        sprite.change_color(mouse.currColor)
+                        mouse.currentImage = mouse.currentImage
+                        sprite.set_image(mouse.currentImage)
                         playerBoard.place_tile(int(sprite.rect.x / BLOCK_SIZE),
-                                                   int(sprite.rect.y / BLOCK_SIZE),
-                                                   mouse.get_tile())
+                                               int(sprite.rect.y / BLOCK_SIZE),
+                                               mouse.get_tile())
 
                 for button in toolbox.buttonsSprites:
                     mousex, mousey = pygame.mouse.get_pos()
                     mousex -= (WIDTH - TOOLBOX_WIDTH)
-                    print(mousex)
-                    if button.rect.collidepoint(mousex, mousey):
-                        mouseGrup.sprite.currColor = button.color
-                        mouseGrup.sprite.currBlock = button.attribute
 
-                        print(f'Current color {mouseGrup.sprite.currColor} '
-                              f'Current attribute {mouseGrup.sprite.currBlock}')
+                    if button.rect.collidepoint(mousex, mousey):
+                        mouse.currentImage = button.tileImage
+                        mouse.currBlock = button.attribute
+
             elif event.type == KEYDOWN and event.key == K_s:
                 playerBoard.save_board()
-
-        mouseGrup.update()
 
         screen.blit(canvas, canvasCenter)
         allTiles.update()
         allTiles.draw(canvas)
-        mouseGrup.draw(screen)
         screen.blit(toolbox.image, (WIDTH - 200, 0))
 
         pygame.display.update()
         pygame.display.flip()
+
+def resetMap(screen, lvlName, game, points):
+    game.logicState = True
+    start_the_game(screen, lvlName, game, points)

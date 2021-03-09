@@ -36,6 +36,7 @@ class Game:
         self.gameLevel = 1
         self.gamePoints = 0
         self.playerName = ''
+        self.currentLevel = 0
 
     def check_events(self):
         if self.running:

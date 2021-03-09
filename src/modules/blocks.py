@@ -39,10 +39,8 @@ class Box(pygame.sprite.Sprite):
         """
         pygame.sprite.Sprite.__init__(self)
         self.image = BOX_IMG.convert_alpha()
-        self.rect = self.image.get_rect()
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
-        self.rect.width = TILE_WIDTH
-        self.rect.height = TILE_HEIGHT
+        self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.moveX = 0
@@ -148,11 +146,8 @@ class Wall(pygame.sprite.Sprite):
         """
         pygame.sprite.Sprite.__init__(self)
         self.image = WALL_IMG.convert_alpha()
-        self.rect = self.image.get_rect()
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
-
-        self.rect.width = TILE_WIDTH
-        self.rect.height = TILE_HEIGHT
+        self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.char = WALL_CHAR
@@ -162,12 +157,10 @@ class Floor(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = FLOOR_IMG.convert()
+        self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
-        self.rect.width = TILE_WIDTH
-        self.rect.height = TILE_HEIGHT
         self.char = FLOOR_CHAR
 
 
@@ -188,11 +181,9 @@ class Destination(pygame.sprite.Sprite):
             Initial value in y-axis.
         """
         pygame.sprite.Sprite.__init__(self)
-        self.image = DESTINATION_IMG.convert()
-        self.rect = self.image.get_rect()
+        self.image = DESTINATION_IMG.convert_alpha()
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
-        self.rect.width = TILE_WIDTH
-        self.rect.height = TILE_HEIGHT
+        self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.char = DESTINATION_CHAR

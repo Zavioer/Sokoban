@@ -11,7 +11,7 @@ class Board:
 
     def empty_map(self):
         for y in range(0, self.height):
-            self.map.append([' '] * self.width)
+            self.map.append([EMPTY_CHAR] * self.width)
 
     def place_tile(self, x, y, tile):
         self.map[y][x] = tile
@@ -26,15 +26,8 @@ class Board:
 class Mouse(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((5, 5))
-        self.image.fill(RED)
-        self.rect = self.image.get_rect()
         self.currBlock = 'X'
-        self.currColor = BLUE
-
-    def update(self):
-        pos = pygame.mouse.get_pos()
-        self.rect.midtop = pos
+        self.currentImage = WALL_IMG
 
     def get_tile(self):
         return self.currBlock
@@ -44,24 +37,21 @@ class Tile(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((BLOCK_SIZE - 1, BLOCK_SIZE - 1))
-        self.color = GREEN
-        self.image.fill(self.color)
+        self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
-    def update(self, *args, **kwargs) -> None:
-        self.image.fill(self.color)
-
-    def change_color(self, name):
-        self.color = name
+    def set_image(self, name):
+        self.image = name.convert_alpha()
+        self.image = pygame.transform.scale(self.image, (BLOCK_SIZE - 1, BLOCK_SIZE - 1))
 
 
 class Button(pygame.sprite.Sprite):
     """
     Utility class for Toolbox.
     """
-    def __init__(self, x, y, width, height, bgColor, name, char, color, font,
+    def __init__(self, x, y, width, height, bgColor, name, char, tileImage, font,
                  fontColor):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((width, height))
@@ -70,7 +60,7 @@ class Button(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.attribute = char
-        self.color = color
+        self.tileImage = tileImage
         text = font.render(name, 1, fontColor)
         text_pos = text.get_rect(center=(width / 2, height / 2))
         self.image.blit(text, text_pos)

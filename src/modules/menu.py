@@ -25,8 +25,7 @@ class Menu:
         self.runDisplay = True
         self.pointerRect = pygame.Rect(0, 0, 20, 20)
         self.offset = -100
-        self.storekeeperImg = pygame.image.load('./src/img/player.png')
-        self.storekeeperImg = pygame.transform.scale(self.storekeeperImg, (70, 70))
+        self.storekeeperImg = pygame.transform.scale(STOREKEEPER_IMG, (70, 70))
 
     def draw_pointer(self):
         """
@@ -502,7 +501,8 @@ class DiffMenu(Menu):
         if self.game.START_KEY:
             if self.state == 'Easy':
                 self.runDisplay = False
-                logic.start_the_game(self.game.window,  "2.txt", self.game, self.game.gamePoints)
+                self.game.currentLevel = "2.txt"
+                logic.start_the_game(self.game.window,  self.game.currentLevel, self.game, self.game.gamePoints)
             elif self.state == 'Medium':
                 logic.start_the_game(self.game.window, str(randrange(21, 40)) + ".txt", self.game, self.game.gamePoints)
             else:

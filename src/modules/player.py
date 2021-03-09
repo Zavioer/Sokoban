@@ -30,10 +30,8 @@ class Player(pygame.sprite.Sprite):
         """
         pygame.sprite.Sprite.__init__(self)
         self.image = STOREKEEPER_IMG.convert_alpha()
-        self.rect = self.image.get_rect()
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
-        self.rect.width = TILE_WIDTH
-        self.rect.height = TILE_HEIGHT
+        self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.moveX = 0
@@ -126,17 +124,12 @@ class Player(pygame.sprite.Sprite):
             Direction in which player moves.
         """
         if direction == 'north':
-            self.image = pygame.image.load(os.path.join('src/img/', 'player_north.png'))
-            self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
+            self.image = STOREKEEPER_NORTH_IMG
         elif direction == 'east':
-            self.image = pygame.image.load(os.path.join('src/img/', 'player_east.png'))
-            self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
-        elif direction == 'south':
-            self.image = pygame.image.load(os.path.join('src/img/', 'player.png'))
-            self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
+            self.image = STOREKEEPER_EAST_IMG
         elif direction == 'west':
-            self.image = pygame.image.load(os.path.join('src/img/', 'player_west.png'))
-            self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
+            self.image = STOREKEEPER_WEST_IMG
         else:
-            self.image = pygame.image.load(os.path.join('src/img/', 'player.png'))
-            self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
+            self.image = STOREKEEPER_IMG
+
+        self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
