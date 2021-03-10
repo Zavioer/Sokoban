@@ -47,6 +47,7 @@ class HUD(pygame.sprite.Sprite):
 
         self.image.blit(text, playerNamePosition)
 
+
 class Timer(pygame.sprite.Sprite):
     """
         Class which returns the time (ticks) since the game-start
@@ -55,26 +56,35 @@ class Timer(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.start = start
         self.passedTime = 0
+        self.passedTimeStr = ''
         self.fontName = fontName
         self.x = 0
         self.y = 0
+        self.buffer = 0
+        self.startPause = 0
+        self.end_time = 0
 
     def update(self, ticks):
-        self.passedTime = math.ceil((ticks - self.start) / 1000)
+        self.passedTime = round((ticks - self.start) / 1000)
+
+        if self.buffer > 0:
+            self.passedTime -= self.buffer
+
         minutes = int(self.passedTime / 60)
         seconds = int(self.passedTime % 60)
+
         if minutes < 10:
             minutes = "0" + str(minutes)
         elif minutes > 60:
             hours = int(self.passedTime / 3600)
             if hours < 10:
                 hours = "0" + str(hours)
-            self.passedTime = str(hours) + ":" + str(minutes) + ":" + str(seconds)
+            self.passedTimeStr = str(hours) + ":" + str(minutes) + ":" + str(seconds)
         if seconds < 10:
             seconds = "0" + str(seconds)
-        self.passedTime = str(minutes) + ":" + str(seconds)
+        self.passedTimeStr = str(minutes) + ":" + str(seconds)
 
-        self.image = self.fontName.render(f'Time: {self.passedTime}', 1, WHITE)
+        self.image = self.fontName.render(f'Time: {self.passedTimeStr}', 1, WHITE)
         self.rect = self.image.get_rect()
         self.rect.centerx = self.x
         self.rect.y = self.y
@@ -82,3 +92,10 @@ class Timer(pygame.sprite.Sprite):
     def set_position(self, x, y):
         self.x = x
         self.y = y
+
+    def stop(self, ticks):
+        self.startPause = ticks
+        self.end_time = self.passedTime * 1000
+
+    def resume(self, ticks):
+        self.buffer += round((ticks - self.startPause) / 1000)

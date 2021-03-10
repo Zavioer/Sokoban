@@ -67,8 +67,20 @@ def start_the_game(screen, lvlName, game, points):
         clock.tick(FPS)
 
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pass
+            if event.type == pygame.QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
+                game.logicState = False
+                hud.timer.stop(pygame.time.get_ticks())
+                game.currentMenu = game.saveGameMenu
+                game.currentMenu.ownRunDisplay = True
+
+                game.currentPlayerState['width'] = mapWidth
+                game.currentPlayerState['height'] = mapHeight
+                game.currentPlayerState['sprites'] = allSprites
+                game.currentPlayerState['time'] = hud.timer.end_time
+
+                game.currentMenu.display_menu()
+                hud.timer.resume(pygame.time.get_ticks())
+
             elif event.type == KEYDOWN:
                 if event.key == K_w:
                     storekeeper.move(0, -STOREKEEPER_MOVE)
@@ -78,13 +90,9 @@ def start_the_game(screen, lvlName, game, points):
                     storekeeper.move(-STOREKEEPER_MOVE, 0)
                 elif event.key == K_d:
                     storekeeper.move(STOREKEEPER_MOVE, 0)
-                elif event.key == K_g:
-                    saveBoard(mapWidth, mapHeight, allSprites, gamerTimer.passedTime,
-                              lvlName)
                 elif event.key == K_r:
                     game.logicState = False
                     resetMap(game.window, game.currentLevel, game, game.gamePoints)
-
 
         storekeeper.collision(walls.sprites())
 
@@ -135,19 +143,8 @@ def start_the_game(screen, lvlName, game, points):
         pygame.display.update()
         pygame.display.flip()
 
-    # while game.logicState == False:
-    #     game.display.fill(BLACK)
-    #     game.draw_text('DO YOU WANT TO QUIT AND SAVE YOUR SCORE?', 65, midWidth, midHeight - 300, game.WHITE, game.fontName)
-    #     game.draw_text('YES', 60, game.levelMenu.firstModuleX, game.levelMenu.firstModuleY, game.WHITE, game.fontName)
-    #     game.draw_text('NO', 60, game.levelMenu.secondModuleX, game.levelMenu.secondModuleY, game.WHITE, game.fontName)
-    #     game.levelMenu.draw_pointer()
-    #     game.levelMenu.monitCheckInput()
-    #     game.levelMenu.movePointerQuit()
-    #
-    #     game.levelMenu.blit_screen()
 
-
-def saveBoard(width, height, sprites, time, playerName, lvlName):
+def saveBoard(width, height, sprites, endTime, playerName, lvlName):
     """
     Function for saving current playing lvl and additional information in to
     shelve file.
@@ -158,7 +155,7 @@ def saveBoard(width, height, sprites, time, playerName, lvlName):
         Current map height.
     :param sprites: pygame.sprite.Group
         Group of all sprites in level.
-    :param time:
+    :param endTime:
         Time passed from beginning.
     :param playerName: str
         Current playing player name.
@@ -171,14 +168,24 @@ def saveBoard(width, height, sprites, time, playerName, lvlName):
     emptyBoard = []
 
     for h in range(height):
-        emptyBoard.append([' '] * width)
+        emptyBoard.append([EMPTY_CHAR] * width)
 
     for sprite in sprites:
         emptyBoard[int(sprite.rect.y / TILE_HEIGHT)][int(sprite.rect.x / TILE_WIDTH)] = sprite.char
 
-    shelfFile = shelve.open(os.path.join('./src/saves', 'test'))
+    currentDate = time.localtime(time.time())
+    formatedDate = time.strftime('%H_%M_%S_%d_%m_%Y', currentDate)
+    fileName = ''.join((playerName, '_', 'BOARD', '_', formatedDate))
+
+    shelfFile = shelve.open(os.path.join('./src/saves', fileName))
+
+    shelfFile['widthBoardVar'] = width
+    shelfFile['hieghtBoardVar'] = height
+    shelfFile['lvlNameVar'] = lvlName
+    shelfFile['userNameVar'] = playerName
+    shelfFile['endtimeVar'] = endTime
     shelfFile['mainBoardVar'] = emptyBoard
-    shelfFile['timeVar'] = time
+
     shelfFile.close()
 
 

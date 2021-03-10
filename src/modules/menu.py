@@ -209,17 +209,15 @@ class LevelMenu(Menu):
                 self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
                 self.saveMonit = 'Yes'
 
-    def monitCheckInput(self):
+    def monitCheckInput(self, width, height, sprites, timer):
         """
         Method that handles quit monit.
         """
         self.game.check_events()
         if self.game.START_KEY and self.saveMonit == 'Yes':
-            # TODO
-            # Passing arguments
-            logic.saveBoard(22, 11, allSprites, hud.Timer.passedTime, self.game.playerName, self.game.gameLevel)
-            self.game.currentMenu = self.game.mainMenu
             self.runDisplay = False
+            logic.saveBoard(width, height, sprites, timer, self.game.playerName, self.game.gameLevel)
+            self.game.currentMenu = self.game.mainMenu
         elif self.game.ESC_PRESSED or self.game.BACK_KEY or (self.game.START_KEY and self.saveMonit == 'No'):
             self.runDisplay = False
             self.game.logicState = True
@@ -233,7 +231,7 @@ class LevelMenu(Menu):
         while self.runDisplay:
             self.game.check_events()
             self.check_input()
-            self.game.display.fill((0, 0, 0))
+            self.game.display.fill(BLACK)
             self.game.draw_text('Choose module: ', 120, midWidth, midHeight - 200, self.game.WHITE, self.game.fontName)
             self.game.draw_text('Module 1', 80, self.firstModuleX, self.firstModuleY, self.game.WHITE, self.game.fontName)
             self.game.draw_text('Module 2', 80, self.secondModuleX, self.secondModuleY, self.game.WHITE, self.game.fontName)
@@ -608,6 +606,7 @@ class InputName(Menu):
             self.check_input()
             self.blit_screen()
 
+
 class RankMenu(Menu):
     """
     Class which represents the rank menu, inheriting from the Menu class.
@@ -652,3 +651,86 @@ class RankMenu(Menu):
                 self.game.draw_text(str(index) + ". " + str(name) + " P:" + str(points) + " T:" + str(time), 60, self.headerX, self.itemY + (i * 100), self.game.WHITE, self.game.fontName)
             self.blit_screen()
         scoreFile.close()
+
+
+class SaveGameMenu(Menu):
+    def __init__(self, game):
+        """
+        Sub menu for game map and score saving to shelf file format.
+
+        :attributes
+        firstModuleX, secondModuleX, thirdModuleX - Buttons initial x coordinates.
+        firstModuleY, secondModuleY, thirdModuleY - Buttons initial y coordinates.
+        level - string, required
+            Game's module choice. [default = '']
+        state - string, required
+            pointer state variable [default = 'One']
+
+        :param
+        game: class, required
+            Game class
+        """
+        Menu.__init__(self, game)
+        self.firstModuleX, self.firstModuleY = midWidth, midHeight
+        self.secondModuleX, self.secondModuleY = midWidth, midHeight + 100
+        self.thirdModuleX, self.thirdModuleY = midWidth, midHeight + 200
+        self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
+        self.level = 1
+        self.state = 'Yes'
+        self.ownRunDisplay = True
+
+    def display_menu(self):
+        while self.ownRunDisplay:
+            self.game.check_events()
+            self.check_input()
+            self.game.display.fill(BLACK)
+            self.game.draw_text('DO YOU WANT TO QUIT AND SAVE YOUR SCORE?', 65, midWidth, midHeight - 300,
+                                self.game.WHITE,
+                                self.game.fontName)
+            self.game.draw_text('YES', 60, self.firstModuleX, self.firstModuleY,
+                                self.game.WHITE,
+                                self.game.fontName)
+            self.game.draw_text('NO', 60, self.secondModuleX, self.secondModuleY,
+                                self.game.WHITE,
+                                self.game.fontName)
+            self.draw_pointer()
+            self.blit_screen()
+
+    def check_input(self):
+        """
+        Method that handles changing the currently displayed menu.
+        """
+        self.move_pointer()
+        if self.game.START_KEY:
+            if self.state == 'Yes':
+                self.ownRunDisplay = False
+                logic.saveBoard(self.game.currentPlayerState['width'], self.game.currentPlayerState['height'],
+                                self.game.currentPlayerState['sprites'], self.game.currentPlayerState['time'],
+                                self.game.playerName, self.level)
+                # self.runDisplay = False
+                # self.game.currentMenu = self.game.mainMenu
+
+            if self.state == 'No':
+                self.ownRunDisplay = False
+                print(f'>> {self.game.logicState}')
+                self.game.logicState = True
+
+
+    def move_pointer(self):
+        """
+        Method that includes pointer's movement logic. Moreover, it includes an end event handler.
+        """
+        if self.game.DOWN_KEY or self.game.S_KEY:
+            if self.state == 'Yes':
+                self.pointerRect.midtop = (self.secondModuleX + self.offset, self.secondModuleY)
+                self.state = 'No'
+            elif self.state == 'No':
+                self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
+                self.state = 'Yes'
+        elif self.game.UP_KEY or self.game.W_KEY:
+            if self.state == 'Yes':
+                self.pointerRect.midtop = (self.secondModuleX + self.offset, self.secondModuleY)
+                self.state = 'No'
+            elif self.state == 'No':
+                self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
+                self.state = 'Yes'

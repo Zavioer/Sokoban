@@ -133,3 +133,6 @@ dmypy.json
 
 # User created maps
 src/boards/own/*
+
+# User saved games
+src/saves/*

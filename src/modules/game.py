@@ -31,12 +31,14 @@ class Game:
         self.legendMenu = LegendMenu(self)
         self.instructionsMenu = InstructionsMenu(self)
         self.creditsMenu = CreditsMenu(self)
+        self.saveGameMenu = SaveGameMenu(self)
         self.currentMenu = self.mainMenu
         self.BLACK, self.WHITE, self.RED = BLACK, WHITE, RED
         self.gameLevel = 1
         self.gamePoints = 0
         self.playerName = ''
         self.currentLevel = 0
+        self.currentPlayerState = {'width': 0, 'height': 0, 'map': [], 'time': 0}
 
     def check_events(self):
         if self.running:
