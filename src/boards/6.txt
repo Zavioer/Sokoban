@@ -1,13 +1,13 @@
 12
 11
 XXXXXX  XXX 
-X..  X XX@XX
-X..  XXX   X
-X..     ** X
-X..  X X * X
-X..XXX X * X
-XXXX * X*  X
-   X  *X * X
-   X *  *  X
-   X  XX   X
+X..aaXaXX@XX
+X..aaXXXaaaX
+X..aaaaa**aX
+X..aaXaXa*aX
+X..XXXaXa*aX
+XXXXa*aX*aaX
+   Xaa*Xa*aX
+   Xa*aa*aaX
+   XaaXXaaaX
    XXXXXXXXX

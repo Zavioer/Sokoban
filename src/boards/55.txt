@@ -1,17 +1,17 @@
 22
 15
  XXXXXXXXXXXXXXXXXXXXX
-XX                   X
-X    * X      XX X   X
-X  XXXXXX XXX  X*XX XX
-XX*X   XX*X....   X X 
-X  X    * X....XX X X 
-X * X X X X....XX   X 
-X * X**   X....XX*X X 
-X X *@*XX*X....XX   X 
-X   ***   X....X    X 
-X  *X   X XXXXXX *XXX 
-XX  X XXX**  *   * X  
-XX     X *  * XX   X  
- XXXXX   X   XXXXXXX  
+XXaaaaaaaaaaaaaaaaaaaX
+Xaaaa*aXaaaaaaXXaXaaaX
+XaaXXXXXXaXXXaaX*XXaXX
+XX*XaaaXX*X....aaaXaX 
+XaaXaaaa*aX....XX XaX 
+Xa*aXaXaXaX....XXaaaX 
+Xa*aX**aaaX....XX*XaX 
+XaXa*@*XX*X....XXaaaX 
+Xaaa***aaaX....XaaaaX 
+Xaa*XaaaXaXXXXXXa*XXX 
+XXaaXaXXX**aa*aaa*aX  
+XXaaaaaXa*aa*aXXaaaX  
+ XXXXXaaaXaaaXXXXXXX  
      XXXXXXXXX        
