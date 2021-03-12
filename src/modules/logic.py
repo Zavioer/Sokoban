@@ -71,13 +71,13 @@ def start_the_game(screen, lvlName, game, points):
                 game.logicState = False
                 hud.timer.stop(pygame.time.get_ticks())
                 game.currentMenu = game.saveGameMenu
-                game.currentMenu.ownRunDisplay = True
 
                 game.currentPlayerState['width'] = mapWidth
                 game.currentPlayerState['height'] = mapHeight
                 game.currentPlayerState['sprites'] = allSprites
                 game.currentPlayerState['time'] = hud.timer.end_time
 
+                game.START_KEY = False
                 game.currentMenu.display_menu()
                 hud.timer.resume(pygame.time.get_ticks())
 

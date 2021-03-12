@@ -72,10 +72,11 @@ class MainMenu(Menu):
         It also draws the pointer and blits the screen every single frame.
         """
         self.runDisplay = True
+
         while self.runDisplay:
             self.game.check_events()
             self.check_input()
-            self.game.display.fill((0, 0, 0))
+            self.game.display.fill(BLACK)
             self.game.draw_text('SOKOBAN', 130, self.logoMenuX, self.logoMenuY, self.game.WHITE, self.game.fontTitle)
             self.game.draw_text('Start Game', 70, self.startMenuX, self.startMenuY, self.game.WHITE, self.game.fontName)
             self.game.draw_text('Load Level', 70, self.levelMenuX, self.levelMenuY, self.game.WHITE, self.game.fontName)
@@ -134,6 +135,7 @@ class MainMenu(Menu):
         Method that handles changing the currently displayed menu.
         """
         self.move_pointer()
+
         if self.game.START_KEY:
             if self.state == 'Start' and len(self.game.playerName) == 0:
                 self.game.currentMenu = self.game.inputMenu
@@ -188,39 +190,39 @@ class LevelMenu(Menu):
         self.saveMonit = ''
         self.state = 'One'
 
-    def movePointerQuit(self):
-        """
-        Method that handles quit monit
-        """
-        if self.saveMonit == '':
-            self.saveMonit = 'Yes'
-        if self.game.DOWN_KEY or self.game.S_KEY:
-            if self.saveMonit == 'Yes':
-                self.pointerRect.midtop = (self.secondModuleX + self.offset, self.secondModuleY)
-                self.saveMonit = 'No'
-            elif self.saveMonit == 'No':
-                self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
-                self.saveMonit = 'Yes'
-        elif self.game.UP_KEY or self.game.W_KEY:
-            if self.saveMonit == 'Yes':
-                self.pointerRect.midtop = (self.secondModuleX + self.offset, self.secondModuleY)
-                self.saveMonit = 'No'
-            elif self.saveMonit == 'No':
-                self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
-                self.saveMonit = 'Yes'
+    # def movePointerQuit(self):
+    #     """
+    #     Method that handles quit monit
+    #     """
+    #     if self.saveMonit == '':
+    #         self.saveMonit = 'Yes'
+    #     if self.game.DOWN_KEY or self.game.S_KEY:
+    #         if self.saveMonit == 'Yes':
+    #             self.pointerRect.midtop = (self.secondModuleX + self.offset, self.secondModuleY)
+    #             self.saveMonit = 'No'
+    #         elif self.saveMonit == 'No':
+    #             self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
+    #             self.saveMonit = 'Yes'
+    #     elif self.game.UP_KEY or self.game.W_KEY:
+    #         if self.saveMonit == 'Yes':
+    #             self.pointerRect.midtop = (self.secondModuleX + self.offset, self.secondModuleY)
+    #             self.saveMonit = 'No'
+    #         elif self.saveMonit == 'No':
+    #             self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
+    #             self.saveMonit = 'Yes'
 
-    def monitCheckInput(self, width, height, sprites, timer):
-        """
-        Method that handles quit monit.
-        """
-        self.game.check_events()
-        if self.game.START_KEY and self.saveMonit == 'Yes':
-            self.runDisplay = False
-            logic.saveBoard(width, height, sprites, timer, self.game.playerName, self.game.gameLevel)
-            self.game.currentMenu = self.game.mainMenu
-        elif self.game.ESC_PRESSED or self.game.BACK_KEY or (self.game.START_KEY and self.saveMonit == 'No'):
-            self.runDisplay = False
-            self.game.logicState = True
+    # def monitCheckInput(self, width, height, sprites, timer):
+    #     """
+    #     Method that handles quit monit.
+    #     """
+    #     self.game.check_events()
+    #     if self.game.START_KEY and self.saveMonit == 'Yes':
+    #         self.runDisplay = False
+    #         logic.saveBoard(width, height, sprites, timer, self.game.playerName, self.game.gameLevel)
+    #         self.game.currentMenu = self.game.mainMenu
+    #     elif self.game.ESC_PRESSED or self.game.BACK_KEY or (self.game.START_KEY and self.saveMonit == 'No'):
+    #         self.runDisplay = False
+    #         self.game.logicState = True
 
     def display_menu(self):
         """
@@ -333,7 +335,7 @@ class CreditsMenu(Menu):
             if self.game.START_KEY or self.game.BACK_KEY or self.game.ESC_PRESSED:
                 self.game.currentMenu = self.game.mainMenu
                 self.runDisplay = False
-            self.game.display.fill((0, 0, 0))
+            self.game.display.fill(BLACK)
             self.game.draw_text('THE GAME HAS BEEN WRITTEN BY', 85, self.creditsTitleX, self.creditsTitleY, self.game.WHITE, self.game.fontName)
             self.game.draw_text('PIOTR BATOR', 70, self.firstAuthorX, self.firstAuthorY, self.game.WHITE, self.game.fontName)
             self.game.draw_text('GABRIEL BRZOSKWINIA', 70, self.secondAuthorX, self.secondAuthorY, self.game.WHITE, self.game.fontName)
@@ -370,6 +372,7 @@ class InstructionsMenu(Menu):
         It also blits the screen every single frame.
         """
         self.runDisplay = True
+
         while self.runDisplay:
             self.game.check_events()
             if self.game.START_KEY:
@@ -379,7 +382,7 @@ class InstructionsMenu(Menu):
                 self.game.currentMenu = self.game.mainMenu
                 self.runDisplay = False
 
-            self.game.display.fill((0, 0, 0))
+            self.game.display.fill(BLACK)
             self.game.display.blit(self.image, (self.instructionsTextX - 250, self.instructionsTextY + 150))
             self.game.draw_text('USE', 55, self.instructionsTextX - 450, self.instructionsTextY, self.game.WHITE, self.game.fontName)
             self.game.draw_text('WSAD', 55, self.instructionsTextX - 340, self.instructionsTextY, self.game.RED, self.game.fontName)
@@ -411,12 +414,12 @@ class LegendMenu(Menu):
         It also blits the screen every single frame.
         """
         self.runDisplay = True
+        
         while self.runDisplay:
             self.game.check_events()
-            if self.game.START_KEY or self.game.BACK_KEY or self.game.ESC_PRESSED:
-                self.game.currentMenu = self.game.mainMenu
-                self.runDisplay = False
-            self.game.display.fill((0, 0, 0))
+            self.check_input()
+
+            self.game.display.fill(BLACK)
             self.game.draw_text('RULES', 100, self.legendTextX, self.legendTextY, self.game.WHITE, self.game.fontName)
             self.game.draw_text('IT IS A LOGICAL GAME WHOSE AIM IS TO MOVE', 45, self.legendTextX, self.legendTextY + 150, self.game.WHITE, self.game.fontName)
             self.game.draw_text('AND CORRECTLY POSITION THE', 45, self.legendTextX - 180, self.legendTextY + 220, self.game.WHITE, self.game.fontName)
@@ -431,6 +434,20 @@ class LegendMenu(Menu):
             self.game.draw_text('WE WISH YOU GOOD LUCK!', 45, self.legendTextX, self.legendTextY + 500, self.game.WHITE, self.game.fontName)
 
             self.blit_screen()
+
+    def check_input(self):
+        """
+        Method that handles changing the currently displayed menu.
+        """
+        if self.game.BACK_KEY:
+            self.game.currentMenu = self.game.mainMenu
+            self.runDisplay = False
+        if self.game.ESC_PRESSED:
+            self.game.currentMenu = self.game.mainMenu
+            self.runDisplay = False
+        if self.game.START_KEY:
+            self.game.currentMenu = self.game.mainMenu
+            self.runDisplay = False
 
 
 class DiffMenu(Menu):
@@ -461,12 +478,10 @@ class DiffMenu(Menu):
         It also blits the screen every single frame.
         """
         self.runDisplay = True
+
         while self.runDisplay:
             self.game.check_events()
             self.check_input()
-            if self.game.START_KEY or self.game.BACK_KEY or self.game.ESC_PRESSED:
-                self.game.currentMenu = self.game.mainMenu
-                self.runDisplay = False
 
             self.game.display.fill(BLACK)
             self.game.draw_text('SELECT YOUR DIFFICULTY', 85, self.diffTitleX, self.diffTitleY, self.game.WHITE, self.game.fontName)
@@ -482,6 +497,7 @@ class DiffMenu(Menu):
         Method that handles changing the currently displayed menu.
         """
         self.move_pointer()
+
         if self.game.BACK_KEY:
             self.game.currentMenu = self.game.mainMenu
             self.runDisplay = False
@@ -506,7 +522,7 @@ class DiffMenu(Menu):
             else:
                 logic.start_the_game(self.game.window, str(randrange(41, 60)) + ".txt", self.game, self.game.gamePoints)
 
-        if self.game.DOWN_KEY:
+        if self.game.DOWN_KEY or self.game.S_KEY:
             if self.state == 'Easy':
                 self.pointerRect.midtop = (self.mediumX + self.offset, self.mediumY)
                 self.state = 'Medium'
@@ -519,7 +535,7 @@ class DiffMenu(Menu):
                 self.pointerRect.midtop = (self.easyX + self.offset, self.easyY)
                 self.state = 'Easy'
 
-        elif self.game.UP_KEY:
+        elif self.game.UP_KEY or self.game.W_KEY:
             if self.state == 'Easy':
                 self.pointerRect.midtop = (self.hardX + self.offset, self.hardY)
                 self.state = 'Hard'
@@ -552,6 +568,7 @@ class InputName(Menu):
         Method that handles changing the currently displayed menu.
         """
         if len(self.game.playerName) > 0 and self.game.START_KEY:
+            self.game.START_KEY = False
             self.runDisplay = False
             self.game.currentMenu = self.game.levelMenu
             self.game.running = True
@@ -597,6 +614,8 @@ class InputName(Menu):
         self.runDisplay = True
 
         while self.runDisplay:
+
+
             self.game.display.fill(BLACK)
             self.game.draw_text('TYPE IN YOUR NICKNAME [20]', 95, self.inputNameX, self.inputNameY + 50, self.game.WHITE,
                                 self.game.fontName)
@@ -631,17 +650,23 @@ class RankMenu(Menu):
         It also blits the screen every single frame.
         """
         self.runDisplay = True
+
         scoreFile = open('./src/img/scoreFile.txt', 'r')
         scoreList = []
+
         for playerScore in scoreFile.readlines():
             scoreList.append(playerScore)
+
         while self.runDisplay:
             self.game.check_events()
+
             if self.game.START_KEY or self.game.BACK_KEY or self.game.ESC_PRESSED:
                 self.game.currentMenu = self.game.mainMenu
                 self.runDisplay = False
+
             self.game.display.fill(BLACK)
             self.game.draw_text('RANKING', 90, self.headerX, self.headerY, self.game.WHITE, self.game.fontName)
+
             for i in range(int(len(scoreList))):
                 splitted = scoreList[i].split()
                 index = i + 1
@@ -677,10 +702,11 @@ class SaveGameMenu(Menu):
         self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
         self.level = 1
         self.state = 'Yes'
-        self.ownRunDisplay = True
 
     def display_menu(self):
-        while self.ownRunDisplay:
+        self.runDisplay = True
+
+        while self.runDisplay:
             self.game.check_events()
             self.check_input()
             self.game.display.fill(BLACK)
@@ -703,18 +729,18 @@ class SaveGameMenu(Menu):
         self.move_pointer()
         if self.game.START_KEY:
             if self.state == 'Yes':
-                self.ownRunDisplay = False
+                self.runDisplay = False
                 logic.saveBoard(self.game.currentPlayerState['width'], self.game.currentPlayerState['height'],
                                 self.game.currentPlayerState['sprites'], self.game.currentPlayerState['time'],
                                 self.game.playerName, self.level)
-                # self.runDisplay = False
-                # self.game.currentMenu = self.game.mainMenu
+
+                self.game.START_KEY = False
+                self.game.currentMenu = self.game.mainMenu
+                self.game.currentMenu.display_menu()
 
             if self.state == 'No':
-                self.ownRunDisplay = False
-                print(f'>> {self.game.logicState}')
+                self.runDisplay = False
                 self.game.logicState = True
-
 
     def move_pointer(self):
         """
