@@ -1,3 +1,5 @@
+17
+13
         XXXXX    
         X   XXXXX
         X X*XX  X

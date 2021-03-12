@@ -21,6 +21,7 @@ class Menu:
         game: class, required
             Game class
         """
+
         self.game = game
         self.runDisplay = True
         self.pointerRect = pygame.Rect(0, 0, 20, 20)
@@ -50,8 +51,8 @@ class MainMenu(Menu):
         Menu.__init__(self, game)
         """
         :attributes
-        logoMenuX, startMenuX, levelMenuX, instructionsMenuX,rankingMenuX creditsMenuX, quitMenuX - Buttons initial x coordinates.
-        logoMenuY, startMenuY, levelMenuY, instructionsMenuY,rankingMenuY creditsMenuY, quitMenuY - Buttons initial y coordinates.
+        logoMenuX, startMenuX, levelMenuX, instructionsMenuX, rankingMenuX, creditsMenuX, quitMenuX - Buttons initial x coordinates.
+        logoMenuY, startMenuY, levelMenuY, instructionsMenuY, rankingMenuY, creditsMenuY, quitMenuY - Buttons initial y coordinates.
         :param
         game: class, required
             Game class
@@ -68,7 +69,7 @@ class MainMenu(Menu):
 
     def display_menu(self):
         """
-        Method that displays the menu. It prints 6 buttons thanks to the draw_text() method.
+        Method that displays the menu. It prints 7 buttons thanks to the draw_text() method.
         It also draws the pointer and blits the screen every single frame.
         """
         self.runDisplay = True
@@ -79,7 +80,7 @@ class MainMenu(Menu):
             self.game.display.fill(BLACK)
             self.game.draw_text('SOKOBAN', 130, self.logoMenuX, self.logoMenuY, self.game.WHITE, self.game.fontTitle)
             self.game.draw_text('Start Game', 70, self.startMenuX, self.startMenuY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('Load Level', 70, self.levelMenuX, self.levelMenuY, self.game.WHITE, self.game.fontName)
+            self.game.draw_text('Load Module', 70, self.levelMenuX, self.levelMenuY, self.game.WHITE, self.game.fontName)
             self.game.draw_text('Instructions', 70, self.instructionsMenuX, self.instructionsMenuY, self.game.WHITE, self.game.fontName)
             self.game.draw_text('Ranking', 70, self.rankingMenuX, self.rankingMenuY, self.game.WHITE, self.game.fontName)
             self.game.draw_text('Credits', 70, self.creditsMenuX, self.creditsMenuY, self.game.WHITE, self.game.fontName)
@@ -95,58 +96,74 @@ class MainMenu(Menu):
             if self.state == 'Start':
                 self.pointerRect.midtop = (self.levelMenuX + self.offset, self.levelMenuY)
                 self.state = 'Level'
+                self.game.previousState = 'Start'
             elif self.state == 'Level':
                 self.pointerRect.midtop = (self.instructionsMenuX + self.offset, self.instructionsMenuY)
                 self.state = 'Instructions'
+                self.game.previousState = 'Level'
             elif self.state == 'Instructions':
                 self.pointerRect.midtop = (self.rankingMenuX + self.offset, self.rankingMenuY)
                 self.state = 'Ranking'
+                self.game.previousState = 'Instructions'
             elif self.state == 'Ranking':
                 self.pointerRect.midtop = (self.creditsMenuX + self.offset, self.creditsMenuY)
                 self.state = 'Credits'
+                self.game.previousState = 'Ranking'
             elif self.state == 'Credits':
                 self.pointerRect.midtop = (self.quitMenuX + self.offset, self.quitMenuY)
                 self.state = 'Quit'
+                self.game.previousState = 'Credits'
             elif self.state == 'Quit':
                 self.pointerRect.midtop = (self.startMenuX + self.offset, self.startMenuY)
                 self.state = 'Start'
+                self.game.previousState = 'Quit'
         elif self.game.UP_KEY or self.game.W_KEY:
             if self.state == 'Start':
                 self.pointerRect.midtop = (self.quitMenuX + self.offset, self.quitMenuY)
                 self.state = 'Quit'
+                self.game.previousState = 'Start'
             elif self.state == 'Quit':
                 self.pointerRect.midtop = (self.creditsMenuX + self.offset, self.creditsMenuY)
                 self.state = 'Credits'
+                self.game.previousState = 'Quit'
             elif self.state == 'Credits':
                 self.pointerRect.midtop = (self.rankingMenuX + self.offset, self.rankingMenuY)
                 self.state = 'Ranking'
+                self.game.previousState = 'Credits'
             elif self.state == 'Ranking':
                 self.pointerRect.midtop = (self.instructionsMenuX + self.offset, self.instructionsMenuY)
                 self.state = 'Instructions'
+                self.game.previousState = 'Ranking'
             elif self.state == 'Instructions':
                 self.pointerRect.midtop = (self.levelMenuX + self.offset, self.levelMenuY)
                 self.state = 'Level'
+                self.game.previousState = 'Instructions'
             elif self.state == 'Level':
                 self.pointerRect.midtop = (self.startMenuX + self.offset, self.startMenuY)
                 self.state = 'Start'
+                self.game.previousState = 'Level'
 
     def check_input(self):
         """
-        Method that handles changing the currently displayed menu.
+        Method that handles changing the currently displayed menu depending on whether player has given its nickname.
         """
         self.move_pointer()
 
         if self.game.START_KEY:
             if self.state == 'Start' and len(self.game.playerName) == 0:
+                self.game.previousState = 'Start'
                 self.game.currentMenu = self.game.inputMenu
                 self.runDisplay = False
             elif self.state == 'Start' and len(self.game.playerName) > 0:
-                self.game.currentMenu = self.game.levelMenu
+                self.game.previousState = 'Start'
+                self.game.currentMenu = self.game.diffMenu
                 self.runDisplay = False
             elif self.state == 'Level' and len(self.game.playerName) == 0:
+                self.game.previousState = 'Level'
                 self.game.currentMenu = self.game.inputMenu
                 self.runDisplay = False
             elif self.state == 'Level' and len(self.game.playerName) > 0:
+                self.game.previousState = 'Level'
                 self.game.currentMenu = self.game.levelMenu
                 self.runDisplay = False
             elif self.state == 'Instructions':
@@ -189,40 +206,7 @@ class LevelMenu(Menu):
         self.level = 1
         self.saveMonit = ''
         self.state = 'One'
-
-    # def movePointerQuit(self):
-    #     """
-    #     Method that handles quit monit
-    #     """
-    #     if self.saveMonit == '':
-    #         self.saveMonit = 'Yes'
-    #     if self.game.DOWN_KEY or self.game.S_KEY:
-    #         if self.saveMonit == 'Yes':
-    #             self.pointerRect.midtop = (self.secondModuleX + self.offset, self.secondModuleY)
-    #             self.saveMonit = 'No'
-    #         elif self.saveMonit == 'No':
-    #             self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
-    #             self.saveMonit = 'Yes'
-    #     elif self.game.UP_KEY or self.game.W_KEY:
-    #         if self.saveMonit == 'Yes':
-    #             self.pointerRect.midtop = (self.secondModuleX + self.offset, self.secondModuleY)
-    #             self.saveMonit = 'No'
-    #         elif self.saveMonit == 'No':
-    #             self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
-    #             self.saveMonit = 'Yes'
-
-    # def monitCheckInput(self, width, height, sprites, timer):
-    #     """
-    #     Method that handles quit monit.
-    #     """
-    #     self.game.check_events()
-    #     if self.game.START_KEY and self.saveMonit == 'Yes':
-    #         self.runDisplay = False
-    #         logic.saveBoard(width, height, sprites, timer, self.game.playerName, self.game.gameLevel)
-    #         self.game.currentMenu = self.game.mainMenu
-    #     elif self.game.ESC_PRESSED or self.game.BACK_KEY or (self.game.START_KEY and self.saveMonit == 'No'):
-    #         self.runDisplay = False
-    #         self.game.logicState = True
+        self.visited = False
 
     def display_menu(self):
         """
@@ -230,6 +214,7 @@ class LevelMenu(Menu):
         It also draws the pointer and blits the screen every single frame.
         """
         self.runDisplay = True
+
         while self.runDisplay:
             self.game.check_events()
             self.check_input()
@@ -243,29 +228,30 @@ class LevelMenu(Menu):
 
     def check_input(self):
         """
-        Method that handles changing the currently displayed menu.
+        Method that handles changing the currently displayed menu. Supports three module selection logic.
         """
         self.move_pointer()
 
-        if self.game.BACK_KEY:
-            self.game.currentMenu = self.game.mainMenu
-            self.runDisplay = False
-
-        if self.game.ESC_PRESSED:
+        if self.game.BACK_KEY or self.game.ESC_PRESSED:
             self.game.currentMenu = self.game.mainMenu
             self.runDisplay = False
 
         if self.game.START_KEY:
-            if self.state == 'One':
+            if self.state == 'One' and self.visited == True:
                 self.game.currentMenu = self.game.diffMenu
+                self.runDisplay = False
+                self.game.running = True
+                self.game.currentMenu.display_menu()
 
-            elif self.state == 'Two':
+            elif self.state == 'Two' and self.visited == True:
                 self.runDisplay = False
                 while self.game.gameLevel <= 20 and self.game.BACK_KEY == False or self.game.ESC_PRESSED == False:
                     logic.start_the_game(self.game.window, str(self.game.gameLevel) + ".txt", self.game, self.game.gamePoints)
-            elif self.state == 'Three':
+
+            elif self.state == 'Three' and self.visited == True:
                 self.run_display = False
                 logic.create_map(self.game.window, self.game.playerName, 15, 15)
+
             else:
                 self.game.currentMenu = self.game.mainMenu
             self.runDisplay = False
@@ -278,32 +264,32 @@ class LevelMenu(Menu):
             if self.state == 'One':
                 self.pointerRect.midtop = (self.secondModuleX + self.offset, self.secondModuleY)
                 self.state = 'Two'
-
+                self.visited = True
             elif self.state == 'Two':
                 self.pointerRect.midtop = (self.thirdModuleX + self.offset, self.thirdModuleY)
                 self.state = 'Three'
-
+                self.visited = True
             elif self.state == 'Three':
                 self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
                 self.state = 'One'
-
+                self.visited = True
         elif self.game.UP_KEY or self.game.W_KEY:
             if self.state == 'One':
                 self.pointerRect.midtop = (self.thirdModuleX + self.offset, self.thirdModuleY)
                 self.state = 'Three'
-
+                self.visited = True
             elif self.state == 'Two':
                 self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
                 self.state = 'One'
-
+                self.visited = True
             elif self.state == 'Three':
                 self.pointerRect.midtop = (self.secondModuleX + self.offset, self.secondModuleY)
                 self.state = 'Two'
-
+                self.visited = True
 
 class CreditsMenu(Menu):
     """
-    Class which represents the credits menu, inheriting from the Menu class.
+    Class which represents the credits menu, inheriting from the Menu class. Shows the info about the game developers.
     """
     def __init__(self, game):
         """
@@ -330,6 +316,7 @@ class CreditsMenu(Menu):
         It also blits the screen every single frame.
         """
         self.runDisplay = True
+
         while self.runDisplay:
             self.game.check_events()
             if self.game.START_KEY or self.game.BACK_KEY or self.game.ESC_PRESSED:
@@ -350,6 +337,7 @@ class CreditsMenu(Menu):
 class InstructionsMenu(Menu):
     """
     Class which represents the instructions menu, inheriting from the Menu class.
+    It is an interface that presents the rules of the game and controls to the player.
     """
     def __init__(self, game):
         """
@@ -394,6 +382,7 @@ class InstructionsMenu(Menu):
 class LegendMenu(Menu):
     """
     Class which represents the legend menu, inheriting from the Menu class.
+    The rules of the game are displayed here.
     """
     def __init__(self, game):
         """
@@ -452,7 +441,7 @@ class LegendMenu(Menu):
 
 class DiffMenu(Menu):
     """
-    Class which represents the diffMenu, inheriting from the Menu class.
+    Class which represents the diffMenu, inheriting from the Menu class. Player can choose game difficulty here.
     """
     def __init__(self, game):
         """
@@ -471,6 +460,7 @@ class DiffMenu(Menu):
         self.hardX, self.hardY = midWidth, midHeight + 200
         self.pointerRect.midtop = (self.easyX + self.offset, self.easyY)
         self.state = 'Easy'
+        self.visited = False
 
     def display_menu(self):
         """
@@ -497,7 +487,6 @@ class DiffMenu(Menu):
         Method that handles changing the currently displayed menu.
         """
         self.move_pointer()
-
         if self.game.BACK_KEY:
             self.game.currentMenu = self.game.mainMenu
             self.runDisplay = False
@@ -510,27 +499,25 @@ class DiffMenu(Menu):
 
     def move_pointer(self):
         """
-        Method that includes pointer's movement logic. Moreover, it includes an end event handler.
+        Method that includes pointer's movement logic. Moreover, it includes an end event handler. Depending on the chosen difficulty, the player draws a map from three fields.
         """
         if self.game.START_KEY:
-            if self.state == 'Easy':
-                self.runDisplay = False
-                self.game.currentLevel = "2.txt"
-                logic.start_the_game(self.game.window,  self.game.currentLevel, self.game, self.game.gamePoints)
-            elif self.state == 'Medium':
+            if self.state == 'Easy' and self.visited == True:
+                logic.start_the_game(self.game.window, str(randrange(1, 20)) + ".txt", self.game, self.game.gamePoints)
+            elif self.state == 'Medium' and self.visited == True:
                 logic.start_the_game(self.game.window, str(randrange(21, 40)) + ".txt", self.game, self.game.gamePoints)
-            else:
+            elif self.state == 'Hard' and self.visited == True:
                 logic.start_the_game(self.game.window, str(randrange(41, 60)) + ".txt", self.game, self.game.gamePoints)
 
         if self.game.DOWN_KEY or self.game.S_KEY:
             if self.state == 'Easy':
                 self.pointerRect.midtop = (self.mediumX + self.offset, self.mediumY)
                 self.state = 'Medium'
-
+                self.visited = True
             elif self.state == 'Medium':
                 self.pointerRect.midtop = (self.hardX + self.offset, self.hardY)
                 self.state = 'Hard'
-
+                self.visited = True
             elif self.state == 'Hard':
                 self.pointerRect.midtop = (self.easyX + self.offset, self.easyY)
                 self.state = 'Easy'
@@ -539,17 +526,20 @@ class DiffMenu(Menu):
             if self.state == 'Easy':
                 self.pointerRect.midtop = (self.hardX + self.offset, self.hardY)
                 self.state = 'Hard'
-
+                self.visited = True
             elif self.state == 'Medium':
                 self.pointerRect.midtop = (self.easyX + self.offset, self.easyY)
                 self.state = 'Easy'
-
+                self.visited = True
             elif self.state == 'Hard':
                 self.pointerRect.midtop = (self.mediumX + self.offset, self.mediumY)
                 self.state = 'Medium'
-
+                self.visited = True
 
 class InputName(Menu):
+    """
+    This is a class that handles user input. It gives its name, which is necessary for many functions in the game to work.
+    """
     def __init__(self, game):
         """
         :attributes
@@ -628,7 +618,7 @@ class InputName(Menu):
 
 class RankMenu(Menu):
     """
-    Class which represents the rank menu, inheriting from the Menu class.
+    Class which represents the rank menu, inheriting from the Menu class. The results are read from the file and a ranking of the players is being created.
     """
     def __init__(self, game):
         """

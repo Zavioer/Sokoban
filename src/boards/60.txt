@@ -1,3 +1,5 @@
+26
+16
         XXXXX             
         X   XXXX          
         X *    XXXX  XXXX 
