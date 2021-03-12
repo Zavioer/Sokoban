@@ -1,3 +1,5 @@
+15
+12
  XXXXXXX       
  X  X  XXXXX   
 XX  X  X...XXX 

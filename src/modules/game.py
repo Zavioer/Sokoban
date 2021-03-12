@@ -39,6 +39,7 @@ class Game:
         self.playerName = ''
         self.currentLevel = 0
         self.currentPlayerState = {'width': 0, 'height': 0, 'map': [], 'time': 0}
+        self.previousState = 'Start'
 
     def check_events(self):
         if self.running:
