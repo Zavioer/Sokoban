@@ -23,15 +23,18 @@ class Game:
 
         self.fontTitle = 'src/fonts/Future TimeSplitters.otf'
         self.fontName = 'src/fonts/gomarice_no_continue.ttf'
+
         self.mainMenu = MainMenu(self)
+        self.levelMenu = LevelMenu(self)
+        self.instructionsMenu = InstructionsMenu(self)
+        self.legendMenu = LegendMenu(self)
+        self.rankMenu = RankMenu(self)
         self.inputMenu = InputName(self)
         self.diffMenu = DiffMenu(self)
-        self.rankMenu = RankMenu(self)
-        self.levelMenu = LevelMenu(self)
-        self.legendMenu = LegendMenu(self)
-        self.instructionsMenu = InstructionsMenu(self)
         self.creditsMenu = CreditsMenu(self)
         self.saveGameMenu = SaveGameMenu(self)
+        self.widthHeightMenu = WidthHeightMenu(self)
+
         self.currentMenu = self.mainMenu
         self.BLACK, self.WHITE, self.RED = BLACK, WHITE, RED
         self.gameLevel = 1
@@ -45,6 +48,7 @@ class Game:
         if self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    self.BACK_KEY = True
                     self.running, self.playing = False, False
                     self.currentMenu.runDisplay = False
 
