@@ -2,20 +2,20 @@
 19
    XXXXXXXXXX        
    X........XXXX     
-   X.X.X....X  X     
-   X........** X     
-   X     .XXX  XXXX  
- XXXXXXXXX  * X   X  
- X     *   * *  * X  
- X  X    X  * *X  X  
- XX XXXXX   X  X  X  
- X *     X   XXXX X  
-XX  *X   X XX  X  X  
-X    XX*XXX    X  XX 
-X *    * X  X  X   X 
-XXXXX    X XX X XX XX
-    X*X X  *  * *   X
-    X@X  *X***  X   X
-    XXX  *      XXXXX
-      XX  X  X  X    
+   X.X.X....XaaX     
+   X........**aX     
+   Xaaaaa.XXXaaXXXX  
+ XXXXXXXXXaa*aXaaaX  
+ Xaaaaa*aaa*a*aa*aX  
+ XaaXaaaaXaa*a*XaaX  
+ XXaXXXXXaaaXaaXaaX  
+ Xa*aaaaaXaaaXXXXaX  
+XXaa*XaaaXaXXaaXaaX  
+XaaaaXX*XXXaaaaXaaXX 
+Xa*aaaa*aXaaXaaXaaX 
+XXXXXaaaaXaXXaXaXXaXX
+    X*XaXaa*aa*a*aaaX
+    X@Xaa*X***aaXaaaX
+    XXXaa*aaaaaaXXXXX
+      XXaaXaaXaaX    
        XXXXXXXXXX    

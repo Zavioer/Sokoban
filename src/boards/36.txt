@@ -1,21 +1,21 @@
 18
 19
      XXXX         
-   XXX  XX        
-XXXX  *  X        
-X   * *  XXXX     
-X *   X *   X XXXX
-X  X  X   * X X..X
-XX*X* XXXX*XXXX..X
- X   XXXXX XX ...X
- X*X XX@XX XX  ..X
- X X    *     ...X
- X   XXXX XXX  ..X
- XXX XX X  XX ...X
-  XX* XXXX* XXX..X
-  X   XX    X X..X
- XX **XX  * X XXXX
- X     **** X     
- X * XXX    X     
- X   X XXXXXX     
+   XXXaaXX        
+XXXXaa*aaX        
+Xaaa*a*aaXXXX     
+Xa*aaaXa*aaaXaXXXX
+XaaXaaXaaa*aXaX..X
+XX*X*aXXXX*XXXX..X
+ XaaaXXXXXaXXa...X
+ X*XaXX@XXaXXaa..X
+ XaXaaaa*aaaaa...X
+ XaaaXXXXaXXXaa..X
+ XXXaXXaXaaXXa...X
+  XX*aXXXX*aXXX..X
+  XaaaXXaaaaX X..X
+ XXa**XXaa*aX XXXX
+ Xaaaaa****aX     
+ Xa*aXXXaaaaX     
+ XaaaX XXXXXX     
  XXXXX            

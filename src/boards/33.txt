@@ -1,17 +1,17 @@
 13
 15
       XXXX   
-  XXXXX  X   
- XX     *X   
-XX *  XX XXX 
-X@* * X *  X 
-XXXX XX   *X 
- X....X* * X 
- X....X   *X 
- X....  ** XX
- X... X *   X
- XXXXXX* *  X
-      X   XXX
-      X* XXX 
-      X  X   
+  XXXXXaaX   
+ XXaaaaa*X   
+XXa*aaXXaXXX 
+X@*a*aXa*aaX 
+XXXXaXXaaa*X 
+ X....X*a*aX 
+ X....Xaaa*X 
+ X....aaa**aXX
+ X... Xa*aaaX
+ XXXXXX*a*aaX
+      XaaaXXX
+      X*aXXX 
+      XaaX   
       XXXX   
