@@ -1,0 +1,6 @@
+{"userNameVar": "Piotr Konewka", "userScore": 69}
+{"userNameVar": "Jozin Z bazin", "userScore": 420}
+{"userNameVar": "Gabryjela","userScore": 960}
+{"userNameVar": "YoungSyk","userScore": 80}
+{"userNameVar": "Usmiechania","userScore": 1}
+{"userNameVar": "Big L","userScore": 88}

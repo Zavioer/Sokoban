@@ -2,6 +2,7 @@ import os
 import time
 import shelve
 import pygame
+import json
 from pygame.locals import *
 from .blocks import Floor, Box, Destination, Wall
 from .player import Player
@@ -143,7 +144,7 @@ def startTheGame(screen, lvlName, game, points):
         pygame.display.flip()
 
 
-def saveBoard(width, height, sprites, endTime, playerName, lvlName):
+def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints):
     """
     Function for saving current playing lvl and additional information in to
     shelve file.
@@ -179,7 +180,7 @@ def saveBoard(width, height, sprites, endTime, playerName, lvlName):
     shelveFile = shelve.open(os.path.join('./src/saves', fileName))
 
     shelveFile['widthBoardVar'] = width
-    shelveFile['hieghtBoardVar'] = height
+    shelveFile['heightBoardVar'] = height
     shelveFile['lvlNameVar'] = lvlName
     shelveFile['userNameVar'] = playerName
     shelveFile['endTimeVar'] = endTime
@@ -187,6 +188,28 @@ def saveBoard(width, height, sprites, endTime, playerName, lvlName):
 
     shelveFile.close()
 
+    data = {
+        'userNameVar' : playerName,
+        'userScore' : gamePoints
+    }
+
+    with open('scoreFile.txt', 'a') as scoreFile:
+        json.dump(data, scoreFile)
+        scoreFile.write('\n')
+
+def removeMap(playerName, mapID):
+    """
+    Function for module III which allows player to delete his own map.
+    :param playerName:
+        Map creator nick.
+    :param mapID:
+        ID of created map.
+    """
+    if os.path.isfile(str(mapID) + 'txt'):
+        os.remove(mapID)
+        print(f'Map deleted successfully.')
+    else:
+        print(f'File not exist.')
 
 def createMap(screen, playerName, width, height):
     """
@@ -300,7 +323,7 @@ def loadMap(fileName):
     mapDetails = {}
 
     mapDetails['width'] = shelveFile['widthBoardVar']
-    mapDetails['height'] = shelveFile['hieghtBoardVar']
+    mapDetails['height'] = shelveFile['heightBoardVar']
     mapDetails['lvlName'] = shelveFile['lvlNameVar']
     mapDetails['playerName'] = shelveFile['userNameVar']
     mapDetails['endTime'] = shelveFile['endTimeVar']

@@ -1,5 +1,6 @@
 import time
 import pygame
+import json
 from src.modules import logic, functions
 from random import randrange
 from .settings import *
@@ -423,7 +424,7 @@ class LegendMenu(Menu):
         It also blits the screen every single frame.
         """
         self.runDisplay = True
-        
+
         while self.runDisplay:
             self.game.reset_keys()
             self.game.checkEvents()
@@ -671,11 +672,7 @@ class RankMenu(Menu):
         """
         self.runDisplay = True
 
-        scoreFile = open('./src/img/scoreFile.txt', 'r')
-        scoreList = []
 
-        for playerScore in scoreFile.readlines():
-            scoreList.append(playerScore)
 
         while self.runDisplay:
             self.game.checkEvents()
@@ -686,15 +683,26 @@ class RankMenu(Menu):
 
             self.game.display.fill(BLACK)
             self.game.draw_text('RANKING', 90, self.headerX, self.headerY, self.game.WHITE, self.game.fontName)
+            self.game.draw_text('NAME', 60, self.headerX - 300, self.headerY + 100, self.game.WHITE, self.game.fontName)
+            self.game.draw_text('POINTS', 60, self.headerX + 300, self.headerY + 100, self.game.WHITE, self.game.fontName)
+            def getScore(table):
+                return table.get('userScore')
 
-            for i in range(int(len(scoreList))):
-                splitted = scoreList[i].split()
-                index = i + 1
-                name = splitted[0]
-                points = splitted[1]
-                time = splitted[2]
-                self.game.draw_text(str(index) + ". " + str(name) + " P:" + str(points) + " T:" + str(time), 60, self.headerX, self.itemY + (i * 100), self.game.WHITE, self.game.fontName)
-            self.blitScreen()
+            with open('scoreFile.txt', 'r') as scoreFile:
+                table = [json.loads(line) for line in scoreFile]
+                counter = 1
+
+                table.sort(key=getScore, reverse = True)
+
+                for row in table:
+                    name = table[counter - 1]['userNameVar']
+                    points = table[counter - 1]['userScore']
+                    if counter <= 5:
+                        self.game.draw_text(str(counter) + '. ' + str(name), 50, self.headerX - 300, self.itemY + (counter * 60), self.game.WHITE, self.game.fontName)
+                        self.game.draw_text(str(points), 50, self.headerX + 300, self.itemY + (counter * 60), self.game.RED, self.game.fontName)
+                    counter += 1
+
+                self.blitScreen()
         scoreFile.close()
 
 
@@ -759,7 +767,7 @@ class SaveGameMenu(Menu):
 
                 logic.saveBoard(self.game.currentPlayerState['width'], self.game.currentPlayerState['height'],
                                 self.game.currentPlayerState['sprites'], self.game.currentPlayerState['time'],
-                                self.game.playerName, self.game.gameLevel)
+                                self.game.playerName, self.game.gameLevel, self.game.gamePoints)
 
             if self.state == 'No':
                 self.runDisplay = False
