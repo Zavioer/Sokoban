@@ -41,6 +41,8 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
+GRAY = pygame.Color('gray15')
+LIGHTSKYBLUE = pygame.Color('lightskyblue3')
 
 # In game HUD
 HUD_SIZE = 200

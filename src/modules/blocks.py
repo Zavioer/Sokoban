@@ -60,7 +60,7 @@ class Box(pygame.sprite.Sprite):
         self.moveX = 0
         self.moveY = 0
 
-    def collision_wall(self, object_list):
+    def collisionWall(self, object_list):
         """
         Check if instance collide with wall in wall group.
 
@@ -86,15 +86,13 @@ class Box(pygame.sprite.Sprite):
         self.rect.x -= self.moveX
         self.rect.y -= self.moveY
 
-    def collision_box(self, group_box):
+    def collisionBox(self, group_box):
         """
         Check if instance collide with another box.
 
         :param
         group_box: pygame.Sprite.Group
             Group that contains box sprites.
-
-        :return:
         """
         self.rect.x += self.moveX
         self.rect.y += self.moveY
@@ -118,7 +116,6 @@ class Box(pygame.sprite.Sprite):
         direction: string
             Name of direction in which box will be moved. Allowed values
             (north, east, south, west).
-        :return:
         """
         if direction == 'north':
             self.moveY -= STOREKEEPER_MOVE
@@ -133,11 +130,10 @@ class Box(pygame.sprite.Sprite):
 
 
 class Wall(pygame.sprite.Sprite):
-    """
-    Class for warehouse walls that block player.
-    """
     def __init__(self, x, y):
         """
+        Class for warehouse walls that block player.
+
         :param
         x: int
             Initial value in x-axis.
@@ -155,6 +151,15 @@ class Wall(pygame.sprite.Sprite):
 
 class Floor(pygame.sprite.Sprite):
     def __init__(self, x, y):
+        """
+        Class for warehouse floor on which storekeeper moves.
+
+        :param
+            x: int
+                Initial value in x-axis.
+            y: int
+                Initial value in y-axis.
+        """
         pygame.sprite.Sprite.__init__(self)
         self.image = FLOOR_IMG.convert()
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
@@ -165,11 +170,10 @@ class Floor(pygame.sprite.Sprite):
 
 
 class Destination(pygame.sprite.Sprite):
-    """
-    Target for box instances
-    """
     def __init__(self, x, y):
         """
+        Target for box instances
+
         :attributes
         state: string
             Tells if the box is inside instance or not.

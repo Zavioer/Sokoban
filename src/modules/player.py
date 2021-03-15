@@ -72,7 +72,7 @@ class Player(pygame.sprite.Sprite):
         elif y < 0:
             self.direction = 'north'
 
-        self.change_position(self.direction)
+        self.changePosition(self.direction)
 
         self.moveX += x
         self.moveY += y
@@ -98,7 +98,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.x -= self.moveX
         self.rect.y -= self.moveY
 
-    def collision_box(self, box):
+    def collisionBox(self, box):
         """
         Check if instance collide with box.
 
@@ -115,7 +115,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.x -= self.moveX
         self.rect.y -= self.moveY
 
-    def change_position(self, direction):
+    def changePosition(self, direction):
         """
         Change player's move animation on move.
 

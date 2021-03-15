@@ -1,11 +1,11 @@
 13
 16
   XXXXXXXXX  
-  X&.&X&.&X  
-  X.&.&.&.X  
-  X&.&.&.&X  
-  X.&.&.&.X  
-  X&.&.&.&X  
+  Xa.aXa.aX  
+  X.a.a.a.X  
+  Xa.a.a.aX  
+  X.a.a.a.X  
+  Xa.a.a.aX  
   XXXaaaXXX  
     XaaaX    
 XXXXXXaXXXXXX

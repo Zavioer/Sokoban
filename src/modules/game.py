@@ -16,7 +16,7 @@ class Game:
         self.LEFT_KEY = False
         self.S_KEY = False
         self.W_KEY = False
-        self.logicState = True
+        self.logicState = False
 
         self.display = pygame.Surface((WIDTH, HEIGHT))
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -44,7 +44,7 @@ class Game:
         self.currentPlayerState = {'width': 0, 'height': 0, 'map': [], 'time': 0}
         self.previousState = 'Start'
 
-    def check_events(self):
+    def checkEvents(self):
         if self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

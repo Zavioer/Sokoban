@@ -11,7 +11,7 @@ from .game import *
 from .settings import *
 
 
-def start_the_game(screen, lvlName, game, points):
+def startTheGame(screen, lvlName, game, points):
     start = time.time()
     myFont = pygame.font.SysFont('Montserrat', 30)
 
@@ -75,10 +75,9 @@ def start_the_game(screen, lvlName, game, points):
                 game.currentPlayerState['width'] = mapWidth
                 game.currentPlayerState['height'] = mapHeight
                 game.currentPlayerState['sprites'] = allSprites
-                game.currentPlayerState['time'] = hud.timer.end_time
+                game.currentPlayerState['time'] = hud.timer.endTime
 
-                game.START_KEY = False
-                game.currentMenu.display_menu()
+                game.currentMenu.displayMenu()
                 hud.timer.resume(pygame.time.get_ticks())
 
             elif event.type == KEYDOWN:
@@ -92,20 +91,20 @@ def start_the_game(screen, lvlName, game, points):
                     storekeeper.move(STOREKEEPER_MOVE, 0)
                 elif event.key == K_r:
                     game.logicState = False
-                    resetMap(game.window, game.currentLevel, game, game.gamePoints)
+                    resetMap(game.window, lvlName, game, game.gamePoints)
 
         storekeeper.collision(walls.sprites())
 
         for boxSprite in boxes.sprites():
             boxesCopy = boxes.copy()
             boxesCopy.remove(boxSprite)
-            storekeeper.collision_box(boxSprite)
+            storekeeper.collisionBox(boxSprite)
 
             if storekeeper.boxCollision:
                 boxSprite.move(storekeeper.direction)
 
-                boxSprite.collision_wall(walls.sprites())
-                boxSprite.collision_box(boxesCopy.sprites())
+                boxSprite.collisionWall(walls.sprites())
+                boxSprite.collisionBox(boxesCopy.sprites())
 
                 if boxSprite.blockedByBox:
                     storekeeper.move(-storekeeper.moveX, -storekeeper.moveY)
@@ -115,15 +114,15 @@ def start_the_game(screen, lvlName, game, points):
                 storekeeper.boxCollision = False
 
         # Check if all boxes collide with destinations
-        placed_boxes = pygame.sprite.groupcollide(boxes, destinations, False, False)
+        placedBoxes = pygame.sprite.groupcollide(boxes, destinations, False, False)
 
-        if len(placed_boxes) == destinationsAmount:
-            # Correct needed stuck in lvl game
+        if len(placedBoxes) == destinationsAmount:
+            # # Correct needed stuck in lvl game
+            game.logicState = False
             game.currentMenu = game.mainMenu
             game.currentMenu.display_menu()
             game.gameLevel += 1
             game.gamePoints += 1
-            break
 
         # Updating and drawing sprites groups
         storekeeper.update()
@@ -133,10 +132,10 @@ def start_the_game(screen, lvlName, game, points):
         canvas.fill(BLACK)
 
         allSprites.draw(canvas)
-        hud.display_timer(pygame.time.get_ticks())
-        hud.display_lvl(lvlName)
-        hud.display_points(points)
-        hud.display_playerName(game.playerName)
+        hud.displayTimer(pygame.time.get_ticks())
+        hud.displayLvl(lvlName)
+        hud.displayPoints(points)
+        hud.displayPlayerName(game.playerName)
         screen.blit(hud.image, hud.rect)
 
         screen.blit(canvas, canvasPos)
@@ -177,24 +176,24 @@ def saveBoard(width, height, sprites, endTime, playerName, lvlName):
     formatedDate = time.strftime('%H_%M_%S_%d_%m_%Y', currentDate)
     fileName = ''.join((playerName, '_', 'BOARD', '_', formatedDate))
 
-    shelfFile = shelve.open(os.path.join('./src/saves', fileName))
+    shelveFile = shelve.open(os.path.join('./src/saves', fileName))
 
-    shelfFile['widthBoardVar'] = width
-    shelfFile['hieghtBoardVar'] = height
-    shelfFile['lvlNameVar'] = lvlName
-    shelfFile['userNameVar'] = playerName
-    shelfFile['endtimeVar'] = endTime
-    shelfFile['mainBoardVar'] = emptyBoard
+    shelveFile['widthBoardVar'] = width
+    shelveFile['hieghtBoardVar'] = height
+    shelveFile['lvlNameVar'] = lvlName
+    shelveFile['userNameVar'] = playerName
+    shelveFile['endTimeVar'] = endTime
+    shelveFile['mainBoardVar'] = emptyBoard
 
-    shelfFile.close()
+    shelveFile.close()
 
 
-def create_map(screen, player_name, width, height):
+def createMap(screen, playerName, width, height):
     """
     Function for module III which allows player to create own map.
     :param screen:
         Surface on which will draw canvas to draw map.
-    :param player_name:
+    :param playerName:
         Creator's map nick.
     :param width:
         Given map width. Max number 30.
@@ -205,7 +204,7 @@ def create_map(screen, player_name, width, height):
     boardWidth = BLOCK_SIZE * width
     boardHeight = BLOCK_SIZE * height
     canvas = pygame.Surface((boardWidth, boardHeight))
-    # canvas.fill(RED)
+
     canvasCenter = canvas.get_rect(center=((screen.get_width() - TOOLBOX_WIDTH) / 2,
                                            screen.get_height() / 2))
     clock = pygame.time.Clock()
@@ -277,7 +276,7 @@ def create_map(screen, player_name, width, height):
                         mouse.currBlock = button.attribute
 
             elif event.type == KEYDOWN and event.key == K_s:
-                playerBoard.save_board(player_name)
+                playerBoard.save_board(playerName)
 
 
         allTiles.update()
@@ -292,4 +291,19 @@ def create_map(screen, player_name, width, height):
 
 def resetMap(screen, lvlName, game, points):
     game.logicState = True
-    start_the_game(screen, lvlName, game, points)
+    startTheGame(screen, lvlName, game, points)
+
+
+def loadMap(fileName):
+    shelveFile = shelve.open(os.path.join('./src/saves', fileName))
+
+    mapDetails = {}
+
+    mapDetails['width'] = shelveFile['widthBoardVar']
+    mapDetails['height'] = shelveFile['hieghtBoardVar']
+    mapDetails['lvlName'] = shelveFile['lvlNameVar']
+    mapDetails['playerName'] = shelveFile['userNameVar']
+    mapDetails['endTime'] = shelveFile['endTimeVar']
+    mapDetails['emptyBoard'] = shelveFile['mainBoardVar']
+
+    return mapDetails

@@ -1,13 +1,13 @@
 22
 11
-    XXXXXXXXXXXXXXXXXXXX
+    XXXXX
     XaaaX
     X*aaX
   XXXaa*XXX
-  Xaa*aa*aX        XXXXX
-XXXaXaXXXaXXXXXXXXXaaaaX
-XaaaXaXXXaXXaaaa*aaa.aaX
-Xaaaaaa*aaaaaaaaaa*a.aaX
-XXXXXaXXXXaX@aaaaaa*.aaX
-    XaaaaaaXXXXXXXXXXXXX
+  Xaa*aa*aX
+XXXaXaXXXaX     XXXXXX
+XaaaXaXXXaXXXXXXXaa..X
+Xa*aa*aaaaaaaaaaaaa..X
+XXXXXaXXXXaX@XXXXaa..X
+    XaaaaaaXXX  XXXXXX
     XXXXXXXX

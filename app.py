@@ -10,7 +10,7 @@ def main():
     game = Game()
 
     while game.running:
-        game.currentMenu.display_menu()
+        game.currentMenu.displayMenu()
 
 
 if __name__ == '__main__':

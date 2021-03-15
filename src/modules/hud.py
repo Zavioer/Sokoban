@@ -20,26 +20,27 @@ class HUD(pygame.sprite.Sprite):
         self.rect.x = WIDTH - HUD_SIZE
         self.padding = 25
 
-    def display_lvl(self, lvl_number):
-        cleanName = lvl_number[:lvl_number.find('.')]
+    def displayLvl(self, lvlNumber):
+        cleanName = lvlNumber[:lvlNumber.find('.')]
         font = pygame.font.Font(None, 32)
         text = font.render(f'Level number: {cleanName}', 1, WHITE)
-        levelPosition = text.get_rect(y = self.padding, centerx= self.image.get_width() / 2)
+        levelPosition = text.get_rect(y=self.padding, centerx=self.image.get_width() / 2)
+        
         self.image.blit(text, levelPosition)
 
-    def display_timer(self, passedTicks):
+    def displayTimer(self, passedTicks):
         self.image.fill(RED)
-        self.timer.set_position(self.image.get_width() / 2, self.padding * 2)
+        self.timer.setPosition(self.image.get_width() / 2, self.padding * 2)
         self.timer.update(passedTicks)
         self.image.blit(self.timer.image, self.timer.rect)
 
-    def display_points(self, passedPoints):
+    def displayPoints(self, passedPoints):
         font = pygame.font.Font(None, 30)
         text = font.render(f'Points: {passedPoints}', 1, WHITE)
-        pointsPosition = text.get_rect(y = 75, centerx= self.image.get_width() / 2)
+        pointsPosition = text.get_rect(y=75, centerx=self.image.get_width() / 2)
         self.image.blit(text, pointsPosition)
 
-    def display_playerName(self, passedName):
+    def displayPlayerName(self, passedName):
         font = pygame.font.Font(None, 30)
         text = font.render(f'Nick: {passedName}', 1, WHITE)
 
@@ -62,7 +63,7 @@ class Timer(pygame.sprite.Sprite):
         self.y = 0
         self.buffer = 0
         self.startPause = 0
-        self.end_time = 0
+        self.endTime = 0
 
     def update(self, ticks):
         self.passedTime = round((ticks - self.start) / 1000)
@@ -89,13 +90,13 @@ class Timer(pygame.sprite.Sprite):
         self.rect.centerx = self.x
         self.rect.y = self.y
 
-    def set_position(self, x, y):
+    def setPosition(self, x, y):
         self.x = x
         self.y = y
 
     def stop(self, ticks):
         self.startPause = ticks
-        self.end_time = self.passedTime * 1000
+        self.endTime = self.passedTime * 1000
 
     def resume(self, ticks):
         self.buffer += round((ticks - self.startPause) / 1000)
