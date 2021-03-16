@@ -6,8 +6,8 @@
   XXXaa*XXX
   Xaa*aa*aX
 XXXaXaXXXaX     XXXXXX
-XaaaXaXXXaXXXXXXXaa..X
-Xa*aa*aaaaaaaaaaaaa..X
-XXXXXaXXXXaX@XXXXaa..X
+XaaaXaXXXaXXXXXXXaa*.X
+Xa*aa*aaaaaaaaaaaaa*.X
+XXXXXaXXXXaX@XXXXaa*.X
     XaaaaaaXXX  XXXXXX
     XXXXXXXX

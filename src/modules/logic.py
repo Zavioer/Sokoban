@@ -12,7 +12,7 @@ from .game import *
 from .settings import *
 
 
-def startTheGame(screen, lvlName, game, points):
+def startTheGame(screen, lvlName, game, points, flag):
     start = time.time()
     myFont = pygame.font.SysFont('Montserrat', 30)
 
@@ -92,7 +92,7 @@ def startTheGame(screen, lvlName, game, points):
                     storekeeper.move(STOREKEEPER_MOVE, 0)
                 elif event.key == K_r:
                     game.logicState = False
-                    resetMap(game.window, lvlName, game, game.gamePoints)
+                    resetMap(game.window, lvlName, game, game.gamePoints, flag)
 
         storekeeper.collision(walls.sprites())
 
@@ -118,12 +118,16 @@ def startTheGame(screen, lvlName, game, points):
         placedBoxes = pygame.sprite.groupcollide(boxes, destinations, False, False)
 
         if len(placedBoxes) == destinationsAmount:
-            # # Correct needed stuck in lvl game
-            game.logicState = False
-            game.currentMenu = game.mainMenu
-            game.currentMenu.display_menu()
-            game.gameLevel += 1
-            game.gamePoints += 1
+            if flag == MODULE_I:
+                game.logicState = False
+                game.currentMenu = game.mainMenu
+                game.currentMenu.display_menu()
+
+            if flag == MODULE_II:
+                game.logicState = False
+                game.gameLevel += 1
+                game.gamePoints += 1
+                game.START_KEY = True
 
         # Updating and drawing sprites groups
         storekeeper.update()
@@ -312,9 +316,9 @@ def createMap(screen, playerName, width, height):
         pygame.display.flip()
 
 
-def resetMap(screen, lvlName, game, points):
+def resetMap(screen, lvlName, game, points, flag):
     game.logicState = True
-    startTheGame(screen, lvlName, game, points)
+    startTheGame(screen, lvlName, game, points, flag)
 
 
 def loadMap(fileName):

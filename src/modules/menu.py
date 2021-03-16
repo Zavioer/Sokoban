@@ -214,7 +214,7 @@ class LevelMenu(Menu):
             self.game.reset_keys()
             self.game.checkEvents()
             self.checkInput()
-            print(f'Level Menu działa w tle')
+
             self.game.display.fill(BLACK)
             self.game.draw_text('Choose module: ', 120, midWidth, midHeight - 200, self.game.WHITE, self.game.fontName)
             self.game.draw_text('Module 1', 80, self.firstModuleX, self.firstModuleY, self.game.WHITE, self.game.fontName)
@@ -243,10 +243,13 @@ class LevelMenu(Menu):
                 self.runDisplay = False
                 self.game.logicState = True
 
-                while self.game.gameLevel <= 20 and self.game.BACK_KEY == False or self.game.ESC_PRESSED == False:
+                while self.game.gameLevel <= 20 and self.game.START_KEY:
                     currLvl = str(self.game.gameLevel)
+
                     logic.startTheGame(self.game.window, currLvl + ".txt",
-                                       self.game, self.game.gamePoints)
+                                       self.game, self.game.gamePoints, MODULE_II)
+
+                    self.game.logicState = True
 
             elif self.state == 'Three':
                 self.runDisplay = False
@@ -528,14 +531,14 @@ class DiffMenu(Menu):
         if self.game.START_KEY:
             if self.state == 'Easy':
                 self.game.logicState = True
-                logic.startTheGame(self.game.window, str(randrange(1, 20)) + ".txt", self.game, self.game.gamePoints)
+                logic.startTheGame(self.game.window, str(randrange(1, 20)) + ".txt", self.game, self.game.gamePoints, MODULE_I)
                 self.runDisplay = False
             elif self.state == 'Medium':
                 self.game.logicState = True
-                logic.startTheGame(self.game.window, str(randrange(21, 40)) + ".txt", self.game, self.game.gamePoints)
+                logic.startTheGame(self.game.window, str(randrange(21, 40)) + ".txt", self.game, self.game.gamePoints, MODULE_I)
             elif self.state == 'Hard':
                 self.game.logicState = True
-                logic.startTheGame(self.game.window, str(randrange(41, 60)) + ".txt", self.game, self.game.gamePoints)
+                logic.startTheGame(self.game.window, str(randrange(41, 60)) + ".txt", self.game, self.game.gamePoints, MODULE_I)
 
         if self.game.DOWN_KEY or self.game.S_KEY:
             if self.state == 'Easy':

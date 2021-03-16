@@ -58,3 +58,8 @@ TOOLBOX_WIDTH = 200
 
 # Utilities
 EMPTY_IMG = pygame.Surface((1, 1)).fill(GREEN)
+
+# Flags
+MODULE_I = 'MODULEI'
+MODULE_II = 'MODULEII'
+MODULE_III = 'MODULEIII'
