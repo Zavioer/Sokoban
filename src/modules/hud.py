@@ -1,16 +1,14 @@
-import pygame
-import math
-from .settings import *
+from src.modules.settings import *
 
 
 class HUD(pygame.sprite.Sprite):
-    """
-    Class for HUD which displays information about current game.
-    """
     def __init__(self, timer):
         """
-        :param timer: Timer
+        Class for HUD which displays information about current game.
+
+        :param timer:
             Timer object for time handling.
+        :type timer: Timer, required
         """
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((HUD_SIZE, WIDTH))
@@ -21,6 +19,13 @@ class HUD(pygame.sprite.Sprite):
         self.padding = 25
 
     def displayLvl(self, lvlNumber):
+        """
+        Display level menu on the HUD.
+
+        :param lvlNumber:
+            Full level name in convention number.txt.
+        :type lvlNumber: str, required
+        """
         cleanName = lvlNumber[:lvlNumber.find('.')]
         font = pygame.font.Font(None, 32)
         text = font.render(f'Level number: {cleanName}', 1, WHITE)
@@ -29,31 +34,58 @@ class HUD(pygame.sprite.Sprite):
         self.image.blit(text, levelPosition)
 
     def displayTimer(self, passedTicks):
-        self.image.fill(RED)
+        """
+        Display passed time on the HUD.
+
+        :param passedTicks:
+            Amount of ticks that passed from the start of the game.
+        :type passedTicks: int, required
+        """
         self.timer.setPosition(self.image.get_width() / 2, self.padding * 2)
         self.timer.update(passedTicks)
         self.image.blit(self.timer.image, self.timer.rect)
 
     def displayPoints(self, passedPoints):
+        """
+        Display points on the HUD.
+
+        :param passedPoints:
+            Amount of points to display on the HUD.
+        :type passedPoints: int, required
+        """
         font = pygame.font.Font(None, 30)
         text = font.render(f'Points: {passedPoints}', 1, WHITE)
         pointsPosition = text.get_rect(y=75, centerx=self.image.get_width() / 2)
         self.image.blit(text, pointsPosition)
 
     def displayPlayerName(self, passedName):
+        """
+        Display current playing user nick name.
+
+        :param passedName:
+            Nick name to display on the HUD.
+        :type passedName: str, required
+        """
         font = pygame.font.Font(None, 30)
         text = font.render(f'Nick: {passedName}', 1, WHITE)
 
-        playerNamePosition = text.get_rect(y = 100, centerx=self.image.get_width() / 2)
+        playerNamePosition = text.get_rect(y=100, centerx=self.image.get_width() / 2)
 
         self.image.blit(text, playerNamePosition)
 
 
 class Timer(pygame.sprite.Sprite):
-    """
-        Class which returns the time (ticks) since the game-start
-    """
     def __init__(self, start, fontName):
+        """
+        Class which returns the time (ticks) since the game start.
+
+        :param start:
+            Start amount of ticks.
+        :type start: int, required
+        :param fontName:
+            Name of the font.
+        :type fontName: pygame.Font, required
+        """
         pygame.sprite.Sprite.__init__(self)
         self.start = start
         self.passedTime = 0
@@ -66,6 +98,13 @@ class Timer(pygame.sprite.Sprite):
         self.endTime = 0
 
     def update(self, ticks):
+        """
+        Calculate passed time between start and current measurement.
+
+        :param ticks:
+            Current value of ticks.
+        :type ticks: int, required
+        """
         self.passedTime = round((ticks - self.start) / 1000)
 
         if self.buffer > 0:
@@ -91,12 +130,37 @@ class Timer(pygame.sprite.Sprite):
         self.rect.y = self.y
 
     def setPosition(self, x, y):
+        """
+        Set position on which display Timer on the HUD.
+
+        :param x:
+            Position in x-axis.
+        :type x: int, required,
+        :param y:
+            Position in y-axis.
+        :type y: int, required
+        """
         self.x = x
         self.y = y
 
     def stop(self, ticks):
+        """
+        Utility function for handling in game pause and set potential finish game
+        time.
+
+        :param ticks:
+            Current value of ticks.
+        :type ticks: int, required
+        """
         self.startPause = ticks
         self.endTime = self.passedTime * 1000
 
     def resume(self, ticks):
+        """
+        Utility class for resume game time after in game pause.
+
+        :param ticks:
+            Current value of ticks.
+        :type ticks: int, required
+        """
         self.buffer += round((ticks - self.startPause) / 1000)

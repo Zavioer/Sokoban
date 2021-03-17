@@ -1,28 +1,18 @@
-import time
-import pygame
 import json
-from src.modules import logic, functions
+from src.modules import logic
 from random import randrange
-from .settings import *
 from .player import *
 
 
 class Menu:
-    """
-    Class which represents the menu.
-    """
     def __init__(self, game):
         """
-        :attributes
-            runDisplay: bool
-                State of checking if the displays can be printed.
-            pointerRect: pygame.Rect
-                Pygame Rect class of pointer instance.
-        :param
-        game: class, required
-            Game class
-        """
+        Class which represents the menu.
 
+        :param game:
+            Game class that allows connection between game logic and menu.
+        :type game: game.Game, required
+        """
         self.game = game
         self.runDisplay = True
         self.pointerRect = pygame.Rect(0, 0, 20, 20)
@@ -45,18 +35,14 @@ class Menu:
 
 
 class MainMenu(Menu):
-    """
-    Class which represents the main menu, inheriting from the Menu class.
-    """
     def __init__(self, game):
         Menu.__init__(self, game)
         """
-        :attributes
-        logoMenuX, startMenuX, levelMenuX, instructionsMenuX, rankingMenuX, creditsMenuX, quitMenuX - Buttons initial x coordinates.
-        logoMenuY, startMenuY, levelMenuY, instructionsMenuY, rankingMenuY, creditsMenuY, quitMenuY - Buttons initial y coordinates.
-        :param
-        game: class, required
-            Game class
+        Class which represents the main menu, inheriting from the Menu class.
+        
+        :param game:
+            Game class that allows connection between game logic and menu.
+        :type game: game.Game, required
         """
         self.state = "Start"
         self.logoMenuX, self.logoMenuY = midWidth, midHeight - 220
@@ -177,22 +163,13 @@ class MainMenu(Menu):
 
 
 class LevelMenu(Menu):
-    """
-    Class which represents the module menu, inheriting from the Menu class.
-    """
     def __init__(self, game):
         """
-        :attributes
-        firstModuleX, secondModuleX, thirdModuleX - Buttons initial x coordinates.
-        firstModuleY, secondModuleY, thirdModuleY - Buttons initial y coordinates.
-        level - string, required
-            Game's module choice. [default = '']
-        state - string, required
-            pointer state variable [default = 'One']
+        Class which represents the module menu, inheriting from the Menu class.
 
-        :param
-        game: class, required
-            Game class
+        :param game:
+            Game class that allows connection between game logic and menu.
+        :type game: game.Game, required
         """
         Menu.__init__(self, game)
         self.firstModuleX, self.firstModuleY = midWidth, midHeight
@@ -292,18 +269,13 @@ class LevelMenu(Menu):
 
 
 class CreditsMenu(Menu):
-    """
-    Class which represents the credits menu, inheriting from the Menu class. Shows the info about the game developers.
-    """
     def __init__(self, game):
         """
-        :attributes
-        creditsTitleX, firstAuthorX, secondAuthorX, partOneX, partTwoX, partThreeX, copyrightX - Buttons initial x coordinates.
-        creditsTitleY, firstAuthorY, secondAuthorY, partOneY, partTwoY, partThreeY, copyrightY - Buttons initial y coordinates.
+        Class which represents the credits menu, inheriting from the Menu class. Shows the info about the game developers.
 
-        :param
-        game: class, required
-            Game class
+        :param game:
+            Game class that allows connection between game logic and menu.
+        :type game: game.Game, required
         """
         Menu.__init__(self, game)
         self.creditsTitleX, self.creditsTitleY = midWidth, midHeight - 280
@@ -353,19 +325,14 @@ class CreditsMenu(Menu):
 
 
 class InstructionsMenu(Menu):
-    """
-    Class which represents the instructions menu, inheriting from the Menu class.
-    It is an interface that presents the rules of the game and controls to the player.
-    """
     def __init__(self, game):
         """
-        :attributes
-        instructionsTextX - Buttons initial x coordinates.
-        instructionsTextY - Buttons initial y coordinates.
+        Class which represents the instructions menu, inheriting from the Menu class.
+        It is an interface that presents the rules of the game and controls to the player.
 
-        :param
-        game: class, required
-            Game class
+        :param game:
+            Game class that allows connection between game logic and menu.
+        :type game: game.Game, required
         """
         Menu.__init__(self, game)
         self.instructionsTextX, self.instructionsTextY = midWidth, midHeight - 280
@@ -404,19 +371,14 @@ class InstructionsMenu(Menu):
 
 
 class LegendMenu(Menu):
-    """
-    Class which represents the legend menu, inheriting from the Menu class.
-    The rules of the game are displayed here.
-    """
     def __init__(self, game):
         """
-        :attributes
-        legendTextX, - Buttons initial x coordinates.
-        legendTextY, - Buttons initial y coordinates.
+        Class which represents the legend menu, inheriting from the Menu class.
+        The rules of the game are displayed here.
 
-        :param
-        game: class, required
-            Game class
+        :param game:
+            Game class that allows connection between game logic and menu.
+        :type game: game.Game, required
         """
         Menu.__init__(self, game)
         self.legendTextX, self.legendTextY = midWidth, midHeight - 280
@@ -437,7 +399,7 @@ class LegendMenu(Menu):
             self.game.draw_text('RULES', 100, self.legendTextX, self.legendTextY, self.game.WHITE, self.game.fontName)
             self.game.draw_text('IT IS A LOGICAL GAME WHOSE AIM IS TO MOVE', 45, self.legendTextX, self.legendTextY + 150, self.game.WHITE, self.game.fontName)
             self.game.draw_text('AND CORRECTLY POSITION THE', 45, self.legendTextX - 180, self.legendTextY + 220, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('BOXES', 45, self.legendTextX + 150 , self.legendTextY + 220, self.game.RED, self.game.fontName)
+            self.game.draw_text('BOXES', 45, self.legendTextX + 150, self.legendTextY + 220, self.game.RED, self.game.fontName)
             self.game.draw_text('IN A WAREHOUSE.', 45, self.legendTextX + 365, self.legendTextY + 220, self.game.WHITE, self.game.fontName)
             self.game.draw_text('YOU WILL PLAY AS THE', 45, self.legendTextX - 300, self.legendTextY + 290, self.game.WHITE, self.game.fontName)
             self.game.draw_text('WAREHOUSE KEEPER', 45, self.legendTextX + 90, self.legendTextY + 290, self.game.RED, self.game.fontName)
@@ -465,18 +427,14 @@ class LegendMenu(Menu):
 
 
 class DiffMenu(Menu):
-    """
-    Class which represents the diffMenu, inheriting from the Menu class. Player can choose game difficulty here.
-    """
     def __init__(self, game):
         """
-        :attributes
-        titleX, easyX, mediumX, hardX - Buttons initial x coordinates.
-        titleY, easyY, mediumY, hardY - Buttons initial y coordinates.
+        Class which represents the diffMenu, inheriting from the Menu class.
+        Player can choose game difficulty here.
 
-        :param
-        game: class, required
-            Game class
+        :param game:
+            Game class that allows connection between game logic and menu.
+        :type game: game.Game, required
         """
         Menu.__init__(self, game)
         self.diffTitleX, self.diffTitleY = midWidth, midHeight - 200
@@ -526,7 +484,8 @@ class DiffMenu(Menu):
 
     def movePointer(self):
         """
-        Method that includes pointer's movement logic. Moreover, it includes an end event handler. Depending on the chosen difficulty, the player draws a map from three fields.
+        Method that includes pointer's movement logic. Moreover, it includes an end event handler.
+        Depending on the chosen difficulty, the player draws a map from three fields.
         """
         if self.game.START_KEY:
             if self.state == 'Easy':
@@ -566,18 +525,14 @@ class DiffMenu(Menu):
 
 
 class InputName(Menu):
-    """
-    This is a class that handles user input. It gives its name, which is necessary for many functions in the game to work.
-    """
     def __init__(self, game):
         """
-        :attributes
-        inputNameX - Buttons initial x coordinates.
-        inputNameY - Buttons initial y coordinates.
+        This is a class that handles user input. It gives its name, which is
+        necessary for many functions in the game to work.
 
-        :param
-        game: class, required
-            Game class
+        :param game:
+            Game class that allows connection between game logic and menu.
+        :type game: game.Game, required
         """
         Menu.__init__(self, game)
         self.inputNameX, self.inputNameY = midWidth, midHeight - 280
@@ -601,6 +556,9 @@ class InputName(Menu):
             self.game.currentMenu.displayMenu()
 
     def inputName(self):
+        """
+        Function for handling player writing his nickname.
+        """
         self.game.running = False
 
         event = pygame.event.poll()
@@ -651,17 +609,14 @@ class InputName(Menu):
 
 
 class RankMenu(Menu):
-    """
-    Class which represents the rank menu, inheriting from the Menu class. The results are read from the file and a ranking of the players is being created.
-    """
     def __init__(self, game):
         """
-        :attributes
-        headerX - Buttons initial x coordinates.
-        headerY, itemY - Buttons initial y coordinates.
-        :param
-        game: class, required
-            Game class
+        Class which represents the rank menu, inheriting from the Menu class.
+        The results are read from the file and a ranking of the players is being created.
+
+        :param game:
+            Game class that allows connection between game logic and menu.
+        :type game: game.Game, required
         """
         Menu.__init__(self, game)
         self.headerX = midWidth
@@ -675,8 +630,6 @@ class RankMenu(Menu):
         """
         self.runDisplay = True
 
-
-
         while self.runDisplay:
             self.game.checkEvents()
 
@@ -688,6 +641,7 @@ class RankMenu(Menu):
             self.game.draw_text('RANKING', 90, self.headerX, self.headerY, self.game.WHITE, self.game.fontName)
             self.game.draw_text('NAME', 60, self.headerX - 300, self.headerY + 100, self.game.WHITE, self.game.fontName)
             self.game.draw_text('POINTS', 60, self.headerX + 300, self.headerY + 100, self.game.WHITE, self.game.fontName)
+
             def getScore(table):
                 return table.get('userScore')
 
@@ -714,17 +668,9 @@ class SaveGameMenu(Menu):
         """
         Sub menu for game map and score saving to shelf file format.
 
-        :attributes
-        firstModuleX, secondModuleX, thirdModuleX - Buttons initial x coordinates.
-        firstModuleY, secondModuleY, thirdModuleY - Buttons initial y coordinates.
-        level - string, required
-            Game's module choice. [default = '']
-        state - string, required
-            pointer state variable [default = 'One']
-
-        :param
-        game: class, required
-            Game class
+        :param game:
+            Game class that allows connection between game logic and menu.
+        :type game: game.Game, required
         """
         Menu.__init__(self, game)
         self.firstModuleX, self.firstModuleY = midWidth, midHeight
@@ -734,6 +680,10 @@ class SaveGameMenu(Menu):
         self.state = 'Yes'
 
     def displayMenu(self):
+        """
+        Method that displays the menu. It prints buttons thanks to the draw_text() method.
+        It also blits the screen every single frame.
+        """
         self.runDisplay = True
 
         while self.runDisplay:
@@ -805,11 +755,9 @@ class WidthHeightMenu(Menu):
         """
         Sub menu for passing the width and height to 3rd module map-creator.
 
-        :attributes
-
-        :param
-        game: class, required
-            Game class
+        :param game:
+            Game class that allows connection between game logic and menu.
+        :type game: game.Game, required
         """
         Menu.__init__(self, game)
 
@@ -846,6 +794,9 @@ class WidthHeightMenu(Menu):
                                 int(self.passedHeight))
 
     def inputHandle(self):
+        """
+        Method for handling input new created map width and height.
+        """
         self.game.running = False
 
         event = pygame.event.poll()
@@ -903,6 +854,10 @@ class WidthHeightMenu(Menu):
                             self.game.fontName)
 
     def displayMenu(self):
+        """
+        Method that displays the menu. It prints buttons thanks to the draw_text() method.
+        It also blits the screen every single frame.
+        """
         self.runDisplay = True
 
         while self.runDisplay:

@@ -1,41 +1,17 @@
-import pygame
-from .functions import load_png
-from .settings import *
+from src.modules.settings import *
 
 
 class Box(pygame.sprite.Sprite):
-    """
-    A box that will move across the screen moved by a warehouse worker.
-    """
     def __init__(self, x, y):
         """
-        :attributes
-        image: pygame.image
-
-        rect: pygame.Rect
-            Instance of pygame.Rect object.
-
-        moveX: int
-            Placeholder for x-axis offset to move object in update() method.
-
-        moveY: int
-            Placeholder for y-axis offset to move object in update() method.
-
-        blocked: bool
-            Tells if Box instance is blocked by Wall instance.
-
-        blocked_direction: string
-            Direction in which Box instance can't be move.
-
-        blocked_by_box: bool
-            Tells if Box instance is blocked by another Box instance.
-
-        :param
-        x: int
-            Instance start value of x-axis.
-
-        y: int
-            Instance start value of y-axis.
+        A box that will move across the screen moved by a warehouse worker.
+        
+        :param x:
+            Position in x-axis.
+        :type x: int, required,
+        :param y:
+            Position in y-axis.
+        :type y: int, required
         """
         pygame.sprite.Sprite.__init__(self)
         self.image = BOX_IMG.convert_alpha()
@@ -60,20 +36,18 @@ class Box(pygame.sprite.Sprite):
         self.moveX = 0
         self.moveY = 0
 
-    def collisionWall(self, object_list):
+    def collisionWall(self, objectList):
         """
         Check if instance collide with wall in wall group.
 
-        :param
-        object_list: pygame.Sprite.Group
+        :param objectList:
             Group that contains wall sprites.
-
-        :return:
+        :type objectList: pygame.Sprite.Group, required
         """
         self.rect.x += self.moveX
         self.rect.y += self.moveY
 
-        if self.rect.collidelist(object_list) != -1:
+        if self.rect.collidelist(objectList) != -1:
             self.rect.x -= self.moveX
             self.rect.y -= self.moveY
 
@@ -86,18 +60,18 @@ class Box(pygame.sprite.Sprite):
         self.rect.x -= self.moveX
         self.rect.y -= self.moveY
 
-    def collisionBox(self, group_box):
+    def collisionBox(self, groupBox):
         """
         Check if instance collide with another box.
 
-        :param
-        group_box: pygame.Sprite.Group
-            Group that contains box sprites.
+        :param groupBox:
+            Group that contains Box class sprites.
+        :type groupBox: pygame.Sprite.Group, required
         """
         self.rect.x += self.moveX
         self.rect.y += self.moveY
 
-        if self.rect.collidelist(group_box) != -1:
+        if self.rect.collidelist(groupBox) != -1:
             self.rect.x -= self.moveX
             self.rect.y -= self.moveY
             self.moveX = 0
@@ -112,10 +86,10 @@ class Box(pygame.sprite.Sprite):
         Prepare instance for changing position. Sets instance possible blocked
         direction.
 
-        :param
-        direction: string
+        :param direction:
             Name of direction in which box will be moved. Allowed values
             (north, east, south, west).
+        :type direction: str, required
         """
         if direction == 'north':
             self.moveY -= STOREKEEPER_MOVE
@@ -134,11 +108,12 @@ class Wall(pygame.sprite.Sprite):
         """
         Class for warehouse walls that block player.
 
-        :param
-        x: int
-            Initial value in x-axis.
-        y: int
-            Initial value in y-axis.
+        :param x:
+            Position in x-axis.
+        :type x: int, required,
+        :param y:
+            Position in y-axis.
+        :type y: int, required
         """
         pygame.sprite.Sprite.__init__(self)
         self.image = WALL_IMG.convert_alpha()
@@ -154,11 +129,12 @@ class Floor(pygame.sprite.Sprite):
         """
         Class for warehouse floor on which storekeeper moves.
 
-        :param
-            x: int
-                Initial value in x-axis.
-            y: int
-                Initial value in y-axis.
+        :param x:
+            Position in x-axis.
+        :type x: int, required,
+        :param y:
+            Position in y-axis.
+        :type y: int, required
         """
         pygame.sprite.Sprite.__init__(self)
         self.image = FLOOR_IMG.convert()
@@ -172,17 +148,14 @@ class Floor(pygame.sprite.Sprite):
 class Destination(pygame.sprite.Sprite):
     def __init__(self, x, y):
         """
-        Target for box instances
+        Target for the Box class instances
 
-        :attributes
-        state: string
-            Tells if the box is inside instance or not.
-
-        :param
-        x: int
-            Initial value in x-axis.
-        y: int
-            Initial value in y-axis.
+        :param x:
+            Position in x-axis.
+        :type x: int, required,
+        :param y:
+            Position in y-axis.
+        :type y: int, required
         """
         pygame.sprite.Sprite.__init__(self)
         self.image = DESTINATION_IMG.convert_alpha()

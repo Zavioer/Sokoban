@@ -1,32 +1,18 @@
-import os
-import pygame
-from .functions import load_png
-from .settings import *
+from src.modules.settings import *
 
 
 class Player(pygame.sprite.Sprite):
-    """
-    Class which represents a player. Loads image and sets up instance
-    in coordinate system.
-    """
     def __init__(self, x, y):
         """
-        :attributes
-        image: pygame.Image
-            Image that represents player instance.
-        rect: pygame.Rect
-            Pygame Rect class of player instance.
-        direction: string
-            Direction in which player moves. Allowed values(north, east, south,
-            west)
-        boxCollision: bool
-            State of checking if player collides with Box instance.
+        Class which represents a player. Loads image and sets up instance
+        in coordinate system.
 
-        :param
-        x: int, required
-            Player initial x coordinate.
-        y: int, required
-            Player initial y coordinate.
+        :param x:
+            Position in x-axis.
+        :type x: int, required,
+        :param y:
+            Position in y-axis.
+        :type y: int, required
         """
         pygame.sprite.Sprite.__init__(self)
         self.image = STOREKEEPER_IMG.convert_alpha()
@@ -56,11 +42,12 @@ class Player(pygame.sprite.Sprite):
         """
         Changes object position in coordinate system to given offset.
 
-        :param
-        x: int, required
+        :param x:
             Offset to move in x-axis.
-        y: int, required
+        :type x: int, required,
+        :param y:
             Offset to move in y-axis.
+        :type y: int, required
         """
         if x > 0:
             self.direction = 'east'
@@ -77,18 +64,18 @@ class Player(pygame.sprite.Sprite):
         self.moveX += x
         self.moveY += y
 
-    def collision(self, object_list):
+    def collision(self, objectList):
         """
         Check if next player position will collide with object in list.
 
-        :param
-        object_list: list, required
+        :param objectList: 
             List of objects which probable collision.
+        :type objectList: pygame.sprites.Group, required
         """
         self.rect.x += self.moveX
         self.rect.y += self.moveY
 
-        if self.rect.collidelist(object_list) != -1:
+        if self.rect.collidelist(objectList) != -1:
             self.rect.x -= self.moveX
             self.rect.y -= self.moveY
 
@@ -102,9 +89,9 @@ class Player(pygame.sprite.Sprite):
         """
         Check if instance collide with box.
 
-        :param
-        box: pygame.Rect
+        :param box:
             Rectangle that represent Box instance.
+        :type box: pygame.Rect, required
         """
         self.rect.x += self.moveX
         self.rect.y += self.moveY
@@ -119,9 +106,9 @@ class Player(pygame.sprite.Sprite):
         """
         Change player's move animation on move.
 
-        :param
-        direction: string, required
+        :param direction:
             Direction in which player moves.
+        :type direction: str, required
         """
         if direction == 'north':
             self.image = STOREKEEPER_NORTH_IMG

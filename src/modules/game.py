@@ -4,6 +4,9 @@ from .settings import *
 
 class Game:
     def __init__(self):
+        """
+        Main game object which allows integration between game logic and main menu.
+        """
         pygame.init()
         self.running = True
         self.playing = False
@@ -42,9 +45,11 @@ class Game:
         self.playerName = ''
         self.currentLevel = 0
         self.currentPlayerState = {'width': 0, 'height': 0, 'map': [], 'time': 0}
-        self.previousState = 'Start'
 
     def checkEvents(self):
+        """
+        Loop for pygame.Events. Set True to given keys when pressed.
+        """
         if self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -73,6 +78,9 @@ class Game:
                         self.W_KEY = True
 
     def reset_keys(self):
+        """
+        Set all keys to default, not pressed state.
+        """
         self.UP_KEY = False
         self.DOWN_KEY = False
         self.START_KEY = False
@@ -84,6 +92,28 @@ class Game:
         self.W_KEY = False
 
     def draw_text(self, text, size, x, y, color, fontName):
+        """
+        Method that render text on the main game screen.
+
+        :param text:
+            Text which will be displayed on screen.
+        :type text: str, required
+        :param size:
+            Size of the text.
+        :type size: int, required
+        :param x:
+            Position in x-axis.
+        :type x: int, required
+        :param y:
+            Position in y-axis.
+        :type y: int, required
+        :param color:
+            Color on the text.
+        :type color: tuple, required
+        :param fontName:
+            Name of the font which text will be rendered.
+        :type fontName: pygame.Font, required
+        """
         font = pygame.font.Font(fontName, size)
         textSurface = font.render(text, True, color)
         textRect = textSurface.get_rect()

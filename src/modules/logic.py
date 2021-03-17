@@ -1,18 +1,34 @@
-import os
-import time
 import shelve
-import pygame
-import json
+import time
 from pygame.locals import *
 from .blocks import Floor, Box, Destination, Wall
 from .player import Player
 from .hud import HUD, Timer
 from .creator import Tile, Mouse, Board, Toolbox
 from .game import *
-from .settings import *
+from src.modules.settings import *
 
 
 def startTheGame(screen, lvlName, game, points, flag):
+    """
+    Main game logic. Handling board draw, set player. Then game loop.
+
+    :param screen:
+        Surface on which draw game.
+    :type screen: pygame.Surface, required
+    :param lvlName:
+        Current playing game name in convention number.txt.
+    :type lvlName: str, required
+    :param game:
+        Game object that all connection between game and menu.
+    :type game: game.Game, required
+    :param points:
+        Number of points which game starts.
+    :type points: int, required
+    :param flag:
+        Flag that allows to discriminate between module I, II and III.
+    :type flag: str, required
+    """
     start = time.time()
     myFont = pygame.font.SysFont('Montserrat', 30)
 
@@ -20,12 +36,17 @@ def startTheGame(screen, lvlName, game, points, flag):
     walls = pygame.sprite.Group()
     boxes = pygame.sprite.Group()
     destinations = pygame.sprite.Group()
-
     floors = pygame.sprite.Group()
+
     clock = pygame.time.Clock()
 
     # Load and place objects on the map
-    with open(os.path.join('./src/boards/', lvlName), 'r') as fd:
+    if flag == MODULE_I or flag == MODULE_II:
+        path = './src/boards/'
+    elif flag == MODULE_III:
+        path = './src/boards/own/'
+
+    with open(os.path.join(path, lvlName), 'r') as fd:
         mapWidth = int(fd.readline())
         mapHeight = int(fd.readline())
 
@@ -153,21 +174,21 @@ def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints):
     Function for saving current playing lvl and additional information in to
     shelve file.
 
-    :param width: int
-        Current map width.
-    :param height: int
-        Current map height.
-    :param sprites: pygame.sprite.Group
+    :param width:
+        Current playing board width.
+    :type width: int, required
+    :param height:
+        Current playing map height.
+    :type height: int, required
+    :param sprites:
         Group of all sprites in level.
+    :type sprites: pygame.sprite.Group, required
     :param endTime:
-        Time passed from beginning.
+        Time in seconds passed from beginning.
+    :type endTime: int, required
     :param playerName: str
-        Current playing player name.
-    :param lvlName: str
-
-
-    :return:
-        None
+        Current playing player nick name.
+    :type lvlName: str, required
     """
     emptyBoard = []
 
@@ -193,21 +214,25 @@ def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints):
     shelveFile.close()
 
     data = {
-        'userNameVar' : playerName,
-        'userScore' : gamePoints
+        'userNameVar': playerName,
+        'userScore': gamePoints
     }
 
     with open('scoreFile.txt', 'a') as scoreFile:
         json.dump(data, scoreFile)
         scoreFile.write('\n')
 
+
 def removeMap(playerName, mapID):
     """
     Function for module III which allows player to delete his own map.
+
     :param playerName:
-        Map creator nick.
+        Map creator nick name.
+    :type playerName: str, required
     :param mapID:
         ID of created map.
+    :type mapID: int, required
     """
     if os.path.isfile(str(mapID) + 'txt'):
         os.remove(mapID)
@@ -215,18 +240,23 @@ def removeMap(playerName, mapID):
     else:
         print(f'File not exist.')
 
+
 def createMap(screen, playerName, width, height):
     """
     Function for module III which allows player to create own map.
+
     :param screen:
         Surface on which will draw canvas to draw map.
+    :type screen: pygame.Surface, required
     :param playerName:
         Creator's map nick.
+    :type playerName: str, required
     :param width:
         Given map width. Max number 30.
+    :type width: int, required
     :param: height:
         Given map height. Max number 20.
-    :return:
+    :type height: int, required
     """
     boardWidth = BLOCK_SIZE * width
     boardHeight = BLOCK_SIZE * height
@@ -317,13 +347,43 @@ def createMap(screen, playerName, width, height):
 
 
 def resetMap(screen, lvlName, game, points, flag):
+    """
+    Function for reset map to default state.
+
+    :param screen:
+
+    :param screen:
+        Surface on which draw game.
+    :type screen: pygame.Surface, required
+    :param lvlName:
+        Current playing game name in convention number.txt.
+    :type lvlName: str, required
+    :param game:
+        Game object that all connection between game and menu.
+    :type game: game.Game, required
+    :param points:
+        Number of points which game starts.
+    :type points: int, required
+    :param flag:
+        Flag that allows to discriminate between module I, II and III.
+    :type flag: str, required
+    """
     game.logicState = True
     startTheGame(screen, lvlName, game, points, flag)
 
 
-def loadMap(fileName):
-    shelveFile = shelve.open(os.path.join('./src/saves', fileName))
+def loadSave(fileName):
+    """
+    Function for restoring game detail for saves.
 
+    :param fileName:
+        Name of saved game.
+    :type fileName: str, required
+
+    :return:
+        dict
+    """
+    shelveFile = shelve.open(os.path.join('./src/saves', fileName))
     mapDetails = {}
 
     mapDetails['width'] = shelveFile['widthBoardVar']

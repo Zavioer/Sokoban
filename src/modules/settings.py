@@ -21,7 +21,7 @@ DESTINATION_CHAR = '.'
 EMPTY_CHAR = ' '
 
 # Images
-STOREKEEPER_IMG = pygame.image.load(os.path.join('./src/img/storekeeper/',
+STOREKEEPER_IMG = pygame.image.load(os.path.join('./src/img/storekeeper',
                                                  'storekeeper.png'))
 STOREKEEPER_NORTH_IMG = pygame.image.load(os.path.join('./src/img/storekeeper/',
                                                        'storekeeper_north.png'))
@@ -44,7 +44,7 @@ BLUE = (0, 0, 255)
 GRAY = pygame.Color('gray15')
 LIGHTSKYBLUE = pygame.Color('lightskyblue3')
 
-# In game HUD
+# In game HUD size
 HUD_SIZE = 200
 
 # Create map

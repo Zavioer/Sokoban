@@ -4,3 +4,9 @@
 {"userNameVar": "YoungSyk","userScore": 80}
 {"userNameVar": "Usmiechania","userScore": 1}
 {"userNameVar": "Big L","userScore": 88}
+{"userNameVar": "asf", "userScore": 0}
+{"userNameVar": "asf", "userScore": 0}
+{"userNameVar": "asd", "userScore": 0}
+{"userNameVar": "asd", "userScore": 0}
+{"userNameVar": "sdf", "userScore": 0}
+{"userNameVar": "wer", "userScore": 1}

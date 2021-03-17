@@ -1,17 +1,18 @@
-import os
 import time
-import pygame
-from .settings import *
+from src.modules.settings import *
 
 
 class Board:
     def __init__(self, width, height):
         """
         Utility class for hidden crating and saving user map to file.
+
         :param width:
             Map given width. Max number 30.
+        :type width: int, required
         :param height:
             Map given width. Max number 20.
+        :type height: int, required
         """
         self.width = width
         self.height = height
@@ -27,21 +28,27 @@ class Board:
 
     def place_tile(self, x, y, tileChar):
         """
-        Place char that represent one of map objects in map attribute.
+        Place char that represent one of map objects in map array.
+
         :param x:
             Position in x-axis.
+        :type x: int, required
         :param y:
             Position in y-axis.
+        :type y: int, required
         :param tileChar:
             Character that represents one of map objects.
+        :type tileChar: str, required
         """
         self.map[y][x] = tileChar
 
     def save_board(self, userName):
         """
-        Method for saving to created map to .txt file.
+        Method for saving the new created map to .txt file.
+
         :param userName:
             Map creator nick name.
+        :type userName: str, required
         """
         currentDate = time.localtime(time.time())
         formatedDate = time.strftime('%H_%M_%S_%d_%m_%Y', currentDate)
@@ -67,8 +74,9 @@ class Mouse(pygame.sprite.Sprite):
     def get_tile(self):
         """
         Getter for attribute currBlock.
+
         :return:
-            currBlock
+            Board.currBlock
         """
         return self.currBlock
 
@@ -76,11 +84,14 @@ class Mouse(pygame.sprite.Sprite):
 class Tile(pygame.sprite.Sprite):
     def __init__(self, x, y):
         """
-        Graphical representation of block for creation new map.
+        Graphical representation of block for creation the new map.
+
         :param x:
             Position in x-axis.
+        :type x: int, required
         :param y:
             Position in y-axis
+        :type y: int, required
         """
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.transform.scale(FLOOR_IMG, (BLOCK_SIZE - 1, BLOCK_SIZE - 1))
@@ -93,8 +104,10 @@ class Tile(pygame.sprite.Sprite):
         """
         Setter for attribute self.image. Includes image transformation to
         BLOCK_SIZE const.
+
         :param name:
             Name on new image to set.
+        :type name: str, required
         """
         self.image = name.convert_alpha()
         self.image = pygame.transform.scale(self.image, (BLOCK_SIZE - 1, BLOCK_SIZE - 1))
@@ -108,24 +121,34 @@ class Button(pygame.sprite.Sprite):
 
         :param x:
             Position in x-axis.
+        :type x: int, required,
         :param y:
-            Position in y-asix.
+            Position in y-axis.
+        :type y: int, required
         :param width:
             Button width.
+        :type width: int, required
         :param height:
             Button height.
+        :type width: int, required
         :param bgColor:
-            Background color on which will be dispay button name.
+            Background color on which will be display button name.
+        :type bgColor: tuple, required
         :param name:
             Name of button.
+        :type name: str, required
         :param char:
             Attribute that represents char for map raw representation.
+        :type char: str, required
         :param tileImage:
             Attribute that represent block for map graphical representation.
+        :type tileImage: pygame.Surface, required
         :param font:
             Font in which will be render name param.
+        :type font: pygame.Font, required
         :param fontColor:
             Color for font.
+        :type fontColor: tuple, required
         """
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((width, height))
@@ -147,8 +170,10 @@ class Toolbox(pygame.sprite.Sprite):
 
         :param width:
             Width of the container.
+        :type width: int, required
         :param height:
             Height of the container.
+        :type height: int, required
         """
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((width, height))
@@ -161,14 +186,17 @@ class Toolbox(pygame.sprite.Sprite):
 
     def add_button(self, name, char, image):
         """
-        Method allow add new Button class object to the container.
+        Method allows add a new Button object to the container.
 
         :param name:
             Name which will be displayed on button.
+        :type name: str, required
         :param char:
             Char that will be set for raw map representation.
+        :type char: str, required
         :param image:
             Block that will be set for graphical map representation.
+        :type image: pygame.Surface, required
         """
         self.buttons.append({'name': name, 'char': char, 'image': image})
 
