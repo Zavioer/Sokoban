@@ -87,7 +87,7 @@ If you have some more questions, you may find a answer in following topics.
 
 2. [FEATURES](#features)
 
-- [What stages does the game consist of?](#what-does-the-application-show-on-the-map)
+- [What stages does the game consist of?](#what-stages-does-the-game-consist-of)
 - [First stage](#first-stage)
 - [Second stage](#second-stage)
 - [Third stage](#third-stage)
