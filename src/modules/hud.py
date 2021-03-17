@@ -11,8 +11,7 @@ class HUD(pygame.sprite.Sprite):
         :type timer: Timer, required
         """
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((HUD_SIZE, WIDTH))
-        self.image.fill(RED)
+        self.image = pygame.Surface((HUD_SIZE, 150))
         self.timer = timer
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH - HUD_SIZE
@@ -28,9 +27,9 @@ class HUD(pygame.sprite.Sprite):
         """
         cleanName = lvlNumber[:lvlNumber.find('.')]
         font = pygame.font.Font(None, 32)
-        text = font.render(f'Level number: {cleanName}', 1, WHITE)
+        text = font.render(f'Level: {cleanName}', 1, WHITE)
         levelPosition = text.get_rect(y=self.padding, centerx=self.image.get_width() / 2)
-        
+
         self.image.blit(text, levelPosition)
 
     def displayTimer(self, passedTicks):
@@ -54,7 +53,7 @@ class HUD(pygame.sprite.Sprite):
         :type passedPoints: int, required
         """
         font = pygame.font.Font(None, 30)
-        text = font.render(f'Points: {passedPoints}', 1, WHITE)
+        text = font.render(f'Score: {passedPoints}', 1, WHITE)
         pointsPosition = text.get_rect(y=75, centerx=self.image.get_width() / 2)
         self.image.blit(text, pointsPosition)
 
@@ -67,7 +66,7 @@ class HUD(pygame.sprite.Sprite):
         :type passedName: str, required
         """
         font = pygame.font.Font(None, 30)
-        text = font.render(f'Nick: {passedName}', 1, WHITE)
+        text = font.render(f'{passedName}', 1, WHITE)
 
         playerNamePosition = text.get_rect(y=100, centerx=self.image.get_width() / 2)
 
@@ -124,7 +123,7 @@ class Timer(pygame.sprite.Sprite):
             seconds = "0" + str(seconds)
         self.passedTimeStr = str(minutes) + ":" + str(seconds)
 
-        self.image = self.fontName.render(f'Time: {self.passedTimeStr}', 1, WHITE)
+        self.image = self.fontName.render(f'{self.passedTimeStr}', 1, WHITE)
         self.rect = self.image.get_rect()
         self.rect.centerx = self.x
         self.rect.y = self.y

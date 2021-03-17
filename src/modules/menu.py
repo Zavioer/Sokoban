@@ -1,4 +1,6 @@
 import json
+import os
+from pygame.locals import *
 from src.modules import logic
 from random import randrange
 from .player import *
@@ -31,15 +33,14 @@ class Menu:
         """
         self.game.window.blit(self.game.display, (0, 0))
         pygame.display.update()
-        self.game.reset_keys()
-
+        self.game.resetKeys()
 
 class MainMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
         """
         Class which represents the main menu, inheriting from the Menu class.
-        
+
         :param game:
             Game class that allows connection between game logic and menu.
         :type game: game.Game, required
@@ -56,24 +57,24 @@ class MainMenu(Menu):
 
     def displayMenu(self):
         """
-        Method that displays the menu. It prints 7 buttons thanks to the draw_text() method.
+        Method that displays the menu. It prints 7 buttons thanks to the drawText() method.
         It also draws the pointer and blits the screen every single frame.
         """
         self.runDisplay = True
 
         while self.runDisplay:
-            self.game.reset_keys()
+            self.game.resetKeys()
             self.game.checkEvents()
             self.checkInput()
 
             self.game.display.fill(BLACK)
-            self.game.draw_text('SOKOBAN', 130, self.logoMenuX, self.logoMenuY, self.game.WHITE, self.game.fontTitle)
-            self.game.draw_text('Start Game', 70, self.startMenuX, self.startMenuY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('Load Module', 70, self.levelMenuX, self.levelMenuY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('Instructions', 70, self.instructionsMenuX, self.instructionsMenuY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('Ranking', 70, self.rankingMenuX, self.rankingMenuY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('Credits', 70, self.creditsMenuX, self.creditsMenuY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('Quit', 70, self.quitMenuX, self.quitMenuY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('SOKOBAN', 130, self.logoMenuX, self.logoMenuY, self.game.WHITE, self.game.fontTitle)
+            self.game.drawText('Start Game', 70, self.startMenuX, self.startMenuY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('Load Module', 70, self.levelMenuX, self.levelMenuY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('Instructions', 70, self.instructionsMenuX, self.instructionsMenuY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('Ranking', 70, self.rankingMenuX, self.rankingMenuY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('Credits', 70, self.creditsMenuX, self.creditsMenuY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('Quit', 70, self.quitMenuX, self.quitMenuY, self.game.WHITE, self.game.fontName)
 
             self.drawPointer()
             self.blitScreen()
@@ -182,21 +183,21 @@ class LevelMenu(Menu):
 
     def displayMenu(self):
         """
-        Method that displays the menu. It prints 4 buttons thanks to the draw_text() method.
+        Method that displays the menu. It prints 4 buttons thanks to the drawText() method.
         It also draws the pointer and blits the screen every single frame.
         """
         self.runDisplay = True
 
         while self.runDisplay:
-            self.game.reset_keys()
+            self.game.resetKeys()
             self.game.checkEvents()
             self.checkInput()
 
             self.game.display.fill(BLACK)
-            self.game.draw_text('Choose module: ', 120, midWidth, midHeight - 200, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('Module 1', 80, self.firstModuleX, self.firstModuleY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('Module 2', 80, self.secondModuleX, self.secondModuleY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('Module 3', 80, self.thirdModuleX, self.thirdModuleY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('Choose module: ', 120, midWidth, midHeight - 200, self.game.WHITE, self.game.fontName)
+            self.game.drawText('Module 1', 80, self.firstModuleX, self.firstModuleY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('Module 2', 80, self.secondModuleX, self.secondModuleY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('Module 3', 80, self.thirdModuleX, self.thirdModuleY, self.game.WHITE, self.game.fontName)
 
             self.drawPointer()
             self.blitScreen()
@@ -288,24 +289,24 @@ class CreditsMenu(Menu):
 
     def displayMenu(self):
         """
-        Method that displays the menu. It prints 7 buttons thanks to the draw_text() method.
+        Method that displays the menu. It prints 7 buttons thanks to the drawText() method.
         It also blits the screen every single frame.
         """
         self.runDisplay = True
 
         while self.runDisplay:
-            self.game.reset_keys()
+            self.game.resetKeys()
             self.game.checkEvents()
             self.checkInput()
 
             self.game.display.fill(BLACK)
-            self.game.draw_text('THE GAME HAS BEEN WRITTEN BY', 85, self.creditsTitleX, self.creditsTitleY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('PIOTR BATOR', 70, self.firstAuthorX, self.firstAuthorY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('GABRIEL BRZOSKWINIA', 70, self.secondAuthorX, self.secondAuthorY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('AS A PART OF', 60, self.partOneX, self.partOneY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('THE MOTOROLA SCIENCE CUP', 60, self.partTwoX, self.partTwoY, self.game.RED, self.game.fontName)
-            self.game.draw_text('COMPETITION TASKS', 60, self.partThreeX, self.partThreeY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('2021 © ALL RIGHTS RESERVED', 30, self.copyrightX, self.copyrightY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('THE GAME HAS BEEN WRITTEN BY', 85, self.creditsTitleX, self.creditsTitleY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('PIOTR BATOR', 70, self.firstAuthorX, self.firstAuthorY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('GABRIEL BRZOSKWINIA', 70, self.secondAuthorX, self.secondAuthorY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('AS A PART OF', 60, self.partOneX, self.partOneY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('THE MOTOROLA SCIENCE CUP', 60, self.partTwoX, self.partTwoY, self.game.RED, self.game.fontName)
+            self.game.drawText('COMPETITION TASKS', 60, self.partThreeX, self.partThreeY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('2021 © ALL RIGHTS RESERVED', 30, self.copyrightX, self.copyrightY, self.game.WHITE, self.game.fontName)
 
             self.blitScreen()
 
@@ -341,7 +342,7 @@ class InstructionsMenu(Menu):
 
     def displayMenu(self):
         """
-        Method that displays the menu. It prints 3 buttons thanks to the draw_text() method.
+        Method that displays the menu. It prints 3 buttons thanks to the drawText() method.
         It also blits the screen every single frame.
         """
         self.runDisplay = True
@@ -352,9 +353,9 @@ class InstructionsMenu(Menu):
 
             self.game.display.fill(BLACK)
             self.game.display.blit(self.image, (self.instructionsTextX - 250, self.instructionsTextY + 150))
-            self.game.draw_text('USE', 55, self.instructionsTextX - 450, self.instructionsTextY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('WSAD', 55, self.instructionsTextX - 340, self.instructionsTextY, self.game.RED, self.game.fontName)
-            self.game.draw_text('IN ORDER TO MOVE YOUR STOREKEEPER', 55, self.instructionsTextX + 150, self.instructionsTextY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('USE', 55, self.instructionsTextX - 450, self.instructionsTextY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('WSAD', 55, self.instructionsTextX - 340, self.instructionsTextY, self.game.RED, self.game.fontName)
+            self.game.drawText('IN ORDER TO MOVE YOUR STOREKEEPER', 55, self.instructionsTextX + 150, self.instructionsTextY, self.game.WHITE, self.game.fontName)
 
             self.blitScreen()
 
@@ -385,29 +386,29 @@ class LegendMenu(Menu):
 
     def displayMenu(self):
         """
-        Method that displays the menu. It prints 12 buttons thanks to the draw_text() method.
+        Method that displays the menu. It prints 12 buttons thanks to the drawText() method.
         It also blits the screen every single frame.
         """
         self.runDisplay = True
 
         while self.runDisplay:
-            self.game.reset_keys()
+            self.game.resetKeys()
             self.game.checkEvents()
             self.checkInput()
 
             self.game.display.fill(BLACK)
-            self.game.draw_text('RULES', 100, self.legendTextX, self.legendTextY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('IT IS A LOGICAL GAME WHOSE AIM IS TO MOVE', 45, self.legendTextX, self.legendTextY + 150, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('AND CORRECTLY POSITION THE', 45, self.legendTextX - 180, self.legendTextY + 220, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('BOXES', 45, self.legendTextX + 150, self.legendTextY + 220, self.game.RED, self.game.fontName)
-            self.game.draw_text('IN A WAREHOUSE.', 45, self.legendTextX + 365, self.legendTextY + 220, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('YOU WILL PLAY AS THE', 45, self.legendTextX - 300, self.legendTextY + 290, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('WAREHOUSE KEEPER', 45, self.legendTextX + 90, self.legendTextY + 290, self.game.RED, self.game.fontName)
-            self.game.draw_text('AND TRY TO COPE', 45, self.legendTextX + 430, self.legendTextY + 290, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('WITH THE CHALLENGE, FACING', 45, self.legendTextX - 300, self.legendTextY + 360, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('20 MAPS', 45, self.legendTextX + 50, self.legendTextY + 360, self.game.RED, self.game.fontName)
-            self.game.draw_text('OF VARYING DIFFICULTY.', 45, self.legendTextX + 350, self.legendTextY + 360, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('WE WISH YOU GOOD LUCK!', 45, self.legendTextX, self.legendTextY + 500, self.game.WHITE, self.game.fontName)
+            self.game.drawText('RULES', 100, self.legendTextX, self.legendTextY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('IT IS A LOGICAL GAME WHOSE AIM IS TO MOVE', 45, self.legendTextX, self.legendTextY + 150, self.game.WHITE, self.game.fontName)
+            self.game.drawText('AND CORRECTLY POSITION THE', 45, self.legendTextX - 180, self.legendTextY + 220, self.game.WHITE, self.game.fontName)
+            self.game.drawText('BOXES', 45, self.legendTextX + 150, self.legendTextY + 220, self.game.RED, self.game.fontName)
+            self.game.drawText('IN A WAREHOUSE.', 45, self.legendTextX + 365, self.legendTextY + 220, self.game.WHITE, self.game.fontName)
+            self.game.drawText('YOU WILL PLAY AS THE', 45, self.legendTextX - 300, self.legendTextY + 290, self.game.WHITE, self.game.fontName)
+            self.game.drawText('WAREHOUSE KEEPER', 45, self.legendTextX + 90, self.legendTextY + 290, self.game.RED, self.game.fontName)
+            self.game.drawText('AND TRY TO COPE', 45, self.legendTextX + 430, self.legendTextY + 290, self.game.WHITE, self.game.fontName)
+            self.game.drawText('WITH THE CHALLENGE, FACING', 45, self.legendTextX - 300, self.legendTextY + 360, self.game.WHITE, self.game.fontName)
+            self.game.drawText('20 MAPS', 45, self.legendTextX + 50, self.legendTextY + 360, self.game.RED, self.game.fontName)
+            self.game.drawText('OF VARYING DIFFICULTY.', 45, self.legendTextX + 350, self.legendTextY + 360, self.game.WHITE, self.game.fontName)
+            self.game.drawText('WE WISH YOU GOOD LUCK!', 45, self.legendTextX, self.legendTextY + 500, self.game.WHITE, self.game.fontName)
 
             self.blitScreen()
 
@@ -446,22 +447,22 @@ class DiffMenu(Menu):
 
     def displayMenu(self):
         """
-        Method that displays the menu. It prints 4 buttons thanks to the draw_text() method.
+        Method that displays the menu. It prints 4 buttons thanks to the drawText() method.
         It also blits the screen every single frame.
         """
         self.runDisplay = True
 
         while self.runDisplay:
-            self.game.reset_keys()
+            self.game.resetKeys()
             self.game.checkEvents()
             self.checkInput()
 
             self.game.display.fill(BLACK)
 
-            self.game.draw_text('SELECT YOUR DIFFICULTY', 85, self.diffTitleX, self.diffTitleY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('EASY', 80, self.easyX, self.easyY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('MEDIUM', 80, self.mediumX, self.mediumY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('HARD', 80, self.hardX, self.hardY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('SELECT YOUR DIFFICULTY', 85, self.diffTitleX, self.diffTitleY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('EASY', 80, self.easyX, self.easyY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('MEDIUM', 80, self.mediumX, self.mediumY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('HARD', 80, self.hardX, self.hardY, self.game.WHITE, self.game.fontName)
 
             self.drawPointer()
             self.blitScreen()
@@ -568,9 +569,9 @@ class InputName(Menu):
             key = pygame.key.name(event.key)  # Returns string id of pressed key.
 
             if len(key) == 1:  # This covers all letters and numbers not on numpad.
-                if (keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]) and len(self.game.playerName) < 20:
+                if (keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]) and len(self.game.playerName) < 15:
                     self.game.playerName += key.upper()
-                elif len(self.game.playerName) < 20:
+                elif len(self.game.playerName) < 15:
                     self.game.playerName += key
 
             elif key == 'backspace':
@@ -584,23 +585,23 @@ class InputName(Menu):
             self.runDisplay = False
             self.game.running = False
 
-        self.game.draw_text(self.game.playerName, 60, self.inputNameX, self.inputNameY + 350, self.game.RED,
+        self.game.drawText(self.game.playerName, 60, self.inputNameX, self.inputNameY + 350, self.game.RED,
                             self.game.fontName)
-        self.game.draw_text('Chars used: ' + str(len(self.game.playerName)), 30, self.inputNameX, self.inputNameY + 600,
+        self.game.drawText('Chars used: ' + str(len(self.game.playerName)), 30, self.inputNameX, self.inputNameY + 600,
                             self.game.WHITE, self.game.fontName)
 
     def displayMenu(self):
         """
-        Method that displays the menu. It prints 2 buttons thanks to the draw_text() method.
+        Method that displays the menu. It prints 2 buttons thanks to the drawText() method.
         It also blits the screen every single frame.
         """
         self.runDisplay = True
 
         while self.runDisplay:
             self.game.display.fill(BLACK)
-            self.game.draw_text('TYPE IN YOUR NICKNAME [20]', 95, self.inputNameX, self.inputNameY + 50, self.game.WHITE,
+            self.game.drawText('TYPE IN YOUR NICKNAME [15]', 95, self.inputNameX, self.inputNameY + 50, self.game.WHITE,
                                 self.game.fontName)
-            self.game.draw_text('AND PRESS ENTER TO CONFIRM', 70, self.inputNameX, self.inputNameY + 150, self.game.WHITE,
+            self.game.drawText('AND PRESS ENTER TO CONFIRM', 70, self.inputNameX, self.inputNameY + 150, self.game.WHITE,
                                 self.game.fontName)
 
             self.inputName()
@@ -625,7 +626,7 @@ class RankMenu(Menu):
 
     def displayMenu(self):
         """
-        Method that displays the menu. It prints buttons thanks to the draw_text() method.
+        Method that displays the menu. It prints buttons thanks to the drawText() method.
         It also blits the screen every single frame.
         """
         self.runDisplay = True
@@ -638,9 +639,9 @@ class RankMenu(Menu):
                 self.runDisplay = False
 
             self.game.display.fill(BLACK)
-            self.game.draw_text('RANKING', 90, self.headerX, self.headerY, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('NAME', 60, self.headerX - 300, self.headerY + 100, self.game.WHITE, self.game.fontName)
-            self.game.draw_text('POINTS', 60, self.headerX + 300, self.headerY + 100, self.game.WHITE, self.game.fontName)
+            self.game.drawText('RANKING', 90, self.headerX, self.headerY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('NAME', 60, self.headerX - 300, self.headerY + 100, self.game.WHITE, self.game.fontName)
+            self.game.drawText('POINTS', 60, self.headerX + 300, self.headerY + 100, self.game.WHITE, self.game.fontName)
 
             def getScore(table):
                 return table.get('userScore')
@@ -655,8 +656,8 @@ class RankMenu(Menu):
                     name = table[counter - 1]['userNameVar']
                     points = table[counter - 1]['userScore']
                     if counter <= 5:
-                        self.game.draw_text(str(counter) + '. ' + str(name), 50, self.headerX - 300, self.itemY + (counter * 60), self.game.WHITE, self.game.fontName)
-                        self.game.draw_text(str(points), 50, self.headerX + 300, self.itemY + (counter * 60), self.game.RED, self.game.fontName)
+                        self.game.drawText(str(counter) + '. ' + str(name), 50, self.headerX - 300, self.itemY + (counter * 60), self.game.WHITE, self.game.fontName)
+                        self.game.drawText(str(points), 50, self.headerX + 300, self.itemY + (counter * 60), self.game.RED, self.game.fontName)
                     counter += 1
 
                 self.blitScreen()
@@ -681,24 +682,24 @@ class SaveGameMenu(Menu):
 
     def displayMenu(self):
         """
-        Method that displays the menu. It prints buttons thanks to the draw_text() method.
+        Method that displays the menu. It prints buttons thanks to the drawText() method.
         It also blits the screen every single frame.
         """
         self.runDisplay = True
 
         while self.runDisplay:
-            self.game.reset_keys()
+            self.game.resetKeys()
             self.game.checkEvents()
             self.checkInput()
 
             self.game.display.fill(BLACK)
-            self.game.draw_text('DO YOU WANT TO QUIT AND SAVE YOUR SCORE?', 65, midWidth, midHeight - 300,
+            self.game.drawText('DO YOU WANT TO QUIT AND SAVE YOUR SCORE?', 65, midWidth, midHeight - 300,
                                 self.game.WHITE,
                                 self.game.fontName)
-            self.game.draw_text('YES', 60, self.firstModuleX, self.firstModuleY,
+            self.game.drawText('YES', 60, self.firstModuleX, self.firstModuleY,
                                 self.game.WHITE,
                                 self.game.fontName)
-            self.game.draw_text('NO', 60, self.secondModuleX, self.secondModuleY,
+            self.game.drawText('NO', 60, self.secondModuleX, self.secondModuleY,
                                 self.game.WHITE,
                                 self.game.fontName)
 
@@ -846,35 +847,251 @@ class WidthHeightMenu(Menu):
         pygame.draw.rect(self.game.display, self.colorW, self.inputWidthRect, 2)
         pygame.draw.rect(self.game.display, self.colorH, self.inputHeightRect, 2)
 
-        self.game.draw_text(self.passedWidth, 50, self.widthX + 150, self.widthY,
+        self.game.drawText(self.passedWidth, 50, self.widthX + 150, self.widthY,
                             self.game.WHITE,
                             self.game.fontName)
-        self.game.draw_text(self.passedHeight, 50, self.heightX + 150, self.heightY,
+        self.game.drawText(self.passedHeight, 50, self.heightX + 150, self.heightY,
                             self.game.WHITE,
                             self.game.fontName)
 
     def displayMenu(self):
         """
-        Method that displays the menu. It prints buttons thanks to the draw_text() method.
+        Method that displays the menu. It prints buttons thanks to the drawText() method.
         It also blits the screen every single frame.
         """
         self.runDisplay = True
 
         while self.runDisplay:
             self.game.display.fill(BLACK)
-            self.game.draw_text('ENTER YOUR MAP DIMENSIONS', 65, self.textInfoX, self.textInfoY,
+            self.game.drawText('ENTER YOUR MAP DIMENSIONS', 65, self.textInfoX, self.textInfoY,
                                 self.game.WHITE,
                                 self.game.fontName)
-            self.game.draw_text('MAX: 30 x 20', 35, self.textInfoX, self.textInfoY + 50,
+            self.game.drawText('MAX: 30 x 20', 35, self.textInfoX, self.textInfoY + 50,
                                 self.game.RED,
                                 self.game.fontName)
-            self.game.draw_text('WIDTH: ', 60, self.widthX, self.widthY,
+            self.game.drawText('WIDTH: ', 60, self.widthX, self.widthY,
                                 self.game.WHITE,
                                 self.game.fontName)
-            self.game.draw_text('HEIGHT: ', 60, self.heightX, self.heightY,
+            self.game.drawText('HEIGHT: ', 60, self.heightX, self.heightY,
                                 self.game.WHITE,
                                 self.game.fontName)
 
             self.inputHandle()
             self.checkInput()
             self.blitScreen()
+
+class LoadMapMenu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+        """
+        Sub menu for Module III that allows player to choose his own map.
+
+        :param game:
+            Game class that allows connection between game logic and menu.
+        :type game: game.Game, required
+        """
+        self.textInfoX, self.textInfoY = midWidth, midHeight - 280
+        self.itemMapX, self.itemMapY = midWidth, midHeight - 200
+        self.chosenMap = ''
+        self.deleteRect= pygame.Rect(midWidth + 450, midHeight + 320, 140, 50)
+        self.offset = -100
+        self.pointerRect = pygame.Rect(0, 0, 20, 20)
+        self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY)
+        self.counter = 0
+        self.storekeeperImg = pygame.transform.scale(STOREKEEPER_IMG, (40, 40))
+
+    def displayMenu(self):
+        """
+        Method that displays the menu. It prints 7 buttons thanks to the drawText() method.
+        It also draws the pointer and blits the screen every single frame.
+        """
+        self.runDisplay = True
+
+        self.mapArray = os.listdir('./src/boards/own/')
+        self.chosenMap = self.mapArray[0]
+
+        while self.runDisplay:
+            self.game.resetKeys()
+            self.game.checkEvents()
+            self.checkInput()
+
+            self.game.display.fill(BLACK)
+            self.game.drawText('CHOOSE YOUR OWN MAP OR DELETE ONE', 65, self.textInfoX, self.textInfoY,
+                                self.game.WHITE,
+                                self.game.fontName)
+
+            pygame.draw.rect(self.game.display, WHITE, self.deleteRect)
+            self.game.drawText("DELETE MAP", 25, midWidth + 520, midHeight + 340, self.game.RED, self.game.fontName)
+
+            for row in range(len(self.mapArray)):
+                map = self.mapArray[row]
+                self.game.drawText(str(map), 20, self.itemMapX, self.itemMapY + (row * 40), self.game.WHITE, self.game.fontName)
+
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    return
+                elif event.type == MOUSEBUTTONDOWN:
+                    if self.deleteRect.collidepoint(event.pos):
+                        self.game.currentMenu.runDisplay = False
+                        self.game.currentMenu = self.game.deleteMapMenu
+                        self.game.currentMenu.displayMenu()
+
+            self.game.display.blit(self.storekeeperImg, (self.pointerRect.x - 200, self.pointerRect.y - 30))
+            self.blitScreen()
+
+    def movePointer(self):
+        """
+        Method that includes pointer's movement logic. Moreover, it includes an end event handler.
+        """
+        self.endY = self.itemMapY + ((len(self.mapArray)) * 40) + 10
+
+        if self.game.DOWN_KEY or self.game.S_KEY:
+            if self.counter < (len(self.mapArray)):
+                self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + (self.counter * 40))
+                self.chosenMap = self.mapArray[self.counter]
+                self.counter += 1
+                print(self.chosenMap)
+            else:
+                self.counter = 0
+                self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY)
+                self.chosenMap = self.mapArray[0]
+                print(self.chosenMap)
+        elif self.game.UP_KEY or self.game.W_KEY:
+            if self.counter >= 0:
+                self.pointerRect.midtop = (self.itemMapX + self.offset, self.endY - (self.counter * 40))
+                self.chosenMap = self.mapArray[self.counter]
+                self.counter -= 1
+                print(self.chosenMap)
+            else:
+                self.counter = len(self.mapArray) - 1
+                self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + (self.counter * 40))
+                self.chosenMap = self.mapArray[self.counter]
+                print(self.chosenMap)
+
+    def checkInput(self):
+        """
+        Method that handles changing the currently displayed menu.
+        """
+        self.movePointer()
+        if self.game.ESC_PRESSED:
+            self.game.currentMenu = self.game.mainMenu
+            self.game.running = True
+            self.runDisplay = False
+
+        if self.game.START_KEY:
+            self.runDisplay = False
+            logic.startTheGame(self.game.window, self.chosenMap,
+                               self.game, self.game.gamePoints, MODULE_III)
+
+class DeleteMapMenu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+        """
+        Sub menu for Module III that allows player to delete his own map.
+
+        :param game:
+            Game class that allows connection between game logic and menu.
+        :type game: game.Game, required
+        """
+        self.textInfoX, self.textInfoY = midWidth, midHeight - 280
+        self.itemMapX, self.itemMapY = midWidth, midHeight - 200
+        self.chosenMap = ''
+        self.offset = -100
+        self.pointerRect = pygame.Rect(0, 0, 20, 20)
+        self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY)
+        self.counter = 0
+        self.storekeeperImg = pygame.transform.scale(STOREKEEPER_IMG, (40, 40))
+
+    def displayMenu(self):
+        """
+        Method that displays the menu. It prints 7 buttons thanks to the drawText() method.
+        It also draws the pointer and blits the screen every single frame.
+        """
+        self.runDisplay = True
+
+        self.mapArray = os.listdir('./src/boards/own/')
+        self.chosenMap = self.mapArray[0]
+
+        while self.runDisplay:
+            self.game.checkEvents()
+            self.checkInput()
+
+            self.game.display.fill(BLACK)
+            self.game.drawText('DELETE YOUR MAP', 65, self.textInfoX, self.textInfoY,
+                                self.game.WHITE,
+                                self.game.fontName)
+
+            for row in range(len(self.mapArray)):
+                map = self.mapArray[row]
+                self.game.drawText(str(map), 20, self.itemMapX, self.itemMapY + (row * 40), self.game.WHITE, self.game.fontName)
+
+            self.game.display.blit(self.storekeeperImg, (self.pointerRect.x - 200, self.pointerRect.y - 30))
+            self.blitScreen()
+
+    def removeMap(self, mapID):
+        """
+        Function for module III which allows player to delete his own map.
+
+        :param playerName:
+            Map creator nick name.
+        :type playerName: str, required
+        :param mapID:
+            ID of created map.
+        :type mapID: int, required
+        """
+        if os.path.isfile('./src/boards/own/' + str(mapID)):
+            os.remove('./src/boards/own/' + mapID)
+            print(f'Map deleted successfully.')
+            self.runDisplay = False
+            self.game.currentMenu = self.game.mainMenu
+            self.game.currentMenu.displayMenu
+        else:
+            print(f'File not exist.')
+            self.runDisplay = False
+            self.game.currentMenu = self.game.mainMenu
+            self.game.currentMenu.displayMenu
+            
+    def movePointer(self):
+        """
+        Method that includes pointer's movement logic. Moreover, it includes an end event handler.
+        """
+        self.endY = self.itemMapY + ((len(self.mapArray) - 1) * 40)
+
+        if self.game.DOWN_KEY or self.game.S_KEY:
+            if self.counter < (len(self.mapArray)):
+                self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + (self.counter * 40))
+                self.chosenMap = self.mapArray[self.counter]
+                self.counter += 1
+                print(self.chosenMap)
+            else:
+                self.counter = 0
+                self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY)
+                self.chosenMap = self.mapArray[0]
+                print(self.chosenMap)
+
+        elif self.game.UP_KEY or self.game.W_KEY:
+            if self.counter > 0:
+                self.pointerRect.midtop = (self.itemMapX + self.offset, self.endY - (self.counter * 40))
+                self.chosenMap = self.mapArray[self.counter]
+                self.counter -= 1
+            else:
+                self.counter = len(self.mapArray) - 1
+                self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + (self.counter * 40))
+                self.chosenMap = self.mapArray[self.counter]
+                print(self.chosenMap)
+
+    def checkInput(self):
+        """
+        Method that handles changing the currently displayed menu.
+        """
+        self.movePointer()
+        if self.game.ESC_PRESSED:
+            self.runDisplay = False
+            self.game.currentMenu = self.game.loadMapMenu
+            self.game.running = True
+
+        if self.game.START_KEY:
+            self.removeMap(self.chosenMap)
+            self.runDisplay = False
+            self.game.currentMenu = self.game.loadMapMenu
+            self.game.running = True

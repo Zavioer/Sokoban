@@ -1,4 +1,5 @@
 import shelve
+import json
 import time
 from pygame.locals import *
 from .blocks import Floor, Box, Destination, Wall
@@ -6,8 +7,8 @@ from .player import Player
 from .hud import HUD, Timer
 from .creator import Tile, Mouse, Board, Toolbox
 from .game import *
+from src.modules import game
 from src.modules.settings import *
-
 
 def startTheGame(screen, lvlName, game, points, flag):
     """
@@ -142,7 +143,7 @@ def startTheGame(screen, lvlName, game, points, flag):
             if flag == MODULE_I:
                 game.logicState = False
                 game.currentMenu = game.mainMenu
-                game.currentMenu.display_menu()
+                game.currentMenu.displayMenu()
 
             if flag == MODULE_II:
                 game.logicState = False
@@ -222,25 +223,6 @@ def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints):
         json.dump(data, scoreFile)
         scoreFile.write('\n')
 
-
-def removeMap(playerName, mapID):
-    """
-    Function for module III which allows player to delete his own map.
-
-    :param playerName:
-        Map creator nick name.
-    :type playerName: str, required
-    :param mapID:
-        ID of created map.
-    :type mapID: int, required
-    """
-    if os.path.isfile(str(mapID) + 'txt'):
-        os.remove(mapID)
-        print(f'Map deleted successfully.')
-    else:
-        print(f'File not exist.')
-
-
 def createMap(screen, playerName, width, height):
     """
     Function for module III which allows player to create own map.
@@ -288,7 +270,16 @@ def createMap(screen, playerName, width, height):
     toolbox.add_button('Rubber / Floor', FLOOR_CHAR, FLOOR_IMG)
     toolbox.place_buttons()
 
+    gameHandle = game.Game()
+    submitRect= pygame.Rect(midWidth + 365, midHeight + 320, 75, 50)
+
     screen.fill(BLACK)
+
+    pygame.draw.rect(gameHandle.display, RED, submitRect)
+    gameHandle.drawText("Submit", 20, midWidth + 400, midHeight + 340, gameHandle.WHITE, gameHandle.fontName)
+    gameHandle.window.blit(gameHandle.display, (0, 0))
+
+    pygame.display.update()
     playerBoard.empty_map()
 
     while True:
@@ -298,6 +289,11 @@ def createMap(screen, playerName, width, height):
             if event.type == QUIT:
                 return
             elif event.type == MOUSEBUTTONDOWN:
+                if submitRect.collidepoint(event.pos):
+                    gameHandle.currentMenu.runDisplay = False
+                    gameHandle.currentMenu = gameHandle.loadMapMenu
+                    gameHandle.currentMenu.displayMenu()
+
                 for sprite in allTiles:
                     mousex, mousey = pygame.mouse.get_pos()
                     x, y = canvasCenter.topleft
@@ -334,7 +330,8 @@ def createMap(screen, playerName, width, height):
 
             elif event.type == KEYDOWN and event.key == K_s:
                 playerBoard.save_board(playerName)
-
+            elif event.type == KEYDOWN and event.key == K_ESCAPE:
+                gameHandle.runDisplay = False
 
         allTiles.update()
         allTiles.draw(canvas)

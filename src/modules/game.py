@@ -37,6 +37,8 @@ class Game:
         self.creditsMenu = CreditsMenu(self)
         self.saveGameMenu = SaveGameMenu(self)
         self.widthHeightMenu = WidthHeightMenu(self)
+        self.loadMapMenu = LoadMapMenu(self)
+        self.deleteMapMenu = DeleteMapMenu(self)
 
         self.currentMenu = self.mainMenu
         self.BLACK, self.WHITE, self.RED = BLACK, WHITE, RED
@@ -77,7 +79,7 @@ class Game:
                     if event.key == pygame.K_w:
                         self.W_KEY = True
 
-    def reset_keys(self):
+    def resetKeys(self):
         """
         Set all keys to default, not pressed state.
         """
@@ -91,7 +93,7 @@ class Game:
         self.S_KEY = False
         self.W_KEY = False
 
-    def draw_text(self, text, size, x, y, color, fontName):
+    def drawText(self, text, size, x, y, color, fontName):
         """
         Method that render text on the main game screen.
 
