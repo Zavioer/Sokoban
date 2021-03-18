@@ -45,7 +45,8 @@ GRAY = pygame.Color('gray15')
 LIGHTSKYBLUE = pygame.Color('lightskyblue3')
 
 # In game HUD size
-HUD_SIZE = 200
+HUD_WIDTH = 200
+HUD_HEIGHT = 150
 
 # Create map
 BLOCK_SIZE = 25

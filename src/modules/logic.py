@@ -10,6 +10,7 @@ from .game import *
 from src.modules import game
 from src.modules.settings import *
 
+
 def startTheGame(screen, lvlName, game, points, flag):
     """
     Main game logic. Handling board draw, set player. Then game loop.
@@ -73,7 +74,7 @@ def startTheGame(screen, lvlName, game, points, flag):
 
     # Map center
     canvas = pygame.Surface((mapWidth * TILE_WIDTH, mapHeight * TILE_HEIGHT))
-    canvasPos = canvas.get_rect(center=((WIDTH - HUD_SIZE) / 2,
+    canvasPos = canvas.get_rect(center=((WIDTH - HUD_WIDTH) / 2,
                                         HEIGHT / 2))
 
     destinationsAmount = len(destinations.sprites())
@@ -157,11 +158,16 @@ def startTheGame(screen, lvlName, game, points, flag):
 
         screen.fill(BLACK)
         canvas.fill(BLACK)
+        hud.image.fill(BLACK)
 
         allSprites.draw(canvas)
+
         hud.displayTimer(pygame.time.get_ticks())
         hud.displayLvl(lvlName)
-        hud.displayPoints(points)
+
+        if flag == MODULE_II:
+            hud.displayPoints(points)
+
         hud.displayPlayerName(game.playerName)
         screen.blit(hud.image, hud.rect)
 
@@ -222,6 +228,7 @@ def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints):
     with open('scoreFile.txt', 'a') as scoreFile:
         json.dump(data, scoreFile)
         scoreFile.write('\n')
+
 
 def createMap(screen, playerName, width, height):
     """

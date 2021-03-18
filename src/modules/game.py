@@ -39,6 +39,7 @@ class Game:
         self.widthHeightMenu = WidthHeightMenu(self)
         self.loadMapMenu = LoadMapMenu(self)
         self.deleteMapMenu = DeleteMapMenu(self)
+        self.loadSaveMenu = LoadSaveMenu(self)
 
         self.currentMenu = self.mainMenu
         self.BLACK, self.WHITE, self.RED = BLACK, WHITE, RED

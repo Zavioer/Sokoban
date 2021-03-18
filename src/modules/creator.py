@@ -208,7 +208,7 @@ class Toolbox(pygame.sprite.Sprite):
         padding = 25
 
         for button in self.buttons:
-            self.buttonsSprites.add(Button(0, padding, self.width - 20, 25,
+            self.buttonsSprites.add(Button(20, padding, self.width - 40, 25,
                                            BLACK, button['name'], button['char'],
                                            button['image'], font, WHITE))
             padding += 30

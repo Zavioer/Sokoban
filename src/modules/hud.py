@@ -11,10 +11,10 @@ class HUD(pygame.sprite.Sprite):
         :type timer: Timer, required
         """
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((HUD_SIZE, 150))
+        self.image = pygame.Surface((HUD_WIDTH, HUD_HEIGHT))
         self.timer = timer
         self.rect = self.image.get_rect()
-        self.rect.x = WIDTH - HUD_SIZE
+        self.rect.x = WIDTH - HUD_WIDTH
         self.padding = 25
 
     def displayLvl(self, lvlNumber):
@@ -66,7 +66,7 @@ class HUD(pygame.sprite.Sprite):
         :type passedName: str, required
         """
         font = pygame.font.Font(None, 30)
-        text = font.render(f'{passedName}', 1, WHITE)
+        text = font.render(f'{passedName.title()}', 1, WHITE)
 
         playerNamePosition = text.get_rect(y=100, centerx=self.image.get_width() / 2)
 
