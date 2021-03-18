@@ -708,7 +708,7 @@ class SaveGameMenu(Menu):
 
                 logic.saveBoard(self.game.currentPlayerState['width'], self.game.currentPlayerState['height'],
                                 self.game.currentPlayerState['sprites'], self.game.currentPlayerState['time'],
-                                self.game.playerName, self.game.gameLevel, self.game.gamePoints)
+                                self.game.playerName, self.game.gameLevel, self.game.gamePoints, 'NORMAL')
 
                 if self.game.gameLevel > 1:
                     self.game.gameLevel = 1
@@ -755,6 +755,7 @@ class WidthHeightMenu(Menu):
         self.textInfoX, self.textInfoY = midWidth, midHeight - 250
         self.widthX, self.widthY = midWidth, midHeight - 50
         self.heightX, self.heightY = midWidth, midHeight + 100
+        self.nameX, self.nameY = midWidth - 300, midHeight + 220
         self.passedWidth = ''
         self.passedHeight = ''
 
@@ -762,10 +763,12 @@ class WidthHeightMenu(Menu):
         self.activeColor = LIGHTSKYBLUE
         self.inputWidthRect = pygame.Rect(self.widthX + 100, self.widthY - 50, 100, 100)
         self.inputHeightRect = pygame.Rect(self.heightX + 100, self.heightY - 50, 100, 100)
-        self.buttonWActive, self.buttonHActive = False, False
+        self.inputNameRect = pygame.Rect(self.nameX + 100, self.nameY - 40, 450, 80)
+        self.buttonWActive, self.buttonHActive, self.buttonNActive = False, False, False
 
         self.colorW = self.passiveColor
         self.colorH = self.passiveColor
+        self.colorN = self.passiveColor
 
     def checkInput(self):
         """
@@ -777,7 +780,7 @@ class WidthHeightMenu(Menu):
             self.runDisplay = False
 
         if self.game.START_KEY:
-            if 0 < int(self.passedWidth) <= 30 and 0 < int(self.passedHeight) <= 20:
+            if 0 < int(self.passedWidth) <= 30 and 0 < int(self.passedHeight) <= 20 and 0 < len(self.game.passedMapName) <= 15:
                 self.runDisplay = False
                 self.game.running = True
 
@@ -805,6 +808,12 @@ class WidthHeightMenu(Menu):
             elif not self.inputHeightRect.collidepoint(event.pos):
                 self.buttonHActive = False
                 self.colorH = self.passiveColor
+            if self.inputNameRect.collidepoint(event.pos):
+                self.buttonNActive = True
+                self.colorN = self.activeColor
+            elif not self.inputNameRect.collidepoint(event.pos):
+                self.buttonNActive = False
+                self.colorN = self.passiveColor
 
         if event.type == pygame.KEYDOWN:
             key = pygame.key.name(event.key)
@@ -826,6 +835,16 @@ class WidthHeightMenu(Menu):
                 else:
                     if (event.key == pygame.K_0 or event.key == pygame.K_1 or event.key == pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4 or event.key == pygame.K_5 or event.key == pygame.K_6 or event.key == pygame.K_7 or event.key == pygame.K_8 or event.key == pygame.K_9) and len(self.passedHeight)  < 2:
                         self.passedHeight += event.unicode
+
+            elif self.buttonNActive:
+                if key == 'backspace':
+                    self.game.passedMapName = self.game.passedMapName[:-1]
+                elif key == 'return':
+                    self.game.START_KEY = True
+                else:
+                    if len(self.game.passedMapName) < 15:
+                        self.game.passedMapName += event.unicode
+
             elif key == 'return':
                 self.game.START_KEY = True
             elif key == 'escape':
@@ -836,11 +855,15 @@ class WidthHeightMenu(Menu):
 
         pygame.draw.rect(self.game.display, self.colorW, self.inputWidthRect, 2)
         pygame.draw.rect(self.game.display, self.colorH, self.inputHeightRect, 2)
+        pygame.draw.rect(self.game.display, self.colorN, self.inputNameRect, 2)
 
         self.game.drawText(self.passedWidth, 50, self.widthX + 150, self.widthY,
                             self.game.WHITE,
                             self.game.fontName)
         self.game.drawText(self.passedHeight, 50, self.heightX + 150, self.heightY,
+                            self.game.WHITE,
+                            self.game.fontName)
+        self.game.drawText(self.game.passedMapName, 40, self.nameX + 325, self.nameY,
                             self.game.WHITE,
                             self.game.fontName)
 
@@ -863,6 +886,9 @@ class WidthHeightMenu(Menu):
                                 self.game.WHITE,
                                 self.game.fontName)
             self.game.drawText('HEIGHT: ', 60, self.heightX, self.heightY,
+                                self.game.WHITE,
+                                self.game.fontName)
+            self.game.drawText('NAME: ', 60, self.nameX, self.nameY,
                                 self.game.WHITE,
                                 self.game.fontName)
 
@@ -907,7 +933,7 @@ class LoadMapMenu(Menu):
             self.checkInput()
 
             self.game.display.fill(BLACK)
-            self.game.drawText('CHOOSE YOUR OWN MAP OR DELETE ONE', 65, self.textInfoX, self.textInfoY,
+            self.game.drawText('CHOOSE MAP', 65, self.textInfoX, self.textInfoY,
                                 self.game.WHITE,
                                 self.game.fontName)
 
@@ -1047,7 +1073,7 @@ class DeleteMapMenu(Menu):
             self.runDisplay = False
             self.game.currentMenu = self.game.mainMenu
             self.game.currentMenu.displayMenu
-            
+
     def movePointer(self):
         """
         Method that includes pointer's movement logic. Moreover, it includes an end event handler.

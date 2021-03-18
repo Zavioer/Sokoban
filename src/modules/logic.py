@@ -176,7 +176,7 @@ def startTheGame(screen, lvlName, game, points, flag):
         pygame.display.flip()
 
 
-def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints):
+def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints, flag):
     """
     Function for saving current playing lvl and additional information in to
     shelve file.
@@ -196,6 +196,9 @@ def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints):
     :param playerName: str
         Current playing player nick name.
     :type lvlName: str, required
+    :param flag:
+        Tells whether filename should be customized.
+    :type flag: string, required
     """
     emptyBoard = []
 
@@ -207,7 +210,11 @@ def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints):
 
     currentDate = time.localtime(time.time())
     formatedDate = time.strftime('%H_%M_%S_%d_%m_%Y', currentDate)
-    fileName = ''.join((playerName, '_', 'BOARD', '_', formatedDate))
+
+    if flag == 'CUSTOM':
+        fileName = ''.join((playerName, '_', gameHandle.passedMapName))
+    else:
+        fileName = ''.join((playerName, '_', 'BOARD', '_', formatedDate))
 
     shelveFile = shelve.open(os.path.join('./src/saves', fileName))
 
@@ -278,15 +285,14 @@ def createMap(screen, playerName, width, height):
     toolbox.place_buttons()
 
     gameHandle = game.Game()
-    submitRect= pygame.Rect(midWidth + 365, midHeight + 320, 75, 50)
+
+    # nie widzę go
+    saveRect = pygame.Rect(20, 675, 160, 25)
+    pygame.draw.rect(canvas, (255, 242, 88), saveRect)
 
     screen.fill(BLACK)
-
-    pygame.draw.rect(gameHandle.display, RED, submitRect)
-    gameHandle.drawText("Submit", 20, midWidth + 400, midHeight + 340, gameHandle.WHITE, gameHandle.fontName)
-    gameHandle.window.blit(gameHandle.display, (0, 0))
-
     pygame.display.update()
+
     playerBoard.empty_map()
 
     while True:
@@ -296,9 +302,13 @@ def createMap(screen, playerName, width, height):
             if event.type == QUIT:
                 return
             elif event.type == MOUSEBUTTONDOWN:
-                if submitRect.collidepoint(event.pos):
+                if saveRect.collidepoint(event.pos):
+                    logic.saveBoard(gameHandle.currentPlayerState['width'], gameHandle.currentPlayerState['height'],
+                                    gameHandle.currentPlayerState['sprites'], gameHandle.currentPlayerState['time'],
+                                    gameHandle.playerName, gameHandle.gameLevel, gameHandle.gamePoints, 'CUSTOM')
+                    playerBoard.save_board(width, height, allSprites, endTime, playerName, lvlName, gameHandle.gamePoints, 'CUSTOM')
                     gameHandle.currentMenu.runDisplay = False
-                    gameHandle.currentMenu = gameHandle.loadMapMenu
+                    gameHandle.currentMenu = gameHandle.mainMenu()
                     gameHandle.currentMenu.displayMenu()
 
                 for sprite in allTiles:
@@ -335,8 +345,6 @@ def createMap(screen, playerName, width, height):
                         mouse.currentImage = button.tileImage
                         mouse.currBlock = button.attribute
 
-            elif event.type == KEYDOWN and event.key == K_s:
-                playerBoard.save_board(playerName)
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 gameHandle.runDisplay = False
 
@@ -348,7 +356,6 @@ def createMap(screen, playerName, width, height):
 
         pygame.display.update()
         pygame.display.flip()
-
 
 def resetMap(screen, lvlName, game, points, flag):
     """

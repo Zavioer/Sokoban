@@ -19,3 +19,5 @@
 {"userNameVar": "sdf", "userScore": 0}
 {"userNameVar": "asdf", "userScore": 0}
 {"userNameVar": "", "userScore": 0}
+{"userNameVar": "gabriel", "userScore": 0}
+{"userNameVar": "", "userScore": 0}
