@@ -813,7 +813,8 @@ class WidthHeightMenu(Menu):
                 if key == 'backspace':
                     self.passedWidth = self.passedWidth[:-1]
                 elif key == 'return':
-                    self.game.START_KEY = True
+                    if len(self.passedHeight) > 0 and len(self.passedWidth) > 0:
+                        self.game.START_KEY = True
                 else:
                     if (event.key == pygame.K_0 or event.key == pygame.K_1 or event.key == pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4 or event.key == pygame.K_5 or event.key == pygame.K_6 or event.key == pygame.K_7 or event.key == pygame.K_8 or event.key == pygame.K_9) and len(self.passedWidth)  < 2:
                         self.passedWidth += event.unicode
@@ -822,14 +823,17 @@ class WidthHeightMenu(Menu):
                 if key == 'backspace':
                     self.passedHeight = self.passedHeight[:-1]
                 elif key == 'return':
-                    self.game.START_KEY = True
+                    if len(self.passedHeight) > 0 and len(self.passedWidth) > 0:
+                        self.game.START_KEY = True
                 else:
                     if (event.key == pygame.K_0 or event.key == pygame.K_1 or event.key == pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4 or event.key == pygame.K_5 or event.key == pygame.K_6 or event.key == pygame.K_7 or event.key == pygame.K_8 or event.key == pygame.K_9) and len(self.passedHeight)  < 2:
                         self.passedHeight += event.unicode
             elif key == 'return':
-                self.game.START_KEY = True
+                if len(self.passedHeight) > 0 and len(self.passedWidth) > 0:
+                    self.game.START_KEY = True
             elif key == 'escape':
                 self.game.ESC_PRESSED = True
+                
         elif event.type == pygame.QUIT:
             self.runDisplay = False
             self.game.running = False
@@ -838,11 +842,9 @@ class WidthHeightMenu(Menu):
         pygame.draw.rect(self.game.display, self.colorH, self.inputHeightRect, 2)
 
         self.game.drawText(self.passedWidth, 50, self.widthX + 150, self.widthY,
-                            self.game.WHITE,
-                            self.game.fontName)
+                           self.game.WHITE, self.game.fontName)
         self.game.drawText(self.passedHeight, 50, self.heightX + 150, self.heightY,
-                            self.game.WHITE,
-                            self.game.fontName)
+                           self.game.WHITE, self.game.fontName)
 
     def displayMenu(self):
         """
@@ -854,17 +856,13 @@ class WidthHeightMenu(Menu):
         while self.runDisplay:
             self.game.display.fill(BLACK)
             self.game.drawText('ENTER YOUR MAP DIMENSIONS', 65, self.textInfoX, self.textInfoY,
-                                self.game.WHITE,
-                                self.game.fontName)
+                               self.game.WHITE, self.game.fontName)
             self.game.drawText('MAX: 30 x 20', 35, self.textInfoX, self.textInfoY + 50,
-                                self.game.RED,
-                                self.game.fontName)
-            self.game.drawText('WIDTH: ', 60, self.widthX, self.widthY,
-                                self.game.WHITE,
-                                self.game.fontName)
+                               self.game.RED, self.game.fontName)
+            self.game.drawText('WIDTH: ', 60, self.widthX, self.widthY,self.game.WHITE,
+                               self.game.fontName)
             self.game.drawText('HEIGHT: ', 60, self.heightX, self.heightY,
-                                self.game.WHITE,
-                                self.game.fontName)
+                               self.game.WHITE, self.game.fontName)
 
             self.inputHandle()
             self.checkInput()
@@ -911,24 +909,9 @@ class LoadMapMenu(Menu):
                                 self.game.WHITE,
                                 self.game.fontName)
 
-            # pygame.draw.rect(self.game.display, WHITE, self.deleteRect)
-            # self.game.drawText("DELETE MAP", 25, midWidth + 520, midHeight + 340, self.game.RED, self.game.fontName)
-            # for row in range(len(self.mapArray)):
             for row in range(len(self.mapArray)):
                 map = self.mapArray[row]
                 self.game.drawText(str(map), 20, self.itemMapX, self.itemMapY + (row * 40), self.game.WHITE, self.game.fontName)
-
-            # for event in pygame.event.get():
-            #     if event.type == QUIT:
-            #         return
-            #
-            #     elif event.type == MOUSEBUTTONDOWN:
-            #         if self.deleteRect.collidepoint(event.pos):
-            #             self.game.currentMenu.runDisplay = False
-            #             self.game.currentMenu = self.game.deleteMapMenu
-            #             self.game.currentMenu.displayMenu()
-
-            # self.game.display.blit(self.storekeeperImg, (self.pointerRect.x - 200, self.pointerRect.y - 30))
 
             self.drawPointer()
             self.blitScreen()
@@ -937,8 +920,6 @@ class LoadMapMenu(Menu):
         """
         Method that includes pointer's movement logic. Moreover, it includes an end event handler.
         """
-        # # self.endY = self.itemMapY + ((len(self.mapArray)) * 40) + 10
-        # self.endY = self.itemMapY + (4 * 40)
         if self.game.DOWN_KEY or self.game.S_KEY:
             self.counter += 1
 

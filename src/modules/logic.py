@@ -268,7 +268,20 @@ def createMap(screen, playerName, width, height):
 
     for x in range(0, boardWidth, BLOCK_SIZE):
         for y in range(0, boardHeight, BLOCK_SIZE):
-            allTiles.add(Tile(x, y))
+            tile = Tile(x, y)
+
+            # Map borders
+            if x == 0:
+                tile.set_image(WALL_IMG)
+            elif x == (boardWidth - BLOCK_SIZE):
+                tile.set_image(WALL_IMG)
+
+            if y == 0:
+                tile.set_image(WALL_IMG)
+            elif y == (boardHeight - BLOCK_SIZE):
+                tile.set_image(WALL_IMG)
+
+            allTiles.add(tile)
 
     toolbox.add_button('Wall', WALL_CHAR, WALL_IMG)
     toolbox.add_button('Player', STOREKEEPER_CHAR, STOREKEEPER_IMG)
@@ -277,14 +290,7 @@ def createMap(screen, playerName, width, height):
     toolbox.add_button('Rubber / Floor', FLOOR_CHAR, FLOOR_IMG)
     toolbox.place_buttons()
 
-    gameHandle = game.Game()
-    submitRect= pygame.Rect(midWidth + 365, midHeight + 320, 75, 50)
-
     screen.fill(BLACK)
-
-    pygame.draw.rect(gameHandle.display, RED, submitRect)
-    gameHandle.drawText("Submit", 20, midWidth + 400, midHeight + 340, gameHandle.WHITE, gameHandle.fontName)
-    gameHandle.window.blit(gameHandle.display, (0, 0))
 
     pygame.display.update()
     playerBoard.empty_map()
@@ -296,11 +302,6 @@ def createMap(screen, playerName, width, height):
             if event.type == QUIT:
                 return
             elif event.type == MOUSEBUTTONDOWN:
-                if submitRect.collidepoint(event.pos):
-                    gameHandle.currentMenu.runDisplay = False
-                    gameHandle.currentMenu = gameHandle.loadMapMenu
-                    gameHandle.currentMenu.displayMenu()
-
                 for sprite in allTiles:
                     mousex, mousey = pygame.mouse.get_pos()
                     x, y = canvasCenter.topleft
@@ -337,14 +338,12 @@ def createMap(screen, playerName, width, height):
 
             elif event.type == KEYDOWN and event.key == K_s:
                 playerBoard.save_board(playerName)
-            elif event.type == KEYDOWN and event.key == K_ESCAPE:
-                gameHandle.runDisplay = False
 
         allTiles.update()
         allTiles.draw(canvas)
         screen.blit(canvas, canvasCenter)
 
-        screen.blit(toolbox.image, (WIDTH - 200, 0))
+        screen.blit(toolbox.image, (WIDTH - TOOLBOX_WIDTH, 0))
 
         pygame.display.update()
         pygame.display.flip()
