@@ -220,8 +220,8 @@ class LevelMenu(Menu):
             elif self.state == 'Three':
                 self.runDisplay = False
                 self.game.currentMenu = self.game.widthHeightMenu
-            else:
-                self.game.currentMenu = self.game.mainMenu
+            # else:
+            #     self.game.currentMenu = self.game.mainMenu
 
             self.runDisplay = False
 
@@ -755,6 +755,7 @@ class WidthHeightMenu(Menu):
         self.textInfoX, self.textInfoY = midWidth, midHeight - 250
         self.widthX, self.widthY = midWidth, midHeight - 50
         self.heightX, self.heightY = midWidth, midHeight + 100
+        self.nameX, self.nameY = midWidth - 300, midHeight + 220
         self.passedWidth = ''
         self.passedHeight = ''
 
@@ -762,10 +763,12 @@ class WidthHeightMenu(Menu):
         self.activeColor = LIGHTSKYBLUE
         self.inputWidthRect = pygame.Rect(self.widthX + 100, self.widthY - 50, 100, 100)
         self.inputHeightRect = pygame.Rect(self.heightX + 100, self.heightY - 50, 100, 100)
-        self.buttonWActive, self.buttonHActive = False, False
+        self.inputNameRect = pygame.Rect(self.nameX + 100, self.nameY - 40, 450, 80)
+        self.buttonWActive, self.buttonHActive, self.buttonNActive = False, False, False
 
         self.colorW = self.passiveColor
         self.colorH = self.passiveColor
+        self.colorN = self.passiveColor
 
     def checkInput(self):
         """
@@ -777,12 +780,16 @@ class WidthHeightMenu(Menu):
             self.runDisplay = False
 
         if self.game.START_KEY:
-            if 0 < int(self.passedWidth) <= 30 and 0 < int(self.passedHeight) <= 20:
+            if 0 < int(self.passedWidth) <= 30 and 0 < int(self.passedHeight) <= 20 and 0 < len(self.game.passedMapName) <= 15:
                 self.runDisplay = False
                 self.game.running = True
+                self.game.logicState = True
 
-                logic.createMap(self.game.window, self.game.playerName, int(self.passedWidth),
-                                int(self.passedHeight))
+                logic.createMap(self.game.window, int(self.passedWidth),
+                                int(self.passedHeight), self.game)
+
+                self.passedWidth = ''
+                self.passedHeight = ''
 
     def inputHandle(self):
         """
@@ -805,6 +812,12 @@ class WidthHeightMenu(Menu):
             elif not self.inputHeightRect.collidepoint(event.pos):
                 self.buttonHActive = False
                 self.colorH = self.passiveColor
+            if self.inputNameRect.collidepoint(event.pos):
+                self.buttonNActive = True
+                self.colorN = self.activeColor
+            elif not self.inputNameRect.collidepoint(event.pos):
+                self.buttonNActive = False
+                self.colorN = self.passiveColor
 
         if event.type == pygame.KEYDOWN:
             key = pygame.key.name(event.key)
@@ -828,6 +841,16 @@ class WidthHeightMenu(Menu):
                 else:
                     if (event.key == pygame.K_0 or event.key == pygame.K_1 or event.key == pygame.K_2 or event.key == pygame.K_3 or event.key == pygame.K_4 or event.key == pygame.K_5 or event.key == pygame.K_6 or event.key == pygame.K_7 or event.key == pygame.K_8 or event.key == pygame.K_9) and len(self.passedHeight)  < 2:
                         self.passedHeight += event.unicode
+
+            elif self.buttonNActive:
+                if key == 'backspace':
+                    self.game.passedMapName = self.game.passedMapName[:-1]
+                elif key == 'return':
+                    self.game.START_KEY = True
+                else:
+                    if len(self.game.passedMapName) < 15:
+                        self.game.passedMapName += event.unicode
+
             elif key == 'return':
                 if len(self.passedHeight) > 0 and len(self.passedWidth) > 0:
                     self.game.START_KEY = True
@@ -840,11 +863,16 @@ class WidthHeightMenu(Menu):
 
         pygame.draw.rect(self.game.display, self.colorW, self.inputWidthRect, 2)
         pygame.draw.rect(self.game.display, self.colorH, self.inputHeightRect, 2)
+        pygame.draw.rect(self.game.display, self.colorN, self.inputNameRect, 2)
 
         self.game.drawText(self.passedWidth, 50, self.widthX + 150, self.widthY,
                            self.game.WHITE, self.game.fontName)
         self.game.drawText(self.passedHeight, 50, self.heightX + 150, self.heightY,
-                           self.game.WHITE, self.game.fontName)
+                            self.game.WHITE,
+                            self.game.fontName)
+        self.game.drawText(self.game.passedMapName, 40, self.nameX + 325, self.nameY,
+                            self.game.WHITE,
+                            self.game.fontName)
 
     def displayMenu(self):
         """
@@ -863,6 +891,11 @@ class WidthHeightMenu(Menu):
                                self.game.fontName)
             self.game.drawText('HEIGHT: ', 60, self.heightX, self.heightY,
                                self.game.WHITE, self.game.fontName)
+
+            self.game.drawText('NAME: ', 60, self.nameX, self.nameY,
+                                self.game.WHITE,
+                                self.game.fontName)
+
 
             self.inputHandle()
             self.checkInput()
@@ -905,7 +938,7 @@ class LoadMapMenu(Menu):
             self.checkInput()
 
             self.game.display.fill(BLACK)
-            self.game.drawText('CHOOSE YOUR OWN MAP OR DELETE ONE', 65, self.textInfoX, self.textInfoY,
+            self.game.drawText('CHOOSE MAP', 65, self.textInfoX, self.textInfoY,
                                 self.game.WHITE,
                                 self.game.fontName)
 
@@ -1028,7 +1061,7 @@ class DeleteMapMenu(Menu):
             self.runDisplay = False
             self.game.currentMenu = self.game.mainMenu
             self.game.currentMenu.displayMenu
-            
+
     def movePointer(self):
         """
         Method that includes pointer's movement logic. Moreover, it includes an end event handler.
@@ -1106,9 +1139,9 @@ class LoadSaveMenu(Menu):
 
             self.game.display.fill(BLACK)
             self.game.drawText('Load game/map from:', 120, midWidth, midHeight - 200, self.game.WHITE, self.game.fontName)
-            # self.game.drawText('Module 1', 80, self.firstModuleX, self.firstModuleY, self.game.WHITE, self.game.fontName)
-            self.game.drawText('Module 2', 80, self.secondModuleX, self.secondModuleY, self.game.WHITE, self.game.fontName)
-            self.game.drawText('Module 3', 80, self.thirdModuleX, self.thirdModuleY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('Module 2', 80, self.firstModuleX, self.firstModuleY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('Module 3', 80, self.secondModuleX, self.secondModuleY, self.game.WHITE, self.game.fontName)
+            self.game.drawText('Del Map', 80, self.thirdModuleX, self.thirdModuleY, self.game.WHITE, self.game.fontName)
 
             self.drawPointer()
             self.blitScreen()
@@ -1170,3 +1203,102 @@ class LoadSaveMenu(Menu):
                 self.pointerRect.midtop = (self.secondModuleX + self.offset, self.secondModuleY)
                 self.state = 'Two'
                 self.visited = True
+
+
+class ResumeSavedGameMenu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+        """
+        Sub menu for Module III that allows player to choose his own map.
+
+        :param game:
+            Game class that allows connection between game logic and menu.
+        :type game: game.Game, required
+        """
+        self.textInfoX, self.textInfoY = midWidth, midHeight - 280
+        self.itemMapX, self.itemMapY = midWidth, midHeight - 200
+        self.chosenMap = ''
+        self.deleteRect = pygame.Rect(midWidth + 450, midHeight + 320, 140, 50)
+        self.offset = -100
+        self.pointerRect = pygame.Rect(0, 0, 20, 20)
+        self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY)
+        self.counter = 0
+        self.storekeeperImg = pygame.transform.scale(STOREKEEPER_IMG, (40, 40))
+        self.mapArray = []
+
+    def displayMenu(self):
+        """
+        Method that displays the menu. It prints 7 buttons thanks to the drawText() method.
+        It also draws the pointer and blits the screen every single frame.
+        """
+        self.runDisplay = True
+        self.mapArray = os.listdir('./src/saves/')
+        print(maps)
+        for file in maps:
+            print(file)
+            if file.find('.bak') > -1:
+                self.mapArray.append(file)
+
+        self.chosenMap = self.mapArray[0]
+
+        while self.runDisplay:
+            self.game.resetKeys()
+            self.game.checkEvents()
+            self.checkInput()
+
+            self.game.display.fill(BLACK)
+            self.game.drawText('CHOOSE MAP', 65, self.textInfoX, self.textInfoY,
+                                self.game.WHITE,
+                                self.game.fontName)
+
+            for row in range(len(self.mapArray)):
+                map = self.mapArray[row]
+                self.game.drawText(str(map), 20, self.itemMapX, self.itemMapY + (row * 40), self.game.WHITE, self.game.fontName)
+
+            self.drawPointer()
+            self.blitScreen()
+
+    def movePointer(self):
+        """
+        Method that includes pointer's movement logic. Moreover, it includes an end event handler.
+        """
+        if self.game.DOWN_KEY or self.game.S_KEY:
+            self.counter += 1
+
+            if self.counter > len(self.mapArray) - 1:
+                self.counter = 0
+
+            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + (self.counter * 40))
+            self.chosenMap = self.mapArray[self.counter]
+
+            print(self.chosenMap)
+        elif self.game.UP_KEY or self.game.W_KEY:
+            self.counter -= 1
+
+            if self.counter < 0:
+                self.counter = len(self.mapArray) - 1
+
+            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + self.counter * 40)
+            self.chosenMap = self.mapArray[self.counter]
+
+            print(self.chosenMap)
+
+    def checkInput(self):
+        """
+        Method that handles changing the currently displayed menu.
+        """
+        self.movePointer()
+
+        if self.game.ESC_PRESSED:
+            self.game.currentMenu = self.game.mainMenu
+            # self.game.running = True
+            self.runDisplay = False
+
+        if self.game.START_KEY:
+            self.runDisplay = False
+            self.game.logicState = True
+
+            self.game.restoreDetails = logic.loadSave(self.chosenMap[:len(self.chosenMap) - 3])
+
+            logic.startTheGame(self.game.window, self.chosenMap,
+                               self.game, self.game.gamePoints, 'RESTORE')

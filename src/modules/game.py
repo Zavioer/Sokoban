@@ -48,7 +48,8 @@ class Game:
         self.playerName = ''
         self.currentLevel = 0
         self.currentPlayerState = {'width': 0, 'height': 0, 'map': [], 'time': 0}
-
+        self.passedMapName = ''
+        
     def checkEvents(self):
         """
         Loop for pygame.Events. Set True to given keys when pressed.
