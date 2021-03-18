@@ -42,7 +42,7 @@ def startTheGame(screen, lvlName, game, points, flag):
 
     clock = pygame.time.Clock()
 
-    if flag == 'RESTORE':
+    if flag == RESTORE:
         mapWidth = game.restoreDetails['width']
         mapHeight = game.restoreDetails['height']
 
@@ -105,7 +105,7 @@ def startTheGame(screen, lvlName, game, points, flag):
 
     destinationsAmount = len(destinations.sprites())
 
-    if flag == 'RESTORE':
+    if flag == RESTORE:
         gamerTimer = Timer(game.restoreDetails['endTime'], myFont)
     else:
         gamerTimer = Timer(pygame.time.get_ticks(), myFont)
@@ -146,7 +146,7 @@ def startTheGame(screen, lvlName, game, points, flag):
                 elif event.key == K_r:
                     game.logicState = False
 
-                    if flag == 'RESTORE':
+                    if flag == RESTORE:
                         lvlName = game.restoreDetails['lvlName']
 
                     resetMap(game.window, lvlName, game, game.gamePoints, flag)
@@ -198,7 +198,7 @@ def startTheGame(screen, lvlName, game, points, flag):
 
         hud.displayTimer(pygame.time.get_ticks())
 
-        if flag == 'RESTORE':
+        if flag == RESTORE:
             hud.displayLvl(game.restoreDetails['lvlName'])
         else:
             hud.displayLvl(lvlName)
