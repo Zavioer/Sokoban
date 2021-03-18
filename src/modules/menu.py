@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from pygame.locals import *
 from src.modules import logic
 from random import randrange
@@ -479,24 +480,30 @@ class DiffMenu(Menu):
         if self.game.START_KEY:
             if self.state == 'Easy':
                 self.game.logicState = True
-                logic.startTheGame(self.game.window, str(randrange(1, 20)) + ".txt", self.game, self.game.gamePoints, MODULE_I)
+                self.game.currentLevel = str(randrange(1, 20))
+                logic.startTheGame(self.game.window, self.game.currentLevel + ".txt", self.game, self.game.gamePoints, MODULE_I)
+
                 self.runDisplay = False
+
             elif self.state == 'Medium':
                 self.game.logicState = True
-                logic.startTheGame(self.game.window, str(randrange(21, 40)) + ".txt", self.game, self.game.gamePoints, MODULE_I)
+                self.game.currentLevel = str(randrange(21, 40))
+                self.runDisplay = False
+                logic.startTheGame(self.game.window, self.game.currentLevel + ".txt", self.game, self.game.gamePoints, MODULE_I)
+
             elif self.state == 'Hard':
                 self.game.logicState = True
-                logic.startTheGame(self.game.window, str(randrange(41, 60)) + ".txt", self.game, self.game.gamePoints, MODULE_I)
+                self.game.currentLevel = str(randrange(41, 60))
+                self.runDisplay = False
+                logic.startTheGame(self.game.window, self.game.currentLevel + ".txt", self.game, self.game.gamePoints, MODULE_I)
 
         if self.game.DOWN_KEY or self.game.S_KEY:
             if self.state == 'Easy':
                 self.pointerRect.midtop = (self.mediumX + self.offset, self.mediumY)
                 self.state = 'Medium'
-                self.visited = True
             elif self.state == 'Medium':
                 self.pointerRect.midtop = (self.hardX + self.offset, self.hardY)
                 self.state = 'Hard'
-                self.visited = True
             elif self.state == 'Hard':
                 self.pointerRect.midtop = (self.easyX + self.offset, self.easyY)
                 self.state = 'Easy'
@@ -706,12 +713,15 @@ class SaveGameMenu(Menu):
                 self.game.START_KEY = False
                 self.game.currentMenu = self.game.mainMenu
 
+                currLvl = str(self.game.currentLevel) + '.txt'
+
                 logic.saveBoard(self.game.currentPlayerState['width'], self.game.currentPlayerState['height'],
                                 self.game.currentPlayerState['sprites'], self.game.currentPlayerState['time'],
-                                self.game.playerName, self.game.gameLevel, self.game.gamePoints)
+                                self.game.playerName, currLvl, self.game.gamePoints)
 
                 if self.game.gameLevel > 1:
                     self.game.gameLevel = 1
+
 
             if self.state == 'No':
                 self.runDisplay = False
@@ -1010,7 +1020,6 @@ class DeleteMapMenu(Menu):
         self.pointerRect = pygame.Rect(0, 0, 20, 20)
         self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY)
         self.counter = 0
-        self.storekeeperImg = pygame.transform.scale(STOREKEEPER_IMG, (40, 40))
 
     def displayMenu(self):
         """
@@ -1035,8 +1044,7 @@ class DeleteMapMenu(Menu):
                 map = self.mapArray[row]
                 self.game.drawText(str(map), 20, self.itemMapX, self.itemMapY + (row * 40), self.game.WHITE, self.game.fontName)
 
-            # self.game.display.blit(self.storekeeperImg, (self.pointerRect.x - 200, self.pointerRect.y - 30))
-
+            self.drawPointer()
             self.blitScreen()
 
     def removeMap(self, mapID):
@@ -1053,60 +1061,65 @@ class DeleteMapMenu(Menu):
         if os.path.isfile('./src/boards/own/' + str(mapID)):
             os.remove('./src/boards/own/' + mapID)
             print(f'Map deleted successfully.')
-            self.runDisplay = False
-            self.game.currentMenu = self.game.mainMenu
-            self.game.currentMenu.displayMenu
-        else:
-            print(f'File not exist.')
-            self.runDisplay = False
-            self.game.currentMenu = self.game.mainMenu
-            self.game.currentMenu.displayMenu
+        #     self.runDisplay = False
+        #     self.game.currentMenu = self.game.mainMenu
+        #     self.game.currentMenu.displayMenu
+        # else:
+        #     print(f'File not exist.')
+        #     self.runDisplay = False
+        #     self.game.currentMenu = self.game.mainMenu
+        #     self.game.currentMenu.displayMenu
 
     def movePointer(self):
         """
         Method that includes pointer's movement logic. Moreover, it includes an end event handler.
         """
-        self.endY = self.itemMapY + ((len(self.mapArray) - 1) * 40)
-
         if self.game.DOWN_KEY or self.game.S_KEY:
-            if self.counter < (len(self.mapArray)):
-                self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + (self.counter * 40))
-                self.chosenMap = self.mapArray[self.counter]
-                self.counter += 1
-                print(self.chosenMap)
-            else:
-                self.counter = 0
-                self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY)
-                self.chosenMap = self.mapArray[0]
-                print(self.chosenMap)
+            self.counter += 1
 
+            if self.counter > len(self.mapArray) - 1:
+                self.counter = 0
+
+            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + (self.counter * 40))
+            self.chosenMap = self.mapArray[self.counter]
+
+            print(self.chosenMap)
         elif self.game.UP_KEY or self.game.W_KEY:
-            if self.counter > 0:
-                self.pointerRect.midtop = (self.itemMapX + self.offset, self.endY - (self.counter * 40))
-                self.chosenMap = self.mapArray[self.counter]
-                self.counter -= 1
-            else:
+            self.counter -= 1
+
+            if self.counter < 0:
                 self.counter = len(self.mapArray) - 1
-                self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + (self.counter * 40))
-                self.chosenMap = self.mapArray[self.counter]
-                print(self.chosenMap)
+
+            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + self.counter * 40)
+            self.chosenMap = self.mapArray[self.counter]
+
+            print(self.chosenMap)
 
     def checkInput(self):
         """
         Method that handles changing the currently displayed menu.
         """
         self.movePointer()
+
         if self.game.ESC_PRESSED:
             self.runDisplay = False
-            self.game.currentMenu = self.game.loadMapMenu
-            self.game.running = True
+            self.game.currentMenu = self.game.mainMenu
+            self.counter = 0
 
         if self.game.START_KEY:
             self.removeMap(self.chosenMap)
+            self.successfullMonit()
             self.runDisplay = False
-            self.game.currentMenu = self.game.loadMapMenu
-            self.game.running = True
+            self.counter = 0
+            self.game.currentMenu = self.game.mainMenu
 
+    def successfullMonit(self):
+        self.game.display.fill(BLACK)
+        self.game.drawText('Map successfully deleted!', 65, midWidth, midHeight, WHITE,
+                           self.game.fontName)
+        self.blitScreen()
+
+        time.sleep(1)
 
 class LoadSaveMenu(Menu):
     def __init__(self, game):
@@ -1159,7 +1172,7 @@ class LoadSaveMenu(Menu):
         if self.game.START_KEY:
             if self.state == 'One':
                 self.runDisplay = False
-                self.game.currentMenu = self.game.diffMenu
+                self.game.currentMenu = self.game.resumeSavedGameMenu
 
             elif self.state == 'Two':
                 self.runDisplay = False
@@ -1167,9 +1180,7 @@ class LoadSaveMenu(Menu):
 
             elif self.state == 'Three':
                 self.runDisplay = False
-                self.game.currentMenu = self.game.widthHeightMenu
-            else:
-                self.game.currentMenu = self.game.mainMenu
+                self.game.currentMenu = self.game.deleteMapMenu
 
             self.runDisplay = False
 
@@ -1232,7 +1243,7 @@ class ResumeSavedGameMenu(Menu):
         It also draws the pointer and blits the screen every single frame.
         """
         self.runDisplay = True
-        self.mapArray = os.listdir('./src/saves/')
+        maps = os.listdir('src/saves/')
         print(maps)
         for file in maps:
             print(file)
@@ -1298,7 +1309,8 @@ class ResumeSavedGameMenu(Menu):
             self.runDisplay = False
             self.game.logicState = True
 
-            self.game.restoreDetails = logic.loadSave(self.chosenMap[:len(self.chosenMap) - 3])
+            self.game.restoreDetails = logic.loadSave(self.chosenMap[:len(self.chosenMap) - 4])
 
+            print(f'Before start')
             logic.startTheGame(self.game.window, self.chosenMap,
                                self.game, self.game.gamePoints, 'RESTORE')

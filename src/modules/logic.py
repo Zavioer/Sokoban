@@ -42,47 +42,12 @@ def startTheGame(screen, lvlName, game, points, flag):
 
     clock = pygame.time.Clock()
 
-    # Load and place objects on the map
-    if flag == MODULE_I or flag == MODULE_II:
-        path = './src/boards/'
-    elif flag == MODULE_III:
-        path = './src/boards/own/'
-
-    with open(os.path.join(path, lvlName), 'r') as fd:
-        mapWidth = int(fd.readline())
-        mapHeight = int(fd.readline())
-
-        startY = 0
-        for rows in fd:
-            startX = 0
-            for column in rows:
-                if column == WALL_CHAR:
-                    walls.add(Wall(startX, startY))
-                elif column == STOREKEEPER_CHAR:
-                    storekeeper = Player(startX, startY)
-                    floors.add(Floor(startX, startY))
-                elif column == BOX_CHAR:
-                    boxes.add(Box(startX, startY))
-                    floors.add(Floor(startX, startY))
-                elif column == DESTINATION_CHAR:
-                    destinations.add(Destination(startX, startY))
-                    floors.add(Floor(startX, startY))
-                elif column == FLOOR_CHAR:
-                    floors.add(Floor(startX, startY))
-                startX += TILE_WIDTH
-            startY += TILE_HEIGHT
-
     if flag == 'RESTORE':
-        mapWidth = game.restoreDetails['widthBoardVar']
-        mapHeight = game.restoreDetails['heightBoardVar']
-
-        walls = pygame.sprite.Group()
-        boxes = pygame.sprite.Group()
-        destinations = pygame.sprite.Group()
-        floors = pygame.sprite.Group()
+        mapWidth = game.restoreDetails['width']
+        mapHeight = game.restoreDetails['height']
 
         startY = 0
-        for rows in game.restoreDetails['mainBoardVar']:
+        for rows in game.restoreDetails['emptyBoard']:
             startX = 0
             for column in rows:
                 if column == WALL_CHAR:
@@ -100,6 +65,38 @@ def startTheGame(screen, lvlName, game, points, flag):
                     floors.add(Floor(startX, startY))
                 startX += TILE_WIDTH
             startY += TILE_HEIGHT
+    else:
+        # Load and place objects on the map
+        if flag == MODULE_I or flag == MODULE_II:
+            path = './src/boards/'
+        elif flag == MODULE_III:
+            path = './src/boards/own/'
+
+        with open(os.path.join(path, lvlName), 'r') as fd:
+            mapWidth = int(fd.readline())
+            mapHeight = int(fd.readline())
+
+            startY = 0
+            for rows in fd:
+                startX = 0
+                for column in rows:
+                    if column == WALL_CHAR:
+                        walls.add(Wall(startX, startY))
+                    elif column == STOREKEEPER_CHAR:
+                        storekeeper = Player(startX, startY)
+                        floors.add(Floor(startX, startY))
+                    elif column == BOX_CHAR:
+                        boxes.add(Box(startX, startY))
+                        floors.add(Floor(startX, startY))
+                    elif column == DESTINATION_CHAR:
+                        destinations.add(Destination(startX, startY))
+                        floors.add(Floor(startX, startY))
+                    elif column == FLOOR_CHAR:
+                        floors.add(Floor(startX, startY))
+                    startX += TILE_WIDTH
+                startY += TILE_HEIGHT
+
+
 
     # Map center
     canvas = pygame.Surface((mapWidth * TILE_WIDTH, mapHeight * TILE_HEIGHT))
@@ -109,7 +106,7 @@ def startTheGame(screen, lvlName, game, points, flag):
     destinationsAmount = len(destinations.sprites())
 
     if flag == 'RESTORE':
-        gamerTimer = Timer(game.restoreDetails['endTimeVar'], myFont)
+        gamerTimer = Timer(game.restoreDetails['endTime'], myFont)
     else:
         gamerTimer = Timer(pygame.time.get_ticks(), myFont)
     hud = HUD(gamerTimer)
@@ -148,6 +145,10 @@ def startTheGame(screen, lvlName, game, points, flag):
                     storekeeper.move(STOREKEEPER_MOVE, 0)
                 elif event.key == K_r:
                     game.logicState = False
+
+                    if flag == 'RESTORE':
+                        lvlName = game.restoreDetails['lvlName']
+
                     resetMap(game.window, lvlName, game, game.gamePoints, flag)
 
         storekeeper.collision(walls.sprites())
@@ -196,7 +197,11 @@ def startTheGame(screen, lvlName, game, points, flag):
         allSprites.draw(canvas)
 
         hud.displayTimer(pygame.time.get_ticks())
-        hud.displayLvl(lvlName)
+
+        if flag == 'RESTORE':
+            hud.displayLvl(game.restoreDetails['lvlName'])
+        else:
+            hud.displayLvl(lvlName)
 
         if flag == MODULE_II:
             hud.displayPoints(points)
@@ -246,7 +251,7 @@ def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints):
     shelveFile = shelve.open(os.path.join('./src/saves', fileName))
 
     shelveFile['widthBoardVar'] = width
-    shelveFile['heightBoardVar'] = height
+    shelveFile['heightBoard'] = height
     shelveFile['lvlNameVar'] = lvlName
     shelveFile['userNameVar'] = playerName
     shelveFile['endTimeVar'] = endTime
@@ -439,10 +444,11 @@ def loadSave(fileName):
     mapDetails = {}
 
     mapDetails['width'] = shelveFile['widthBoardVar']
-    mapDetails['height'] = shelveFile['heightBoardVar']
+    mapDetails['height'] = shelveFile['heightBoard']
     mapDetails['lvlName'] = shelveFile['lvlNameVar']
     mapDetails['playerName'] = shelveFile['userNameVar']
     mapDetails['endTime'] = shelveFile['endTimeVar']
     mapDetails['emptyBoard'] = shelveFile['mainBoardVar']
 
+    shelveFile.close()
     return mapDetails

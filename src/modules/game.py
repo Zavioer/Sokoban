@@ -40,6 +40,7 @@ class Game:
         self.loadMapMenu = LoadMapMenu(self)
         self.deleteMapMenu = DeleteMapMenu(self)
         self.loadSaveMenu = LoadSaveMenu(self)
+        self.resumeSavedGameMenu = ResumeSavedGameMenu(self)
 
         self.currentMenu = self.mainMenu
         self.BLACK, self.WHITE, self.RED = BLACK, WHITE, RED
@@ -49,6 +50,7 @@ class Game:
         self.currentLevel = 0
         self.currentPlayerState = {'width': 0, 'height': 0, 'map': [], 'time': 0}
         self.passedMapName = ''
+        self.restoreDetails = {}
         
     def checkEvents(self):
         """
