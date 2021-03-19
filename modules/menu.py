@@ -1,10 +1,10 @@
 import json
 import os
 import time
-from pygame.locals import *
-from src.modules import logic
+import pygame
+from . import logic
 from random import randrange
-from .player import *
+from settings import *
 
 
 class Menu:

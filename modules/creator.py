@@ -1,5 +1,5 @@
 import time
-from src.modules.settings import *
+from settings import *
 
 class Board:
     def __init__(self, width, height):

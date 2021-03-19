@@ -1,4 +1,4 @@
-from src.modules.settings import *
+from settings import *
 
 
 class HUD(pygame.sprite.Sprite):

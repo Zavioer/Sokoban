@@ -1,5 +1,5 @@
 from .menu import *
-from .settings import *
+from settings import *
 
 
 class Game:

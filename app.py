@@ -3,7 +3,7 @@
 # Sokoban
 # A simple game with realistic physics and AI
 # Released as a part of the Motorola 2020 competition
-from src.modules.game import Game
+from modules.game import Game
 
 
 def main():
