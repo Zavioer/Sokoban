@@ -8,6 +8,8 @@ class Game:
         Main game object which allows integration between game logic and main menu.
         """
         pygame.init()
+        pygame.display.set_caption('Sokoban')
+        
         self.running = True
         self.playing = False
         self.UP_KEY = False
@@ -23,6 +25,11 @@ class Game:
 
         self.display = pygame.Surface((WIDTH, HEIGHT))
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
+
+        # ikona
+        icon = pygame.image.load('src/img/storekeeper.png')
+        icon = pygame.transform.smoothscale(icon, (96, 96))
+        pygame.display.set_icon(icon)
 
         self.fontTitle = 'src/fonts/Future TimeSplitters.otf'
         self.fontName = 'src/fonts/gomarice_no_continue.ttf'
@@ -51,7 +58,7 @@ class Game:
         self.currentPlayerState = {'width': 0, 'height': 0, 'map': [], 'time': 0}
         self.passedMapName = ''
         self.restoreDetails = {}
-        
+
     def checkEvents(self):
         """
         Loop for pygame.Events. Set True to given keys when pressed.

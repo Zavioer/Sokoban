@@ -1,22 +1,22 @@
 29
 20
-         XXXX                
-         XaaX                
-         XaaXXXXXXXX         
-   XXXXXXXaaXaaaaaaX         
-   XaaaXaXaXaXaXaaaXX        
-   Xa*aaaaa*aaXXaa*aX        
+         XXXX
+         XaaX
+         XaaXXXXXXXX
+   XXXXXXXaaXaaaaaaX
+   XaaaXaXaXaXaXaaaXX
+   Xa*aaaaa*aaXXaa*aX
   XXXa*XaXaaXaXaaaaaXXXXXXXXX
   Xaa*aaXaa*XaXa**aXaaaXaXaaX
  XXaXaaaXaaaaaXXXaaaa*aXaXaaX
  XaaX*aaaXaXXXaaXaaXa**XaXaaX
  Xaaaa*XXa*aaXaaaXXa*aaXaXaXX
 XXXX*a*aXaaaaXXaaXaaa*aaaa..X
-XaaXaaaaXXXaXa*a*aXXXaaXXX.&X
+XaaXaaaaXXXaXa*a*aXXXaaXXX.aX
 XaaaaaXXaa**a@aa*aaaaaXX....X
-XaaXXaaXXaaa*aaX*XaaXX....&.X
-XXaXaa*aaXaXa*XXaaXX....&.XXX
-XXaXXaa*aaXa*aXaaX....&.XXX  
-Xaaaa*aXXXXaaaXa....&.XXX    
-XaaaXaaX  XaaXaa..&.XXX      
-XXXXXXXX  XXXXXXXXXXX        
+XaaXXaaXXaaa*aaX*XaaXX....a.X
+XXaXaa*aaXaXa*XXaaXX....a.XXX
+XXaXXaa*aaXa*aXaaX....a.XXX
+Xaaaa*aXXXXaaaXa....a.XXX
+XaaaXaaX  XaaXaa..a.XXX
+XXXXXXXX  XXXXXXXXXXX

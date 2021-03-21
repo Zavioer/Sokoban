@@ -5,14 +5,14 @@
    Xa*aaa*aaX
    XaaXXXX*XX
    XXaXaaXaaX
-  XXaaX.&aaaX
+  XXaaX.aaaaX
   XaaXX..XaaX
-  Xa@aX.&XaXX
+  Xa@aX.aXaXX
   XaX*X..X*aX
   Xa*aX..XaaX
-  XaXaX&&XaaX
+  XaXaXaaXaaX
   Xa*aX..X*XX
-  Xaaaa.&XaaX
+  Xaaaa.aXaaX
  XXXaaXaaXaaX
 XXaaaaXXXXaaX
 XaaXXXXXXX*XX

@@ -27,7 +27,6 @@ class HUD(pygame.sprite.Sprite):
         """
         cleanName = lvlNumber[:lvlNumber.find('.')]
         font = pygame.font.Font('src/fonts/gomarice_no_continue.ttf', 32)
-        # font = pygame.font.Font(None, 32)
         text = font.render(f'Level: {cleanName}', 1, WHITE)
         levelPosition = text.get_rect(y=self.padding, centerx=self.image.get_width() / 2)
 
@@ -54,7 +53,6 @@ class HUD(pygame.sprite.Sprite):
         :type passedPoints: int, required
         """
         font = pygame.font.Font('src/fonts/gomarice_no_continue.ttf', 30)
-        # font = pygame.font.Font(None, 30)
         text = font.render(f'Score: {passedPoints}', 1, WHITE)
         pointsPosition = text.get_rect(y=75, centerx=self.image.get_width() / 2)
         self.image.blit(text, pointsPosition)
@@ -67,11 +65,10 @@ class HUD(pygame.sprite.Sprite):
             Nick name to display on the HUD.
         :type passedName: str, required
         """
-        # font = pygame.font.Font(None, 30)
         font = pygame.font.Font('src/fonts/gomarice_no_continue.ttf', 30)
         text = font.render(f'{passedName.title()}', 1, WHITE)
 
-        playerNamePosition = text.get_rect(y=100, centerx=self.image.get_width() / 2)
+        playerNamePosition = text.get_rect(y=95, centerx=self.image.get_width() / 2 - 20)
 
         self.image.blit(text, playerNamePosition)
 

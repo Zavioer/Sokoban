@@ -1,18 +1,18 @@
 26
 16
-        XXXXX             
-        XaaaXXXX          
-        Xa*aaaaXXXX  XXXX 
-        XaaaXa*XaaXXXXaaX 
-XXXXXXXXXXXaXaaa*aaaXaaaX 
-X..aaaaaXa*aaXXXXaXaaXaaX 
-X..*aaXaaa*aaXaa*aXa*a.XX 
-X.&XaXa*a*aXXaaXXaaaaX.X  
-X..X*a@aXaaaXXaaaa**aX.X  
-X..Xa*a*aa*a*aXXaaaXXa.X  
-X.&**aXaXXaaa*aX*Xa*aX.X  
-X..XaaaaaaXXaaaXaaaaaX.X  
-X..XXXXXXXaaXXXaXXXXXX.XX 
-Xa**aaaaaaaaaaaaaaaaaa&.XX
+        XXXXX
+        XaaaXXXX
+        Xa*aaaaXXXX  XXXX
+        XaaaXa*XaaXXXXaaX
+XXXXXXXXXXXaXaaa*aaaXaaaX
+X..aaaaaXa*aaXXXXaXaaXaaX
+X..*aaXaaa*aaXaa*aXa*a.XX
+X.aXaXa*a*aXXaaXXaaaaX.X
+X..X*a@aXaaaXXaaaa**aX.X
+X..Xa*a*aa*a*aXXaaaXXa.X
+X.a**aXaXXaaa*aX*Xa*aX.X
+X..XaaaaaaXXaaaXaaaaaX.X
+X..XXXXXXXaaXXXaXXXXXX.XX
+Xa**aaaaaaaaaaaaaaaaaaa.XX
 XaaXXXXXXXXXXXXXXXXXXaa..X
 XXXX                XXXXXX

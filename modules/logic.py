@@ -329,11 +329,8 @@ def createMap(screen, width, height, game):
     toolbox.add_button('Rubber / Floor', FLOOR_CHAR, FLOOR_IMG)
     toolbox.place_buttons()
 
-
-    # nie widzę go
     saveRect = pygame.Rect(20, 675, 160, 25)
     pygame.draw.rect(canvas, (255, 242, 88), saveRect)
-
 
     playerBoard.empty_map()
 
