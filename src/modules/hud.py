@@ -26,7 +26,8 @@ class HUD(pygame.sprite.Sprite):
         :type lvlNumber: str, required
         """
         cleanName = lvlNumber[:lvlNumber.find('.')]
-        font = pygame.font.Font(None, 32)
+        font = pygame.font.Font('src/fonts/gomarice_no_continue.ttf', 32)
+        # font = pygame.font.Font(None, 32)
         text = font.render(f'Level: {cleanName}', 1, WHITE)
         levelPosition = text.get_rect(y=self.padding, centerx=self.image.get_width() / 2)
 
@@ -40,7 +41,7 @@ class HUD(pygame.sprite.Sprite):
             Amount of ticks that passed from the start of the game.
         :type passedTicks: int, required
         """
-        self.timer.setPosition(self.image.get_width() / 2, self.padding * 2)
+        self.timer.setPosition(self.image.get_width() / 2, self.padding * 2 + 10)
         self.timer.update(passedTicks)
         self.image.blit(self.timer.image, self.timer.rect)
 
@@ -52,7 +53,8 @@ class HUD(pygame.sprite.Sprite):
             Amount of points to display on the HUD.
         :type passedPoints: int, required
         """
-        font = pygame.font.Font(None, 30)
+        font = pygame.font.Font('src/fonts/gomarice_no_continue.ttf', 30)
+        # font = pygame.font.Font(None, 30)
         text = font.render(f'Score: {passedPoints}', 1, WHITE)
         pointsPosition = text.get_rect(y=75, centerx=self.image.get_width() / 2)
         self.image.blit(text, pointsPosition)
@@ -65,13 +67,13 @@ class HUD(pygame.sprite.Sprite):
             Nick name to display on the HUD.
         :type passedName: str, required
         """
-        font = pygame.font.Font(None, 30)
+        # font = pygame.font.Font(None, 30)
+        font = pygame.font.Font('src/fonts/gomarice_no_continue.ttf', 30)
         text = font.render(f'{passedName.title()}', 1, WHITE)
 
         playerNamePosition = text.get_rect(y=100, centerx=self.image.get_width() / 2)
 
         self.image.blit(text, playerNamePosition)
-
 
 class Timer(pygame.sprite.Sprite):
     def __init__(self, start, fontName):
@@ -89,7 +91,7 @@ class Timer(pygame.sprite.Sprite):
         self.start = start
         self.passedTime = 0
         self.passedTimeStr = ''
-        self.fontName = fontName
+        self.fontName = pygame.font.Font('src/fonts/gomarice_no_continue.ttf', 32)
         self.x = 0
         self.y = 0
         self.buffer = 0
