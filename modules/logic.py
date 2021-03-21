@@ -1,14 +1,13 @@
 import shelve
-import json
-import time
 from pygame.locals import *
+import time
+import json
 from .blocks import Floor, Box, Destination, Wall
 from .player import Player
 from .hud import HUD, Timer
 from .creator import Tile, Mouse, Board, Toolbox
 from .game import *
-from src.modules import game
-from src.modules.settings import *
+from settings import *
 
 
 def startTheGame(screen, lvlName, game, points, flag):
@@ -42,7 +41,7 @@ def startTheGame(screen, lvlName, game, points, flag):
 
     clock = pygame.time.Clock()
 
-    if flag == 'RESTORE':
+    if flag == RESTORE:
         mapWidth = game.restoreDetails['width']
         mapHeight = game.restoreDetails['height']
 
@@ -105,7 +104,7 @@ def startTheGame(screen, lvlName, game, points, flag):
 
     destinationsAmount = len(destinations.sprites())
 
-    if flag == 'RESTORE':
+    if flag == RESTORE:
         gamerTimer = Timer(game.restoreDetails['endTime'], myFont)
     else:
         gamerTimer = Timer(pygame.time.get_ticks(), myFont)
@@ -146,7 +145,7 @@ def startTheGame(screen, lvlName, game, points, flag):
                 elif event.key == K_r:
                     game.logicState = False
 
-                    if flag == 'RESTORE':
+                    if flag == RESTORE:
                         lvlName = game.restoreDetails['lvlName']
 
                     resetMap(game.window, lvlName, game, game.gamePoints, flag)
@@ -198,7 +197,7 @@ def startTheGame(screen, lvlName, game, points, flag):
 
         hud.displayTimer(pygame.time.get_ticks())
 
-        if flag == 'RESTORE':
+        if flag == RESTORE:
             hud.displayLvl(game.restoreDetails['lvlName'])
         else:
             hud.displayLvl(lvlName)
@@ -247,8 +246,9 @@ def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints):
     formatedDate = time.strftime('%H_%M_%S_%d_%m_%Y', currentDate)
 
     fileName = ''.join((playerName, '_', 'BOARD', '_', formatedDate))
+    savesPath = os.path.abspath('../src/saves/')
 
-    shelveFile = shelve.open(os.path.join('./src/saves', fileName))
+    shelveFile = shelve.open(os.path.join(savesPath, fileName))
 
     shelveFile['widthBoardVar'] = width
     shelveFile['heightBoard'] = height
@@ -440,7 +440,8 @@ def loadSave(fileName):
     :return:
         dict
     """
-    shelveFile = shelve.open(os.path.join('./src/saves', fileName))
+    savesPath = os.path.abspath('../src/saves')
+    shelveFile = shelve.open(os.path.join(savesPath, fileName))
     mapDetails = {}
 
     mapDetails['width'] = shelveFile['widthBoardVar']
@@ -451,4 +452,5 @@ def loadSave(fileName):
     mapDetails['emptyBoard'] = shelveFile['mainBoardVar']
 
     shelveFile.close()
+
     return mapDetails

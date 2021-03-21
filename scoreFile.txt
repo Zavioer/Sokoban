@@ -28,3 +28,6 @@
 {"userNameVar": "zavioer", "userScore": 0}
 {"userNameVar": "asdf", "userScore": 0}
 {"userNameVar": "", "userScore": 0}
+{"userNameVar": "asdd", "userScore": 0}
+{"userNameVar": "sasdf", "userScore": 1}
+{"userNameVar": "sasdf", "userScore": 1}

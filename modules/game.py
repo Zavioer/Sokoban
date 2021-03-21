@@ -1,5 +1,5 @@
 from .menu import *
-from .settings import *
+from settings import *
 
 
 class Game:
@@ -43,7 +43,7 @@ class Game:
         self.resumeSavedGameMenu = ResumeSavedGameMenu(self)
 
         self.currentMenu = self.mainMenu
-        self.BLACK, self.WHITE, self.RED = BLACK, WHITE, RED
+        self.BLACK, self.RED = BLACK,  RED
         self.gameLevel = 1
         self.gamePoints = 0
         self.playerName = ''

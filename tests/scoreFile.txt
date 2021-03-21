@@ -1,0 +1,5 @@
+{"userNameVar": "user", "userScore": 0}
+{"userNameVar": "user", "userScore": 0}
+{"userNameVar": "user", "userScore": 0}
+{"userNameVar": "user", "userScore": 0}
+{"userNameVar": "user", "userScore": 0}

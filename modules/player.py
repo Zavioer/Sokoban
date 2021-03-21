@@ -1,4 +1,4 @@
-from src.modules.settings import *
+from settings import *
 
 
 class Player(pygame.sprite.Sprite):
