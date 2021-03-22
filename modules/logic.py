@@ -114,7 +114,7 @@ def startTheGame(screen, lvlName, game, points, flag):
     allSprites = pygame.sprite.Group(floors, walls, destinations, boxes, storekeeper)
 
     end = time.time()
-    print(f'Set up total time: {end - start}')
+    # print(f'Set up total time: {end - start}')
 
     # Event loop
     while game.logicState:

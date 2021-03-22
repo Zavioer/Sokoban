@@ -1,46 +1,12 @@
 {"userNameVar": "Piotr Konewka", "userScore": 69}
-{"userNameVar": "Jozin Z bazin", "userScore": 420}
+{"userNameVar": "Jozin Z Bazin", "userScore": 420}
 {"userNameVar": "Gabryjela","userScore": 960}
 {"userNameVar": "YoungSyk","userScore": 80}
 {"userNameVar": "Usmiechania","userScore": 1}
 {"userNameVar": "Big L","userScore": 88}
-{"userNameVar": "asf", "userScore": 0}
-{"userNameVar": "asf", "userScore": 0}
-{"userNameVar": "asd", "userScore": 0}
-{"userNameVar": "asd", "userScore": 0}
-{"userNameVar": "sdf", "userScore": 0}
-{"userNameVar": "wer", "userScore": 1}
-{"userNameVar": "adf", "userScore": 0}
-{"userNameVar": "asdf", "userScore": 0}
-{"userNameVar": "asdf", "userScore": 0}
-{"userNameVar": "asdf", "userScore": 1}
-{"userNameVar": "asdf", "userScore": 1}
-{"userNameVar": "asdf", "userScore": 1}
-{"userNameVar": "sdf", "userScore": 0}
-{"userNameVar": "asdf", "userScore": 0}
-{"userNameVar": "", "userScore": 0}
-{"userNameVar": "gabriel", "userScore": 0}
-{"userNameVar": "", "userScore": 0}
-{"userNameVar": "adf", "userScore": 0}
-{"userNameVar": "fdas", "userScore": 0}
-{"userNameVar": "asdf", "userScore": 0}
-{"userNameVar": "asdf", "userScore": 0}
-{"userNameVar": "zavioer", "userScore": 0}
-{"userNameVar": "asdf", "userScore": 0}
-{"userNameVar": "", "userScore": 0}
-{"userNameVar": "asdd", "userScore": 0}
-{"userNameVar": "sasdf", "userScore": 1}
-{"userNameVar": "sasdf", "userScore": 1}
-{"userNameVar": "user", "userScore": 0}
-{"userNameVar": "user", "userScore": 0}
-{"userNameVar": "user", "userScore": 0}
-{"userNameVar": "asdf", "userScore": 0}
-{"userNameVar": "knykcik", "userScore": 0}
-{"userNameVar": "user", "userScore": 0}
-{"userNameVar": "user", "userScore": 0}
-{"userNameVar": "user", "userScore": 0}
-{"userNameVar": "asdf", "userScore": 0}
-{"userNameVar": "asdf", "userScore": 162}
-{"userNameVar": "d", "userScore": 500}
-{"userNameVar": "", "userScore": 0}
-{"userNameVar": "", "userScore": 0}
+{"userNameVar": "Motorola", "userScore": 500}
+{"userNameVar": "Gabriel", "userScore": 300}
+{"userNameVar": "Piotr", "userScore": 0}
+{"userNameVar": "Piotr", "userScore": 0}
+{"userNameVar": "Piotr", "userScore": 0}
+{"userNameVar": "gabriel", "userScore": 300}
