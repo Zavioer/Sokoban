@@ -3,10 +3,10 @@ import os
 from pathlib import Path
 
 
-# Path
+# Paths
 BASE_DIR = os.path.split(os.path.abspath(__file__))[0]
-IMAGES_DIR = Path(os.path.join(BASE_DIR), 'src/img')
-
+IMAGES_DIR = Path(BASE_DIR, 'src/img')
+SAVES_DIR = Path(BASE_DIR, 'src/saves')
 
 # Game settings
 FPS = 60
@@ -27,7 +27,6 @@ DESTINATION_CHAR = '.'
 EMPTY_CHAR = ' '
 
 # Images
-print(os.path.join(IMAGES_DIR, 'storekeeper.png'))
 STOREKEEPER_IMG = pygame.image.load(os.path.join(IMAGES_DIR, 'storekeeper.png'))
 STOREKEEPER_NORTH_IMG = pygame.image.load(os.path.join(IMAGES_DIR, 'storekeeper_north.png'))
 STOREKEEPER_EAST_IMG = pygame.image.load(os.path.join(IMAGES_DIR, 'storekeeper_east.png'))
@@ -60,7 +59,9 @@ TOOLBOX_WIDTH = 200
 # GOMARINCE_16 = pygame.font.Font('src/fonts/gomarice_no_continue.ttf', 16)
 
 # Utilities
-EMPTY_IMG = pygame.Surface((1, 1)).fill(GREEN)
+SCORE_BASE = 100
+
+# EMPTY_IMG = pygame.Surface((1, 1)).fill(GREEN)
 
 # Flags
 MODULE_I = 'MODULEI'

@@ -15,7 +15,7 @@ class HUD(pygame.sprite.Sprite):
         self.timer = timer
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH - HUD_WIDTH
-        self.padding = 25
+        self.padding = 30
 
     def displayLvl(self, lvlNumber):
         """
@@ -27,10 +27,25 @@ class HUD(pygame.sprite.Sprite):
         """
         cleanName = lvlNumber[:lvlNumber.find('.')]
         font = pygame.font.Font('src/fonts/gomarice_no_continue.ttf', 32)
-        text = font.render(f'Level: {cleanName}', 1, WHITE)
+        text = font.render(f'Level: {cleanName}', True, WHITE)
         levelPosition = text.get_rect(y=self.padding, centerx=self.image.get_width() / 2)
 
         self.image.blit(text, levelPosition)
+
+    def displayPlayerName(self, passedName):
+        """
+        Display current playing user nick name.
+
+        :param passedName:
+            Nick name to display on the HUD.
+        :type passedName: str, required
+        """
+        font = pygame.font.Font('src/fonts/gomarice_no_continue.ttf', 30)
+        text = font.render(f'{passedName.title()}', True, RED)
+
+        playerNamePosition = text.get_rect(y=self.padding * 2, centerx=self.image.get_width() / 2)
+
+        self.image.blit(text, playerNamePosition)
 
     def displayTimer(self, passedTicks):
         """
@@ -40,7 +55,7 @@ class HUD(pygame.sprite.Sprite):
             Amount of ticks that passed from the start of the game.
         :type passedTicks: int, required
         """
-        self.timer.setPosition(self.image.get_width() / 2, self.padding * 2 + 10)
+        self.timer.setPosition(self.image.get_width() / 2, self.padding * 3)
         self.timer.update(passedTicks)
         self.image.blit(self.timer.image, self.timer.rect)
 
@@ -53,24 +68,10 @@ class HUD(pygame.sprite.Sprite):
         :type passedPoints: int, required
         """
         font = pygame.font.Font('src/fonts/gomarice_no_continue.ttf', 30)
-        text = font.render(f'Score: {passedPoints}', 1, WHITE)
-        pointsPosition = text.get_rect(y=75, centerx=self.image.get_width() / 2)
+        text = font.render(f'Score: {passedPoints}', True, WHITE)
+        pointsPosition = text.get_rect(y=self.padding * 4, centerx=self.image.get_width() / 2)
         self.image.blit(text, pointsPosition)
 
-    def displayPlayerName(self, passedName):
-        """
-        Display current playing user nick name.
-
-        :param passedName:
-            Nick name to display on the HUD.
-        :type passedName: str, required
-        """
-        font = pygame.font.Font('src/fonts/gomarice_no_continue.ttf', 30)
-        text = font.render(f'{passedName.title()}', 1, WHITE)
-
-        playerNamePosition = text.get_rect(y=95, centerx=self.image.get_width() / 2 - 20)
-
-        self.image.blit(text, playerNamePosition)
 
 class Timer(pygame.sprite.Sprite):
     def __init__(self, start, fontName):

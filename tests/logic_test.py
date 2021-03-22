@@ -3,7 +3,7 @@ import os
 import pygame
 from pathlib import Path
 from modules.logic import saveBoard, loadSave
-from settings import TILE_WIDTH, TILE_HEIGHT
+from settings import *
 
 
 class BasicSprite(pygame.sprite.Sprite):
@@ -18,7 +18,7 @@ class BasicSprite(pygame.sprite.Sprite):
 
 class SaveBoardLogicTestCase(unittest.TestCase):
     def setUp(self):
-        self.path = Path(os.path.abspath('../src/saves/'))
+        self.path = SAVES_DIR
         self.basicSprite = BasicSprite
         self.width = 5
         self.height = 5
@@ -37,6 +37,9 @@ class SaveBoardLogicTestCase(unittest.TestCase):
                 sprite = self.basicSprite(x * TILE_WIDTH, y * TILE_HEIGHT)
                 self.allSprites.add(sprite)
                 self.board[x][y] = sprite.char
+
+    def tearDown(self):
+        pass
 
     def test_01__check_if_board_save_working(self):
         saved = False

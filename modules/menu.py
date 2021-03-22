@@ -659,9 +659,9 @@ class InputName(Menu):
         while self.runDisplay:
             self.game.display.fill(BLACK)
             self.game.drawText('TYPE IN YOUR NICKNAME [15]', 95, self.inputNameX, self.inputNameY + 50, WHITE,
-                                self.game.fontName)
+                               self.game.fontName)
             self.game.drawText('AND PRESS ENTER TO CONFIRM', 70, self.inputNameX, self.inputNameY + 150, WHITE,
-                                self.game.fontName)
+                               self.game.fontName)
 
             self.inputName()
             self.checkInput()
@@ -975,6 +975,32 @@ class WidthHeightMenu(Menu):
             self.inputHandle()
             self.checkInput()
             self.blitScreen()
+
+    def unableToSaveMonit(self):
+        """
+        Utility method for displaying short monit about information why map cant
+        be saved.
+        """
+        self.game.display.fill(BLACK)
+        self.game.drawText('Created map must have at least one of each game object.',
+                           45, midWidth, midHeight - 45, WHITE, self.game.fontName)
+        self.game.drawText('[Storekeeper, Box, Destination, Floor, Wall]',
+                           45, midWidth, midHeight + 45, WHITE, self.game.fontName)
+        self.blitScreen()
+        time.sleep(2)
+
+    def boxesDestinationInvalidMonit(self):
+        """
+        Utility method for displaying short monit about incorrect amounts of
+        destinations and boxes
+        """
+        self.game.display.fill(BLACK)
+        self.game.drawText('Created map must have equal or more amount',
+                           45, midWidth, midHeight - 45, WHITE, self.game.fontName)
+        self.game.drawText('of the Boxes than the Destinations amount.',
+                           45, midWidth, midHeight + 45, WHITE, self.game.fontName)
+        self.blitScreen()
+        time.sleep(2)
 
 
 class LoadMapMenu(Menu):

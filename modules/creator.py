@@ -1,5 +1,7 @@
 import time
+from collections import Counter
 from settings import *
+
 
 class Board:
     def __init__(self, width, height):
@@ -18,14 +20,14 @@ class Board:
         self.map = []
         self.availablePlayer = True
 
-    def empty_map(self):
+    def emptyMap(self):
         """
         Fill map attribute with char that represent floor in map.
         """
         for y in range(0, self.height):
             self.map.append([FLOOR_CHAR] * self.width)
 
-    def place_tile(self, x, y, tileChar):
+    def placeTile(self, x, y, tileChar):
         """
         Place char that represent one of map objects in map array.
 
@@ -41,7 +43,7 @@ class Board:
         """
         self.map[y][x] = tileChar
 
-    def save_board(self, userName):
+    def saveBoard(self, userName):
         """
         Method for saving the new created map to .txt file.
 
@@ -60,7 +62,66 @@ class Board:
                 fd.write(''.join(self.map[y]))
                 fd.write('\n')
 
+    def checkAssets(self):
+        """
+        Method for checking in all available blocks were placed.
 
+        :return:
+
+        """
+        assets = Counter()
+
+        for line in self.map:
+            assets.update(line)
+
+        assets = dict(assets)
+
+        if STOREKEEPER_CHAR not in assets.keys():
+            assets[STOREKEEPER_CHAR] = 0
+
+        if WALL_CHAR not in assets.keys():
+            assets[WALL_CHAR] = 0
+
+        if FLOOR_CHAR not in assets.keys():
+            assets[FLOOR_CHAR] = 0
+
+        if BOX_CHAR not in assets.keys():
+            assets[BOX_CHAR] = 0
+
+        if DESTINATION_CHAR not in assets.keys():
+            assets[DESTINATION_CHAR] = 0
+
+        for key in assets.keys():
+            if assets[key] < 1:
+                return False
+
+        return True
+
+    def destinationsEqualsBoxes(self):
+        """
+        Utility method for checking if boxes and destination amount is equal.
+
+        :return:
+        """
+        assets = Counter()
+
+        for line in self.map:
+            assets.update(line)
+
+        assets = dict(assets)
+
+        if BOX_CHAR not in assets.keys():
+            assets[BOX_CHAR] = 0
+
+        if DESTINATION_CHAR not in assets.keys():
+            assets[DESTINATION_CHAR] = 0
+
+        if assets[BOX_CHAR] < assets[DESTINATION_CHAR]:
+            return False
+
+        return True
+
+    
 class Mouse(pygame.sprite.Sprite):
     def __init__(self):
         """
@@ -70,7 +131,7 @@ class Mouse(pygame.sprite.Sprite):
         self.currBlock = 'X'
         self.currentImage = WALL_IMG
 
-    def get_tile(self):
+    def getTile(self):
         """
         Getter for attribute currBlock.
 
@@ -99,7 +160,7 @@ class Tile(pygame.sprite.Sprite):
         self.rect.y = y
         self.character = 'a'
 
-    def set_image(self, name):
+    def setImage(self, name):
         """
         Setter for attribute self.image. Includes image transformation to
         BLOCK_SIZE const.
@@ -110,6 +171,7 @@ class Tile(pygame.sprite.Sprite):
         """
         self.image = name.convert_alpha()
         self.image = pygame.transform.scale(self.image, (BLOCK_SIZE - 1, BLOCK_SIZE - 1))
+
 
 class Button(pygame.sprite.Sprite):
     def __init__(self, x, y, width, height, bgColor, name, char, tileImage, font,
@@ -182,7 +244,7 @@ class Toolbox(pygame.sprite.Sprite):
         self.width = width
         self.height = height
 
-    def add_button(self, name, char, image):
+    def addButton(self, name, char, image):
         """
         Method allows add a new Button object to the container.
 
@@ -198,7 +260,7 @@ class Toolbox(pygame.sprite.Sprite):
         """
         self.buttons.append({'name': name, 'char': char, 'image': image})
 
-    def place_buttons(self):
+    def placeButtons(self):
         """
         Method that place button on the container, and draw them on in.
         """
