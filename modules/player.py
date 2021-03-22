@@ -1,39 +1,23 @@
-import os
-import pygame
-from .functions import load_png
-from .settings import *
+from settings import *
 
 
 class Player(pygame.sprite.Sprite):
-    """
-    Class which represents a player. Loads image and sets up instance
-    in coordinate system.
-    """
     def __init__(self, x, y):
         """
-        :attributes
-        image: pygame.Image
-            Image that represents player instance.
-        rect: pygame.Rect
-            Pygame Rect class of player instance.
-        direction: string
-            Direction in which player moves. Allowed values(north, east, south,
-            west)
-        boxCollision: bool
-            State of checking if player collides with Box instance.
+        Class which represents a player. Loads image and sets up instance
+        in coordinate system.
 
-        :param
-        x: int, required
-            Player initial x coordinate.
-        y: int, required
-            Player initial y coordinate.
+        :param x:
+            Position in x-axis.
+        :type x: int, required,
+        :param y:
+            Position in y-axis.
+        :type y: int, required
         """
         pygame.sprite.Sprite.__init__(self)
         self.image = STOREKEEPER_IMG.convert_alpha()
-        self.rect = self.image.get_rect()
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
-        self.rect.width = TILE_WIDTH
-        self.rect.height = TILE_HEIGHT
+        self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.moveX = 0
@@ -58,11 +42,12 @@ class Player(pygame.sprite.Sprite):
         """
         Changes object position in coordinate system to given offset.
 
-        :param
-        x: int, required
+        :param x:
             Offset to move in x-axis.
-        y: int, required
+        :type x: int, required,
+        :param y:
             Offset to move in y-axis.
+        :type y: int, required
         """
         if x > 0:
             self.direction = 'east'
@@ -74,23 +59,23 @@ class Player(pygame.sprite.Sprite):
         elif y < 0:
             self.direction = 'north'
 
-        self.change_position(self.direction)
+        self.changePosition(self.direction)
 
         self.moveX += x
         self.moveY += y
 
-    def collision(self, object_list):
+    def collision(self, objectList):
         """
         Check if next player position will collide with object in list.
 
-        :param
-        object_list: list, required
+        :param objectList: 
             List of objects which probable collision.
+        :type objectList: pygame.sprites.Group, required
         """
         self.rect.x += self.moveX
         self.rect.y += self.moveY
 
-        if self.rect.collidelist(object_list) != -1:
+        if self.rect.collidelist(objectList) != -1:
             self.rect.x -= self.moveX
             self.rect.y -= self.moveY
 
@@ -100,13 +85,13 @@ class Player(pygame.sprite.Sprite):
         self.rect.x -= self.moveX
         self.rect.y -= self.moveY
 
-    def collision_box(self, box):
+    def collisionBox(self, box):
         """
         Check if instance collide with box.
 
-        :param
-        box: pygame.Rect
+        :param box:
             Rectangle that represent Box instance.
+        :type box: pygame.Rect, required
         """
         self.rect.x += self.moveX
         self.rect.y += self.moveY
@@ -117,26 +102,21 @@ class Player(pygame.sprite.Sprite):
         self.rect.x -= self.moveX
         self.rect.y -= self.moveY
 
-    def change_position(self, direction):
+    def changePosition(self, direction):
         """
         Change player's move animation on move.
 
-        :param
-        direction: string, required
+        :param direction:
             Direction in which player moves.
+        :type direction: str, required
         """
         if direction == 'north':
-            self.image = pygame.image.load(os.path.join('src/img/', 'player_north.png'))
-            self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
+            self.image = STOREKEEPER_NORTH_IMG
         elif direction == 'east':
-            self.image = pygame.image.load(os.path.join('src/img/', 'player_east.png'))
-            self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
-        elif direction == 'south':
-            self.image = pygame.image.load(os.path.join('src/img/', 'player.png'))
-            self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
+            self.image = STOREKEEPER_EAST_IMG
         elif direction == 'west':
-            self.image = pygame.image.load(os.path.join('src/img/', 'player_west.png'))
-            self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
+            self.image = STOREKEEPER_WEST_IMG
         else:
-            self.image = pygame.image.load(os.path.join('src/img/', 'player.png'))
-            self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
+            self.image = STOREKEEPER_IMG
+
+        self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))

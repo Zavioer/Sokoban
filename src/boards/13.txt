@@ -1,13 +1,15 @@
-    XXXXXXXXX       
-  XXX   XX  XXXXX   
-XXX      X  X   XXXX
-X  ** X* X  X  ... X
-X X  *X@*XX X X.X. X
-X  XX X*  X    ... X
-X *X    * X X X.X. X
-X    XX  XX* * ... X
-X * XX   X  X*X.X. X
-XX **  *   *  *... X
- X*  XXXXXX    XX  X
- X   X    XXXXXXXXXX
- XXXXX              
+20
+13
+    XXXXXXXXX
+  XXXaaaXXaaXXXXX
+XXXaaaaaaXaaXaaaXXXX
+Xaa**aX*aXaaXaa...aX
+XaXaa*X@*XXaXaX.X.aX
+XaaXXaX*aaXaaaa...aX
+Xa*Xaaaa*aXaXaX.X.aX
+XaaaaXXaaXX*a*a...aX
+Xa*aXXaaaXaaX*X.X.aX
+XXa**aa*aaa*aa*...aX
+ X*aaXXXXXXaaaaXXaaX
+ XaaaX    XXXXXXXXXX
+ XXXXX

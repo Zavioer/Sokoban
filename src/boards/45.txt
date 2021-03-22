@@ -1,11 +1,13 @@
+19
+11
         XXXXXXX    
-    XXXXX  X  XXXX 
-    X   X   *    X 
- XXXX X** XX XX  X 
-XX      X X  XX XXX
-X  XXX *X*  *  *  X
-X...    X XX  X   X
-X...X    @ X XXX XX
-X...X  XXX  *  *  X
-XXXXXXXX XX   X   X
+    XXXXXaaXaaXXXX 
+    XaaaXaaa*aaaaX 
+ XXXXaX**aXXaXXaaX 
+XXaaaaaaXaXaaXXaXXX
+XaaXXXa*X*aa*aa*aaX
+X...aaaaXaXXaaXaaaX
+X...Xaaaa@aXaXXXaXX
+X...XaaXXXaa*aa*aaX
+XXXXXXXX XXaaaXaaaX
           XXXXXXXXX

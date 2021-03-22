@@ -1,0 +1,12 @@
+{"userNameVar": "Piotr Konewka", "userScore": 69}
+{"userNameVar": "Jozin Z Bazin", "userScore": 420}
+{"userNameVar": "Gabryjela","userScore": 960}
+{"userNameVar": "YoungSyk","userScore": 80}
+{"userNameVar": "Usmiechania","userScore": 1}
+{"userNameVar": "Big L","userScore": 88}
+{"userNameVar": "Motorola", "userScore": 500}
+{"userNameVar": "Gabriel", "userScore": 300}
+{"userNameVar": "Piotr", "userScore": 0}
+{"userNameVar": "Piotr", "userScore": 0}
+{"userNameVar": "Piotr", "userScore": 0}
+{"userNameVar": "gabriel", "userScore": 300}

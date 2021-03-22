@@ -130,3 +130,9 @@ dmypy.json
 
 # PyCharm
 .idea/
+
+# User created maps
+src/boards/own/*
+
+# User saved games
+src/saves/*

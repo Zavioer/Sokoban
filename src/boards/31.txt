@@ -1,12 +1,14 @@
+15
+12
  XXXXXXX       
- X  X  XXXXX   
-XX  X  X...XXX 
-X  *X  X...  X 
-X * X** ...  X 
-X  *X  X... .X 
-X   X *XXXXXXXX
-XX*       * * X
-XX  X  ** X   X
- XXXXXX  XX**@X
-      X      XX
+ XaaXaaXXXXX   
+XXaaXaaX...XXX 
+Xaa*XaaX...aaX 
+Xa*aX**a...aaX 
+Xaa*XaaX...a.X 
+XaaaXa*XXXXXXXX
+XX*aaaaaaa*a*aX
+XXaaXaa**aXaaaX
+ XXXXXXaaXX**@X
+      XaaaaaaXX
       XXXXXXXX 
