@@ -132,10 +132,10 @@ dmypy.json
 .idea/
 
 # User created maps
-./src/boards/own/*
+/src/boards/own/*
 
 # User saved games
-./src/saves/*
+/src/saves/*
 
 # Score file
 scoreFile.txt
