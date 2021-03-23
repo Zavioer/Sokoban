@@ -1021,16 +1021,17 @@ class LoadMapMenu(Menu):
             Game class that allows connection between game logic and menu.
         :type game: game.Game, required
         """
-        self.textInfoX, self.textInfoY = midWidth, midHeight - 280
+        self.textInfoX, self.textInfoY = midWidth - 25, midHeight - 280
         self.itemMapX, self.itemMapY = midWidth, midHeight - 200
         self.deleteRect = pygame.Rect(midWidth + 450, midHeight + 320, 140, 50)
         self.offset = -100
         self.pointerRect = pygame.Rect(0, 0, 20, 20)
-        self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY)
+        self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + 10)
         self.counter = 0
         self.storekeeperImg = pygame.transform.scale(STOREKEEPER_IMG, (40, 40))
         self.chosenMap = ''
         self.mapArray = []
+        self.amount = 0
 
     def displayMenu(self):
         """
@@ -1038,7 +1039,6 @@ class LoadMapMenu(Menu):
         screen every single frame.
         """
         self.runDisplay = True
-        # self.mapArray = os.listdir('./src/boards/own/')
 
         for map in os.listdir('./src/boards/own/'):
             if map.find(self.game.playerName) > -1:
@@ -1057,9 +1057,10 @@ class LoadMapMenu(Menu):
                                    WHITE, self.game.fontName)
 
                 for row in range(len(self.mapArray)):
-                    board = self.prepareMapName(self.mapArray[row])
-                    self.game.drawText(str(board), 20, self.itemMapX, self.itemMapY + (row * 40),
-                                       WHITE, self.game.fontName)
+                    if row < 12:
+                        board = self.prepareMapName(self.mapArray[row])
+                        self.game.drawText(str(board), 28, self.itemMapX, self.itemMapY + (row * 45),
+                                           WHITE, self.game.fontName)
 
                 self.drawPointer()
                 self.blitScreen()
@@ -1081,23 +1082,21 @@ class LoadMapMenu(Menu):
         if self.game.DOWN_KEY or self.game.S_KEY:
             self.counter += 1
 
-            if self.counter > len(self.mapArray) - 1:
+            if self.counter > len(self.mapArray) - 1 or self.counter > 11:
                 self.counter = 0
 
-            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + (self.counter * 40))
+            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + (self.counter * 45))
             self.chosenMap = self.mapArray[self.counter]
 
-            print(self.chosenMap)
         elif self.game.UP_KEY or self.game.W_KEY:
             self.counter -= 1
 
             if self.counter < 0:
                 self.counter = len(self.mapArray) - 1
 
-            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + self.counter * 40)
+            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + self.counter * 45)
             self.chosenMap = self.mapArray[self.counter]
 
-            print(self.chosenMap)
 
     def checkInput(self):
         """
@@ -1152,7 +1151,6 @@ class LoadMapMenu(Menu):
 
         return result
 
-
 class DeleteMapMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
@@ -1164,11 +1162,12 @@ class DeleteMapMenu(Menu):
         :type game: game.Game, required
         """
         self.textInfoX, self.textInfoY = midWidth, midHeight - 280
-        self.itemMapX, self.itemMapY = midWidth, midHeight - 200
+        self.itemMapX, self.itemMapY = midWidth, midHeight - 180
 
         self.offset = -100
         self.pointerRect = pygame.Rect(0, 0, 20, 20)
-        self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY)
+        self.storekeeperImg = pygame.transform.scale(STOREKEEPER_IMG, (40, 40))
+        self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + 10)
         self.counter = 0
         self.mapArray = []
         self.chosenMap = ''
@@ -1179,8 +1178,11 @@ class DeleteMapMenu(Menu):
         It also draws the pointer and blits the screen every single frame.
         """
         self.runDisplay = True
-        self.mapArray = os.listdir('./src/boards/own/')
 
+        for map in os.listdir('./src/boards/own/'):
+            if map.find(self.game.playerName) > -1:
+                self.mapArray.append(map)
+                
         if len(self.mapArray) > 0:
             self.chosenMap = self.mapArray[0]
 
@@ -1193,8 +1195,10 @@ class DeleteMapMenu(Menu):
                                    WHITE, self.game.fontName)
 
                 for row in range(len(self.mapArray)):
-                    board = self.mapArray[row]
-                    self.game.drawText(str(board), 20, self.itemMapX, self.itemMapY + (row * 40), WHITE, self.game.fontName)
+                    if row < 12:
+                        board = self.prepareSaveName(self.mapArray[row])
+                        self.game.drawText(str(board), 28, self.itemMapX, self.itemMapY + (row * 45),
+                                           WHITE, self.game.fontName)
 
                 self.drawPointer()
                 self.blitScreen()
@@ -1208,6 +1212,31 @@ class DeleteMapMenu(Menu):
                                    WHITE, self.game.fontName)
 
                 self.blitScreen()
+
+    def prepareSaveName(self, filename):
+        """
+        Utility function for preparing player save game for nice format.
+
+        :param filename:
+            Name of the file which contains save.
+        :type filename: str, required
+
+        :return:
+            Nice looking save game name.
+        :rtype: str
+        """
+        playerName = filename[:filename.find('_')]
+        hours = filename[len(playerName) + 1:]
+
+        hour = hours[:8]
+        date = hours[9:19]
+
+        hour = hour.replace('_', ':')
+        date = date.replace('_', '/')
+
+        result = ''.join((playerName, '        ', hour, '    ', date))
+
+        return result
 
     def removeMap(self, mapID):
         """
@@ -1227,10 +1256,10 @@ class DeleteMapMenu(Menu):
         if self.game.DOWN_KEY or self.game.S_KEY:
             self.counter += 1
 
-            if self.counter > len(self.mapArray) - 1:
+            if self.counter > len(self.mapArray) - 1 or self.counter > 11:
                 self.counter = 0
 
-            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + (self.counter * 40))
+            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + (self.counter * 45))
             self.chosenMap = self.mapArray[self.counter]
 
         elif self.game.UP_KEY or self.game.W_KEY:
@@ -1239,7 +1268,7 @@ class DeleteMapMenu(Menu):
             if self.counter < 0:
                 self.counter = len(self.mapArray) - 1
 
-            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + self.counter * 40)
+            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + self.counter * 45)
             self.chosenMap = self.mapArray[self.counter]
 
     def checkInput(self):
@@ -1383,11 +1412,11 @@ class ResumeSavedGameMenu(Menu):
         """
         Menu.__init__(self, game)
         self.textInfoX, self.textInfoY = midWidth, midHeight - 280
-        self.itemMapX, self.itemMapY = midWidth, midHeight - 200
+        self.itemMapX, self.itemMapY = midWidth, midHeight - 180
         self.deleteRect = pygame.Rect(midWidth + 450, midHeight + 320, 140, 50)
         self.offset = -100
         self.pointerRect = pygame.Rect(0, 0, 20, 20)
-        self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY)
+        self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + 10)
         self.counter = 0
         self.storekeeperImg = pygame.transform.scale(STOREKEEPER_IMG, (40, 40))
         self.mapArray = []
@@ -1400,6 +1429,8 @@ class ResumeSavedGameMenu(Menu):
         """
         self.runDisplay = True
         maps = os.listdir(SAVES_DIR)
+
+        amount = 0
 
         self.cleanMaps(maps, self.game.previousMenu)
         self.game.previousMenu = ''
@@ -1417,9 +1448,10 @@ class ResumeSavedGameMenu(Menu):
                                    WHITE, self.game.fontName)
 
                 for row in range(len(self.mapArray)):
-                    board = self.prepareSaveName(self.mapArray[row])
-                    self.game.drawText(str(board), 28, self.itemMapX, self.itemMapY + (row * 40),
-                                       WHITE, self.game.fontName)
+                    if row < 12:
+                        board = self.prepareSaveName(self.mapArray[row])
+                        self.game.drawText(str(board), 28, self.itemMapX, self.itemMapY + (row * 45),
+                                           WHITE, self.game.fontName)
 
                 self.drawPointer()
                 self.blitScreen()
@@ -1435,6 +1467,31 @@ class ResumeSavedGameMenu(Menu):
 
                 self.blitScreen()
 
+    def prepareSaveName(self, filename):
+        """
+        Utility function for preparing player save game for nice format.
+
+        :param filename:
+            Name of the file which contains save.
+        :type filename: str, required
+
+        :return:
+            Nice looking save game name.
+        :rtype: str
+        """
+        playerName = filename[:filename.find('_')]
+        hours = filename[len(playerName) + 1:]
+
+        hour = hours[:8]
+        date = hours[9:19]
+
+        hour = hour.replace('_', ':')
+        date = date.replace('_', '/')
+
+        result = ''.join((playerName, '        ', hour, '    ', date))
+
+        return result
+
     def movePointer(self):
         """
         Method that includes pointer's movement logic. Moreover, it includes an end event handler.
@@ -1442,10 +1499,10 @@ class ResumeSavedGameMenu(Menu):
         if self.game.DOWN_KEY or self.game.S_KEY:
             self.counter += 1
 
-            if self.counter > len(self.mapArray) - 1:
+            if self.counter > len(self.mapArray) - 1 or self.counter > 11:
                 self.counter = 0
 
-            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + (self.counter * 40))
+            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + (self.counter * 45))
             self.chosenMap = self.mapArray[self.counter]
 
         elif self.game.UP_KEY or self.game.W_KEY:
@@ -1454,7 +1511,7 @@ class ResumeSavedGameMenu(Menu):
             if self.counter < 0:
                 self.counter = len(self.mapArray) - 1
 
-            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + self.counter * 40)
+            self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + self.counter * 45)
             self.chosenMap = self.mapArray[self.counter]
 
     def checkInput(self):

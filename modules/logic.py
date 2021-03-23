@@ -95,8 +95,6 @@ def startTheGame(screen, lvlName, game, points, flag):
                     startX += TILE_WIDTH
                 startY += TILE_HEIGHT
 
-
-
     # Map center
     canvas = pygame.Surface((mapWidth * TILE_WIDTH, mapHeight * TILE_HEIGHT))
     canvasPos = canvas.get_rect(center=((WIDTH - HUD_WIDTH) / 2,
@@ -168,10 +166,17 @@ def startTheGame(screen, lvlName, game, points, flag):
 
                 storekeeper.boxCollision = False
 
-        # Check if all boxes collide with destinations
         placedBoxes = pygame.sprite.groupcollide(boxes, destinations, False, False)
 
         if len(placedBoxes) == destinationsAmount:
+            game.display.fill(BLACK)
+            game.drawText('You passed the level!', 65, midWidth, midHeight,
+                               WHITE, game.fontName)
+            game.window.blit(game.display, (0, 0))
+            pygame.display.update()
+            game.resetKeys()
+            time.sleep(0.6)
+
             if flag == MODULE_I or flag == MODULE_III:
                 game.logicState = False
                 game.currentMenu = game.mainMenu
@@ -200,6 +205,8 @@ def startTheGame(screen, lvlName, game, points, flag):
 
         if flag == RESTORE:
             hud.displayLvl(game.restoreDetails['lvlName'])
+        elif flag == MODULE_III:
+            hud.displayLvl('OWN.')
         else:
             hud.displayLvl(lvlName)
 

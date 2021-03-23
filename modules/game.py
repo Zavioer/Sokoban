@@ -9,7 +9,7 @@ class Game:
         """
         pygame.init()
         pygame.display.set_caption('Sokoban')
-        
+
         self.running = True
         self.playing = False
         self.UP_KEY = False
@@ -26,8 +26,6 @@ class Game:
         self.display = pygame.Surface((WIDTH, HEIGHT))
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
 
-        # ikona
-        # icon = pygame.image.load('src/img/storekeeper.png')
         icon = STOREKEEPER_IMG
         icon = pygame.transform.smoothscale(icon, (96, 96))
         pygame.display.set_icon(icon)

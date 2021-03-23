@@ -70,7 +70,7 @@ py app.py
 To run all tests go to the **tests** subfolder and run:
 
 ```bash
-python -m unittest tests.logic_test
+python -m unittest discover test
 ```
 
 4. #### How to create documentation
@@ -81,7 +81,7 @@ To create the documentation, go to the **docs** subfolder, open a command prompt
 make html
 ```
 
-It will create documentation itself, that will be placed in **_build** folder. 
+It will create documentation itself, that will be placed in **_build** folder.
 
 ## FAQ
 

@@ -1,1 +1,0 @@
-{"userNameVar": "zavioer", "userScore": 300}
