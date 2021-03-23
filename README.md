@@ -1,10 +1,10 @@
 # Sokoban
 
-Application which is a project for the Motorola Science Cup competition.
+Sokoban game - a project prepared for the Motorola Science Cup competition.
 
-This is a game whose goal is to move and place crates in the warehouse to the designated positions playing as a warehouse worker.
--  A warehouse is a board that consists of a layout of fields.
--  Warehouse keeper controlled by a player can move vertically or horizontally (never diagonally).
+The goal of this game is to place crates in dedicated positions in the warehouse. A player acts as a warehouse worker who moves the crates around. 
+-  A warehouse is represented by a board that consist of a layout of fields.
+-  Warehouse keeper controlled by a player can move vertically or horizontally (diagonal moves are not allowed).
 -  He can only push one box, and cannot pull or pass through it.
 -  The warehouseman's task is to move the boxes to all designated positions - the boxes can only be moved individually.
 
@@ -46,7 +46,7 @@ This is a game whose goal is to move and place crates in the warehouse to the de
 
 - Pygame 2.0.0
 - Python 3.8.6
-
+- Sphinx 3.5.2
 ### How to
 
 1. #### How to install dependencies
@@ -54,7 +54,7 @@ This is a game whose goal is to move and place crates in the warehouse to the de
 To install dependencies open a command prompt in the game folder and type in:
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 2. #### How to run game
@@ -62,7 +62,7 @@ pip install -r requirements.txt
 To run game open a command prompt in the game folder and type in:
 
 ```bash
-py app.py
+python3 app.py
 ```
 
 3. #### How to run tests
@@ -70,7 +70,7 @@ py app.py
 To run all tests go to the **tests** subfolder and run:
 
 ```bash
-python -m unittest discover test
+python3 -m unittest discover test
 ```
 
 4. #### How to create documentation
@@ -108,9 +108,9 @@ This is a logical game where you can turn into a warehouse keeper and expand the
 
 #### What was the content of the task this application responds to?
 
-"This is a game whose goal is to move and place crates in the warehouse to the designated positions.
--  A warehouse is a board that consists of a layout of fields.
--  Warehouse keeper controlled by a player can move vertically or horizontally (never diagonally).
+"The goal of this game is to place crates in dedicated positions in the warehouse. A player acts as a warehouse worker who moves the crates around. 
+-  A warehouse is represented by a board that consist of a layout of fields.
+-  Warehouse keeper controlled by a player can move vertically or horizontally (diagonal moves are not allowed).
 -  He can only push one box, and cannot pull or pass through it.
 -  The warehouseman's task is to move the boxes to all designated positions - the boxes can only be moved individually."
 
