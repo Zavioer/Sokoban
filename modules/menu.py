@@ -971,7 +971,7 @@ class WidthHeightMenu(Menu):
 
             self.game.drawText('ENTER YOUR MAP DIMENSIONS', 65, self.textInfoX,
                                self.textInfoY, WHITE, self.game.fontName)
-            self.game.drawText('MAX: 30 x 20', 35, self.textInfoX, self.textInfoY + 50,
+            self.game.drawText('MAX: 30 x 20 [press enter]', 35, self.textInfoX, self.textInfoY + 50,
                                RED, self.game.fontName)
             self.game.drawText('WIDTH: ', 60, self.widthX, self.widthY, WHITE,
                                self.game.fontName)
@@ -1182,7 +1182,7 @@ class DeleteMapMenu(Menu):
         for map in os.listdir('./src/boards/own/'):
             if map.find(self.game.playerName) > -1:
                 self.mapArray.append(map)
-                
+
         if len(self.mapArray) > 0:
             self.chosenMap = self.mapArray[0]
 
