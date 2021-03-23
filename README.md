@@ -67,7 +67,7 @@ python3 app.py
 
 3. #### How to run tests
 
-To run all tests go to the **tests** subfolder and run:
+To run all tests run:
 
 ```bash
 python3 -m unittest discover test
