@@ -20,14 +20,6 @@ modules.creator module
    :undoc-members:
    :show-inheritance:
 
-modules.functions module
-------------------------
-
-.. automodule:: modules.functions
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 modules.game module
 -------------------
 

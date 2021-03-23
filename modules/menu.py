@@ -155,10 +155,14 @@ class MainMenu(Menu):
 
         if self.game.START_KEY:
             if self.state == 'Start' and len(self.game.playerName) == 0:
+                self.game.previousMenu = 'Start'
                 self.game.currentMenu = self.game.inputMenu
             elif self.state == 'Start' and len(self.game.playerName) > 0:
                 self.game.START_KEY = False
                 self.game.currentMenu = self.game.levelMenu
+            elif self.state == 'Level' and len(self.game.playerName) == 0:
+                self.game.previousMenu = 'Level'
+                self.game.currentMenu = self.game.inputMenu
             elif self.state == 'Level':
                 self.game.START_KEY = False
                 self.game.currentMenu = self.game.loadSaveMenu
@@ -471,6 +475,7 @@ class LegendMenu(Menu):
 
         self.runDisplay = False
 
+
 class DiffMenu(Menu):
     def __init__(self, game):
         """
@@ -604,7 +609,13 @@ class InputName(Menu):
             self.runDisplay = False
             self.game.START_KEY = False
             self.game.running = True
-            self.game.currentMenu = self.game.levelMenu
+
+            if self.game.previousMenu == 'Start':
+                self.game.currentMenu = self.game.levelMenu
+            elif self.game.previousMenu == 'Level':
+                self.game.currentMenu = self.game.loadSaveMenu
+
+            self.game.previousMenu = ''
 
         elif self.game.ESC_PRESSED or self.game.BACK_KEY:
             self.runDisplay = False
@@ -750,14 +761,11 @@ class SaveGameMenu(Menu):
 
             self.game.display.fill(BLACK)
             self.game.drawText('DO YOU WANT TO QUIT AND SAVE YOUR SCORE?', 65, midWidth, midHeight - 300,
-                                WHITE,
-                                self.game.fontName)
+                               WHITE, self.game.fontName)
             self.game.drawText('YES', 60, self.firstModuleX, self.firstModuleY,
-                                WHITE,
-                                self.game.fontName)
+                               WHITE, self.game.fontName)
             self.game.drawText('NO', 60, self.secondModuleX, self.secondModuleY,
-                                WHITE,
-                                self.game.fontName)
+                               WHITE, self.game.fontName)
 
             self.drawPointer()
             self.blitScreen()
@@ -775,9 +783,12 @@ class SaveGameMenu(Menu):
                 self.game.currentMenu = self.game.mainMenu
                 currLvl = str(self.game.currentLevel) + '.txt'
 
-                logic.saveBoard(self.game.currentPlayerState['width'], self.game.currentPlayerState['height'],
-                                self.game.currentPlayerState['sprites'], self.game.currentPlayerState['time'],
-                                self.game.playerName, currLvl, self.game.gamePoints)
+                logic.saveBoard(self.game.currentPlayerState['width'],
+                                self.game.currentPlayerState['height'],
+                                self.game.currentPlayerState['sprites'],
+                                self.game.currentPlayerState['time'],
+                                self.game.playerName, currLvl, self.game.gamePoints,
+                                self.game.currentPlayerState['flag'])
 
                 if self.game.gameLevel > 1:
                     self.game.gameLevel = 1
@@ -1023,11 +1034,15 @@ class LoadMapMenu(Menu):
 
     def displayMenu(self):
         """
-        Method that displays the menu. It prints 7 buttons thanks to the drawText() method.
-        It also draws the pointer and blits the screen every single frame.
+        Method that displays the menu. It also draws the pointer and blits the
+        screen every single frame.
         """
         self.runDisplay = True
-        self.mapArray = os.listdir('./src/boards/own/')
+        # self.mapArray = os.listdir('./src/boards/own/')
+
+        for map in os.listdir('./src/boards/own/'):
+            if map.find(self.game.playerName) > -1:
+                self.mapArray.append(map)
 
         if len(self.mapArray) > 0:
             self.chosenMap = self.mapArray[0]
@@ -1042,7 +1057,7 @@ class LoadMapMenu(Menu):
                                    WHITE, self.game.fontName)
 
                 for row in range(len(self.mapArray)):
-                    board = self.mapArray[row]
+                    board = self.prepareMapName(self.mapArray[row])
                     self.game.drawText(str(board), 20, self.itemMapX, self.itemMapY + (row * 40),
                                        WHITE, self.game.fontName)
 
@@ -1090,22 +1105,52 @@ class LoadMapMenu(Menu):
         """
         self.movePointer()
 
-        if self.game.ESC_PRESSED:
+        if self.game.ESC_PRESSED or self.game.BACK_KEY:
             self.runDisplay = False
             self.game.currentMenu = self.game.mainMenu
             self.counter = 0
 
+            self.mapArray.clear()
+
         if self.game.START_KEY and len(self.mapArray) <= 0:
             self.runDisplay = False
             self.game.currentMenu = self.game.loadSaveMenu
+
+            self.mapArray.clear()
 
         elif self.game.START_KEY and len(self.mapArray) > 0:
             self.runDisplay = False
             self.game.logicState = True
             self.counter = 0
 
-            logic.startTheGame(self.game.window, self.chosenMap,
-                               self.game, self.game.gamePoints, MODULE_III)
+            self.mapArray.clear()
+
+            logic.startTheGame(self.game.window, self.chosenMap, self.game,
+                               self.game.gamePoints, MODULE_III)
+
+    def prepareMapName(self, fileName):
+        """
+        Utility function for preparing name of saved game.
+
+        :param fileName:
+            Name of file which contains map.
+        :type fileName: str, required
+        :return:
+            Returns nice looking saved game file name.
+        :rtype: str
+        """
+        mapName = fileName[:fileName.find('_')]
+        date = fileName[len(mapName) + 1:]
+
+        hours = date[:8]
+        hours = hours.replace('_', ':')
+
+        day = date[9: 19]
+        day = day.replace('_', '/')
+
+        result = ''.join((mapName, '        ', hours, '   ', day))
+
+        return result
 
 
 class DeleteMapMenu(Menu):
@@ -1243,6 +1288,7 @@ class LoadSaveMenu(Menu):
         self.firstModuleX, self.firstModuleY = midWidth, midHeight
         self.secondModuleX, self.secondModuleY = midWidth, midHeight + 100
         self.thirdModuleX, self.thirdModuleY = midWidth, midHeight + 200
+        self.fourthModuleX, self.fourthModuleY = midWidth, midHeight + 300
         self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
         self.state = 'One'
 
@@ -1261,8 +1307,9 @@ class LoadSaveMenu(Menu):
             self.game.display.fill(BLACK)
             self.game.drawText('Load game/map from:', 120, midWidth, midHeight - 200, WHITE, self.game.fontName)
             self.game.drawText('Module 2', 80, self.firstModuleX, self.firstModuleY, WHITE, self.game.fontName)
-            self.game.drawText('Module 3', 80, self.secondModuleX, self.secondModuleY, WHITE, self.game.fontName)
-            self.game.drawText('Del Map', 80, self.thirdModuleX, self.thirdModuleY, WHITE, self.game.fontName)
+            self.game.drawText('Own maps', 80, self.secondModuleX, self.secondModuleY, WHITE, self.game.fontName)
+            self.game.drawText('Own saves', 80, self.thirdModuleX, self.thirdModuleY, WHITE, self.game.fontName)
+            self.game.drawText('Del Map', 80, self.fourthModuleX, self.fourthModuleY, WHITE, self.game.fontName)
 
             self.drawPointer()
             self.blitScreen()
@@ -1279,11 +1326,16 @@ class LoadSaveMenu(Menu):
         if self.game.START_KEY:
             if self.state == 'One':
                 self.game.currentMenu = self.game.resumeSavedGameMenu
+                self.game.previousMenu = self.state
 
             elif self.state == 'Two':
                 self.game.currentMenu = self.game.loadMapMenu
 
             elif self.state == 'Three':
+                self.game.currentMenu = self.game.resumeSavedGameMenu
+                self.game.previousMenu = self.state
+
+            elif self.state == 'Four':
                 self.game.currentMenu = self.game.deleteMapMenu
 
         self.runDisplay = False
@@ -1300,18 +1352,24 @@ class LoadSaveMenu(Menu):
                 self.pointerRect.midtop = (self.thirdModuleX + self.offset, self.thirdModuleY)
                 self.state = 'Three'
             elif self.state == 'Three':
+                self.pointerRect.midtop = (self.fourthModuleX + self.offset, self.fourthModuleY)
+                self.state = 'Four'
+            elif self.state == 'Four':
                 self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
                 self.state = 'One'
         elif self.game.UP_KEY or self.game.W_KEY:
             if self.state == 'One':
-                self.pointerRect.midtop = (self.thirdModuleX + self.offset, self.thirdModuleY)
-                self.state = 'Three'
+                self.pointerRect.midtop = (self.fourthModuleX + self.offset, self.fourthModuleY)
+                self.state = 'Four'
             elif self.state == 'Two':
                 self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
                 self.state = 'One'
             elif self.state == 'Three':
                 self.pointerRect.midtop = (self.secondModuleX + self.offset, self.secondModuleY)
                 self.state = 'Two'
+            elif self.state == 'Four':
+                self.pointerRect.midtop = (self.thirdModuleX + self.offset, self.thirdModuleY)
+                self.state = 'Three'
 
 
 class ResumeSavedGameMenu(Menu):
@@ -1341,11 +1399,11 @@ class ResumeSavedGameMenu(Menu):
         It also draws the pointer and blits the screen every single frame.
         """
         self.runDisplay = True
-        maps = os.listdir('src/saves/')
+        maps = os.listdir(SAVES_DIR)
 
-        for file in maps:
-            if file.find('.bak') > -1:
-                self.mapArray.append(file)
+        self.cleanMaps(maps, self.game.previousMenu)
+        self.game.previousMenu = ''
+
         if len(self.mapArray) > 0:
             self.chosenMap = self.mapArray[0]
 
@@ -1359,8 +1417,8 @@ class ResumeSavedGameMenu(Menu):
                                    WHITE, self.game.fontName)
 
                 for row in range(len(self.mapArray)):
-                    board = self.mapArray[row]
-                    self.game.drawText(str(board), 20, self.itemMapX, self.itemMapY + (row * 40),
+                    board = self.prepareSaveName(self.mapArray[row])
+                    self.game.drawText(str(board), 28, self.itemMapX, self.itemMapY + (row * 40),
                                        WHITE, self.game.fontName)
 
                 self.drawPointer()
@@ -1399,7 +1457,6 @@ class ResumeSavedGameMenu(Menu):
             self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + self.counter * 40)
             self.chosenMap = self.mapArray[self.counter]
 
-
     def checkInput(self):
         """
         Method that handles changing the currently displayed menu.
@@ -1408,6 +1465,7 @@ class ResumeSavedGameMenu(Menu):
 
         if self.game.ESC_PRESSED:
             self.runDisplay = False
+            self.mapArray.clear()
             self.game.currentMenu = self.game.mainMenu
 
         if self.game.START_KEY and len(self.mapArray) > 0:
@@ -1415,8 +1473,54 @@ class ResumeSavedGameMenu(Menu):
             self.game.logicState = True
             self.game.restoreDetails = logic.loadSave(self.chosenMap[:len(self.chosenMap) - 4])
 
+            self.mapArray.clear()
+
             logic.startTheGame(self.game.window, self.chosenMap,
                                self.game, self.game.gamePoints, RESTORE)
+
         elif self.game.START_KEY and len(self.mapArray) <= 0:
             self.runDisplay = False
             self.game.currentMenu = self.game.loadSaveMenu
+
+            self.mapArray.clear()
+
+    def prepareSaveName(self, filename):
+        """
+        Utility function for preparing player save game for nice format.
+
+        :param filename:
+            Name of the file which contains save.
+        :type filename: str, required
+
+        :return:
+            Nice looking save game name.
+        :rtype: str
+        """
+        playerName = filename[:filename.find('_')]
+        hours = filename[len(playerName) + 1:]
+
+        hour = hours[:8]
+        date = hours[9:19]
+
+        hour = hour.replace('_', ':')
+        date = date.replace('_', '/')
+
+        result = ''.join((playerName, '        ', hour, '    ', date))
+
+        return result
+
+    def cleanMaps(self, maps, previousState):
+        """
+        Method for chosing map based on before selected menu.
+
+        :param maps:
+            List of game saves in folder SAVES_DIR.
+        :type maps: list, required
+        :param previousState:
+            Flag that allows to discriminate module II and III saved games.
+        :type previousState: str, required
+        """
+        for file in maps:
+            if file.find('.bak') > -1 and file.find(self.game.playerName) > -1 \
+                    and file.find(previousState) > -1:
+                self.mapArray.append(file)

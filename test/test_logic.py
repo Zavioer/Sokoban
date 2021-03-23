@@ -39,13 +39,14 @@ class SaveBoardLogicTestCase(unittest.TestCase):
                 self.board[x][y] = sprite.char
 
     def tearDown(self):
-        pass
+        if 'scoreFile.txt' in os.listdir(os.getcwd()):
+            os.remove('scoreFile.txt')
 
     def test_01__check_if_board_save_working(self):
         saved = False
 
         saveBoard(self.width, self.height, self.allSprites, self.endTime, self.playerName,
-                  self.lvlName, self.gamePoints)
+                  self.lvlName, self.gamePoints, MODULE_II)
 
         saves = os.listdir(self.path)
 
@@ -56,7 +57,7 @@ class SaveBoardLogicTestCase(unittest.TestCase):
 
         self.assertTrue(saved, 'Did not save map correctly.')
 
-        print('> (test_01) saveBoard function correctly saves board to shelve file.')
+        print('> (test 1) saveBoard function correctly saves board to shelve file.')
 
     def test_02__check_if_data_saved_correctly(self):
         saves = os.listdir(self.path)
@@ -78,7 +79,7 @@ class SaveBoardLogicTestCase(unittest.TestCase):
         self.assertEqual(self.endTime, results['endTime'], 'EndTime parameters is wrong!')
         self.assertEqual(self.board, results['emptyBoard'], 'EmptyBoard parameters is wrong!')
 
-        print('> (test_02) All parameters were saved correctly.')
+        print('> (test 2) All parameters were saved correctly.')
 
 
 if __name__ == '__main__':

@@ -27,7 +27,8 @@ class Game:
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
 
         # ikona
-        icon = pygame.image.load('src/img/storekeeper.png')
+        # icon = pygame.image.load('src/img/storekeeper.png')
+        icon = STOREKEEPER_IMG
         icon = pygame.transform.smoothscale(icon, (96, 96))
         pygame.display.set_icon(icon)
 
@@ -55,9 +56,12 @@ class Game:
         self.gamePoints = 0
         self.playerName = ''
         self.currentLevel = 0
-        self.currentPlayerState = {'width': 0, 'height': 0, 'map': [], 'time': 0}
+        self.currentPlayerState = {'width': 0, 'height': 0, 'map': [], 'time': 0,
+                                   'flag': ''}
         self.passedMapName = ''
         self.restoreDetails = {}
+        self.previousMenu = ''
+
 
     def checkEvents(self):
         """

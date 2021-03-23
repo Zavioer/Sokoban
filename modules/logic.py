@@ -31,7 +31,6 @@ def startTheGame(screen, lvlName, game, points, flag):
         Flag that allows to discriminate between module I, II and III.
     :type flag: str, required
     """
-    start = time.time()
     myFont = pygame.font.SysFont('Montserrat', 30)
 
     # Initial sprites groups and map floor
@@ -113,9 +112,6 @@ def startTheGame(screen, lvlName, game, points, flag):
 
     allSprites = pygame.sprite.Group(floors, walls, destinations, boxes, storekeeper)
 
-    end = time.time()
-    # print(f'Set up total time: {end - start}')
-
     # Event loop
     while game.logicState:
         clock.tick(FPS)
@@ -130,6 +126,7 @@ def startTheGame(screen, lvlName, game, points, flag):
                 game.currentPlayerState['height'] = mapHeight
                 game.currentPlayerState['sprites'] = allSprites
                 game.currentPlayerState['time'] = hud.timer.endTime
+                game.currentPlayerState['flag'] = flag
 
                 game.currentMenu.displayMenu()
                 hud.timer.resume(pygame.time.get_ticks())
@@ -217,7 +214,7 @@ def startTheGame(screen, lvlName, game, points, flag):
         pygame.display.flip()
 
 
-def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints):
+def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints, flag):
     """
     Function for saving current playing lvl and additional information in to
     shelve file.
@@ -237,6 +234,9 @@ def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints):
     :param playerName: str
         Current playing player nick name.
     :type lvlName: str, required
+    :param flag:
+        Flago of current playing module.
+    :type flag: str, required
     """
     emptyBoard = []
 
@@ -249,8 +249,14 @@ def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints):
     currentDate = time.localtime(time.time())
     formatedDate = time.strftime('%H_%M_%S_%d_%m_%Y', currentDate)
 
-    fileName = ''.join((playerName, '_', 'BOARD', '_', formatedDate))
-    savesPath = os.path.abspath('../src/saves/')
+    additional = ''
+
+    if flag == MODULE_II:
+        additional = 'One'
+    elif flag == MODULE_III:
+        additional = 'Three'
+
+    fileName = ''.join((playerName, '_', formatedDate, '_', additional))
 
     shelveFile = shelve.open(os.path.join(SAVES_DIR, fileName))
 
@@ -355,7 +361,7 @@ def createMap(screen, width, height, game):
                 if saveRect.collidepoint(mousex, mousey):
                     if playerBoard.checkAssets():
                         if playerBoard.destinationsEqualsBoxes():
-                            playerBoard.saveBoard(game.passedMapName)
+                            playerBoard.saveBoard(game.passedMapName, game.playerName)
                             game.logicState = False
                             game.passedMapName = ''
                             game.currentMenu = game.mainMenu
@@ -453,8 +459,7 @@ def loadSave(fileName):
     :return:
         dict
     """
-    savesPath = os.path.abspath('../src/saves')
-    shelveFile = shelve.open(os.path.join(savesPath, fileName))
+    shelveFile = shelve.open(os.path.join(SAVES_DIR, fileName))
     mapDetails = {}
 
     mapDetails['width'] = shelveFile['widthBoardVar']

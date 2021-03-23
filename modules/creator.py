@@ -43,7 +43,7 @@ class Board:
         """
         self.map[y][x] = tileChar
 
-    def saveBoard(self, userName):
+    def saveBoard(self, mapName, userName):
         """
         Method for saving the new created map to .txt file.
 
@@ -53,11 +53,12 @@ class Board:
         """
         currentDate = time.localtime(time.time())
         formatedDate = time.strftime('%H_%M_%S_%d_%m_%Y', currentDate)
-        fileName = ''.join((userName, '_', formatedDate, '.txt'))
+        fileName = ''.join((mapName, '_', formatedDate, '_', userName, '.txt'))
 
         with open(os.path.join('./src/boards/own/', fileName), 'w') as fd:
             fd.write(str(self.width) + '\n')
             fd.write(str(self.height) + '\n')
+
             for y in range(0, self.height):
                 fd.write(''.join(self.map[y]))
                 fd.write('\n')
