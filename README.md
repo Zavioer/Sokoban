@@ -2,7 +2,7 @@
 
 Sokoban game - a project prepared for the Motorola Science Cup competition.
 
-The goal of this game is to place crates in dedicated positions in the warehouse. A player acts as a warehouse worker who moves the crates around. 
+The goal of this game is to place crates in dedicated positions in the warehouse. A player acts as a warehouse worker who moves the crates around.
 -  A warehouse is represented by a board that consist of a layout of fields.
 -  Warehouse keeper controlled by a player can move vertically or horizontally (diagonal moves are not allowed).
 -  He can only push one box, and cannot pull or pass through it.
@@ -47,6 +47,7 @@ The goal of this game is to place crates in dedicated positions in the warehouse
 - Pygame 2.0.0
 - Python 3.8.6
 - Sphinx 3.5.2
+
 ### How to
 
 1. #### How to install dependencies
@@ -108,7 +109,7 @@ This is a logical game where you can turn into a warehouse keeper and expand the
 
 #### What was the content of the task this application responds to?
 
-"The goal of this game is to place crates in dedicated positions in the warehouse. A player acts as a warehouse worker who moves the crates around. 
+"The goal of this game is to place crates in dedicated positions in the warehouse. A player acts as a warehouse worker who moves the crates around.
 -  A warehouse is represented by a board that consist of a layout of fields.
 -  Warehouse keeper controlled by a player can move vertically or horizontally (diagonal moves are not allowed).
 -  He can only push one box, and cannot pull or pass through it.
@@ -120,6 +121,8 @@ This is a logical game where you can turn into a warehouse keeper and expand the
 - [Gabriel Brzoskwinia](https://github.com/brzoskwi)
 
 ### Features
+
+- To reset game, press *r*
 
 #### What stages does the game consist of?
 

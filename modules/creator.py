@@ -122,7 +122,7 @@ class Board:
 
         return True
 
-    
+
 class Mouse(pygame.sprite.Sprite):
     def __init__(self):
         """
@@ -274,5 +274,6 @@ class Toolbox(pygame.sprite.Sprite):
                                            button['image'], font, WHITE))
             padding += 30
 
-        self.buttonsSprites.add(Button(20, padding + 500, self.width - 40, 25, BLACK, 'save map', button['char'], button['image'], font, WHITE))
+        self.buttonsSprites.add(Button(20, padding + 470, self.width - 40, 25, BLACK, 'save map', button['char'], button['image'], font, WHITE))
+        self.buttonsSprites.add(Button(20, padding + 500, self.width - 40, 25, BLACK, 'quit', button['char'], button['image'], font, WHITE))
         self.buttonsSprites.draw(self.image)

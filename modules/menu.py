@@ -760,8 +760,12 @@ class SaveGameMenu(Menu):
             self.checkInput()
 
             self.game.display.fill(BLACK)
-            self.game.drawText('DO YOU WANT TO QUIT AND SAVE YOUR SCORE?', 65, midWidth, midHeight - 300,
-                               WHITE, self.game.fontName)
+            if self.game.flagVar == MODULE_I:
+                self.game.drawText('DO YOU WANT TO QUIT ?', 65, midWidth, midHeight - 300,
+                                   WHITE, self.game.fontName)
+            else:
+                self.game.drawText('DO YOU WANT TO QUIT AND SAVE YOUR SCORE?', 65, midWidth, midHeight - 300,
+                                   WHITE, self.game.fontName)
             self.game.drawText('YES', 60, self.firstModuleX, self.firstModuleY,
                                WHITE, self.game.fontName)
             self.game.drawText('NO', 60, self.secondModuleX, self.secondModuleY,
@@ -862,7 +866,7 @@ class WidthHeightMenu(Menu):
             self.runDisplay = False
 
         if self.game.START_KEY:
-            if 0 < int(self.passedWidth) <= 30 and 0 < int(self.passedHeight) <= 20 and 0 < len(self.game.passedMapName) <= 15:
+            if 8 <= int(self.passedWidth) <= 30 and 8 <= int(self.passedHeight) <= 20 and 0 < len(self.game.passedMapName) <= 15:
                 self.runDisplay = False
                 self.game.running = True
                 self.game.logicState = True
@@ -971,7 +975,7 @@ class WidthHeightMenu(Menu):
 
             self.game.drawText('ENTER YOUR MAP DIMENSIONS', 65, self.textInfoX,
                                self.textInfoY, WHITE, self.game.fontName)
-            self.game.drawText('MAX: 30 x 20 [press enter]', 35, self.textInfoX, self.textInfoY + 50,
+            self.game.drawText('MIN: 8 x 8 MAX: 30 x 20 [press enter]', 35, self.textInfoX, self.textInfoY + 50,
                                RED, self.game.fontName)
             self.game.drawText('WIDTH: ', 60, self.widthX, self.widthY, WHITE,
                                self.game.fontName)

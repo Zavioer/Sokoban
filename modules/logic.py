@@ -118,6 +118,7 @@ def startTheGame(screen, lvlName, game, points, flag):
             if event.type == pygame.QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
                 game.logicState = False
                 hud.timer.stop(pygame.time.get_ticks())
+                game.flagVar = flag
                 game.currentMenu = game.saveGameMenu
 
                 game.currentPlayerState['width'] = mapWidth
@@ -361,7 +362,9 @@ def createMap(screen, width, height, game):
     toolbox.addButton('Rubber / Floor', FLOOR_CHAR, FLOOR_IMG)
     toolbox.placeButtons()
 
-    saveRect = pygame.Rect(20, 675, 160, 25)
+    quitRect = pygame.Rect(20, 675, 160, 25)
+    saveRect = pygame.Rect(20, 645, 160, 25)
+    pygame.draw.rect(canvas, (255, 242, 88), quitRect)
     pygame.draw.rect(canvas, (255, 242, 88), saveRect)
 
     while game.logicState:
@@ -389,6 +392,10 @@ def createMap(screen, width, height, game):
                         game.logicState = False
                         game.currentMenu.unableToSaveMonit()
                         game.logicState = True
+
+                if quitRect.collidepoint(mousex, mousey):
+                    game.logicState = False
+                    game.currentMenu = game.mainMenu
 
                 for sprite in allTiles:
                     mousex, mousey = pygame.mouse.get_pos()

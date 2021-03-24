@@ -22,6 +22,7 @@ class Game:
         self.S_KEY = False
         self.W_KEY = False
         self.logicState = False
+        self.flagVar = ''
 
         self.display = pygame.Surface((WIDTH, HEIGHT))
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
