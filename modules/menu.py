@@ -1535,6 +1535,8 @@ class ResumeSavedGameMenu(Menu):
             logic.startTheGame(self.game.window, self.chosenMap,
                                self.game, self.game.gamePoints, RESTORE)
 
+            self.game.restoreDetails.clear()
+
         elif self.game.START_KEY and len(self.mapArray) <= 0:
             self.runDisplay = False
             self.game.currentMenu = self.game.loadSaveMenu

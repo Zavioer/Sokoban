@@ -25,6 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.direction = 'none'
         self.boxCollision = False
         self.char = STOREKEEPER_CHAR
+        self.blocked = False
 
     def update(self):
         """
@@ -59,7 +60,8 @@ class Player(pygame.sprite.Sprite):
         elif y < 0:
             self.direction = 'north'
 
-        self.changePosition(self.direction)
+        if not self.blocked:
+            self.changePosition(self.direction)
 
         self.moveX += x
         self.moveY += y

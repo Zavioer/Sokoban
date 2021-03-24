@@ -124,7 +124,11 @@ def startTheGame(screen, lvlName, game, points, flag):
                 game.currentPlayerState['height'] = mapHeight
                 game.currentPlayerState['sprites'] = allSprites
                 game.currentPlayerState['time'] = hud.timer.endTime
-                game.currentPlayerState['flag'] = flag
+
+                if flag == RESTORE:
+                    game.currentPlayerState['flag'] = game.restoreDetails['flag']
+                else:
+                    game.currentPlayerState['flag'] = flag
 
                 game.currentMenu.displayMenu()
                 hud.timer.resume(pygame.time.get_ticks())
@@ -160,11 +164,15 @@ def startTheGame(screen, lvlName, game, points, flag):
                 boxSprite.collisionBox(boxesCopy.sprites())
 
                 if boxSprite.blockedByBox:
+                    storekeeper.blocked = True
                     storekeeper.move(-storekeeper.moveX, -storekeeper.moveY)
+
                 if boxSprite.blocked and storekeeper.direction == boxSprite.blockedDirection:
+                    storekeeper.blocked = True
                     storekeeper.move(-storekeeper.moveX, -storekeeper.moveY)
 
                 storekeeper.boxCollision = False
+                storekeeper.blocked = False
 
         placedBoxes = pygame.sprite.groupcollide(boxes, destinations, False, False)
 
@@ -273,6 +281,7 @@ def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints, 
     shelveFile['userNameVar'] = playerName
     shelveFile['endTimeVar'] = endTime
     shelveFile['mainBoardVar'] = emptyBoard
+    shelveFile['flagVar'] = flag
 
     shelveFile.close()
 
@@ -475,6 +484,7 @@ def loadSave(fileName):
     mapDetails['playerName'] = shelveFile['userNameVar']
     mapDetails['endTime'] = shelveFile['endTimeVar']
     mapDetails['emptyBoard'] = shelveFile['mainBoardVar']
+    mapDetails['flag'] = shelveFile['flagVar']
 
     shelveFile.close()
 

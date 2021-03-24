@@ -131,13 +131,13 @@ class Floor(pygame.sprite.Sprite):
 
         :param x:
             Position in x-axis.
-        :type x: int, required,
+        :type x: int, required
         :param y:
             Position in y-axis.
         :type y: int, required
         """
         pygame.sprite.Sprite.__init__(self)
-        self.image = FLOOR_IMG.convert()
+        self.image = FLOOR_IMG.convert_alpha()
         self.image = pygame.transform.scale(self.image, (TILE_WIDTH, TILE_HEIGHT))
         self.rect = self.image.get_rect()
         self.rect.x = x

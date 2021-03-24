@@ -24,7 +24,7 @@ class SaveBoardLogicTestCase(unittest.TestCase):
         self.height = 5
         self.allSprites = pygame.sprite.Group()
         self.endTime = 0
-        self.playerName = 'user'
+        self.playerName = 'gc33k2DD1dsd'
         self.lvlName = 1
         self.gamePoints = 0
         self.board = []
@@ -38,9 +38,14 @@ class SaveBoardLogicTestCase(unittest.TestCase):
                 self.allSprites.add(sprite)
                 self.board[x][y] = sprite.char
 
-    def tearDown(self):
+    @classmethod
+    def tearDownClass(cls) -> None:
         if 'scoreFile.txt' in os.listdir(os.getcwd()):
             os.remove('scoreFile.txt')
+
+        for file in os.listdir(SAVES_DIR):
+            if file.find('gc33k2DD1dsd') > -1:
+                os.remove(Path(SAVES_DIR, file))
 
     def test_01__check_if_board_save_working(self):
         saved = False
