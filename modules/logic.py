@@ -291,10 +291,23 @@ def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints, 
         'userScore': gamePoints
     }
 
-    with open('scoreFile.txt', 'a') as scoreFile:
-        json.dump(data, scoreFile)
-        scoreFile.write('\n')
+    with open('scoreFile.txt', 'a+') as scoreFile:
+        table = [json.loads(line) for line in scoreFile]
+        for line in table:
+            str(line).replace('\'', '\"')
+            name = line['userNameVar']
+            score = line['userScore']
+            if name == playerName:
+                if score > gamePoints:
+                    pass
+                elif score <= gamePoints:
+                    del table[line]
+                    table.append(data)
+                else:
+                    table.append(data)
 
+        for line in table:
+            scoreFile.write(str(line) + "\n")
 
 def createMap(screen, width, height, game):
     """
