@@ -31,8 +31,8 @@ class Game:
         icon = pygame.transform.smoothscale(icon, (96, 96))
         pygame.display.set_icon(icon)
 
-        self.fontTitle = 'src/fonts/Future TimeSplitters.otf'
-        self.fontName = 'src/fonts/gomarice_no_continue.ttf'
+        self.fontTitle = TIME_SPLITTERS
+        self.fontName = GOMARINCE
 
         self.mainMenu = MainMenu(self)
         self.levelMenu = LevelMenu(self)

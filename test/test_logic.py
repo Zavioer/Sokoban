@@ -2,7 +2,7 @@ import unittest
 import os
 import pygame
 from pathlib import Path
-from modules.logic import saveBoard, loadSave
+from modules.logic import saveGame, loadSave
 from settings import *
 
 
@@ -16,7 +16,7 @@ class BasicSprite(pygame.sprite.Sprite):
         self.char = 'X'
 
 
-class SaveBoardLogicTestCase(unittest.TestCase):
+class SaveGameLogicTestCase(unittest.TestCase):
     def setUp(self):
         self.path = SAVES_DIR
         self.basicSprite = BasicSprite
@@ -50,7 +50,7 @@ class SaveBoardLogicTestCase(unittest.TestCase):
     def test_01__check_if_board_save_working(self):
         saved = False
 
-        saveBoard(self.width, self.height, self.allSprites, self.endTime, self.playerName,
+        saveGame(self.width, self.height, self.allSprites, self.endTime, self.playerName,
                   self.lvlName, self.gamePoints, MODULE_II)
 
         saves = os.listdir(self.path)
@@ -62,7 +62,7 @@ class SaveBoardLogicTestCase(unittest.TestCase):
 
         self.assertTrue(saved, 'Did not save map correctly.')
 
-        print('> (test 1) saveBoard function correctly saves board to shelve file.')
+        print('> (test 1) saveGame function correctly saves board to shelve file.')
 
     def test_02__check_if_data_saved_correctly(self):
         saves = os.listdir(self.path)
@@ -84,6 +84,7 @@ class SaveBoardLogicTestCase(unittest.TestCase):
         self.assertEqual(self.endTime, results['endTime'], 'EndTime parameters is wrong!')
         self.assertEqual(self.board, results['emptyBoard'], 'EmptyBoard parameters is wrong!')
 
+        print(results)
         print('> (test 2) All parameters were saved correctly.')
 
 

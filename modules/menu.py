@@ -239,10 +239,11 @@ class LevelMenu(Menu):
                 self.game.logicState = True
 
                 while self.game.gameLevel <= 20 and self.game.START_KEY:
-                    self.game.currentLevel = str(self.game.gameLevel)
+                    self.game.currentLevel = self.game.gameLevel
+                    boardName = str(self.game.currentLevel) + '.txt'
 
-                    logic.startTheGame(self.game.window, self.game.currentLevel + ".txt",
-                                       self.game, self.game.gamePoints, MODULE_II)
+                    logic.startTheGame(self.game.window, boardName, self.game,
+                                       self.game.gamePoints, MODULE_II)
 
                     self.game.logicState = True
 
@@ -542,26 +543,29 @@ class DiffMenu(Menu):
             if self.state == 'Easy':
                 self.runDisplay = False
                 self.game.logicState = True
-                self.game.currentLevel = str(randrange(1, 20))
+                self.game.currentLevel = randrange(1, 20)
+                boardName = str(self.game.currentLevel) + '.txt'
 
-                logic.startTheGame(self.game.window, self.game.currentLevel + ".txt",
-                                   self.game, self.game.gamePoints, MODULE_I)
+                logic.startTheGame(self.game.window, boardName, self.game,
+                                   self.game.gamePoints, MODULE_I)
 
             elif self.state == 'Medium':
                 self.runDisplay = False
                 self.game.logicState = True
-                self.game.currentLevel = str(randrange(21, 40))
+                self.game.currentLevel = randrange(21, 40)
+                boardName = str(self.game.currentLevel) + '.txt'
 
-                logic.startTheGame(self.game.window, self.game.currentLevel + ".txt",
-                                   self.game, self.game.gamePoints, MODULE_I)
+                logic.startTheGame(self.game.window, boardName, self.game,
+                                   self.game.gamePoints, MODULE_I)
 
             elif self.state == 'Hard':
                 self.runDisplay = False
                 self.game.logicState = True
-                self.game.currentLevel = str(randrange(41, 60))
+                self.game.currentLevel = randrange(41, 60)
+                boardName = str(self.game.currentLevel) + '.txt'
 
-                logic.startTheGame(self.game.window, self.game.currentLevel + ".txt",
-                                   self.game, self.game.gamePoints, MODULE_I)
+                logic.startTheGame(self.game.window, boardName, self.game,
+                                   self.game.gamePoints, MODULE_I)
 
         if self.game.DOWN_KEY or self.game.S_KEY:
 
@@ -785,17 +789,19 @@ class SaveGameMenu(Menu):
                 self.runDisplay = False
                 self.game.START_KEY = False
                 self.game.currentMenu = self.game.mainMenu
-                currLvl = str(self.game.currentLevel) + '.txt'
 
-                logic.saveBoard(self.game.currentPlayerState['width'],
-                                self.game.currentPlayerState['height'],
-                                self.game.currentPlayerState['sprites'],
-                                self.game.currentPlayerState['time'],
-                                self.game.playerName, currLvl, self.game.gamePoints,
-                                self.game.currentPlayerState['flag'])
+                if self.game.currentPlayerState['flag'] in [MODULE_II, MODULE_III, RESTORE]:
+                    currLvl = self.game.currentLevel
 
-                if self.game.gameLevel > 1:
-                    self.game.gameLevel = 1
+                    logic.saveGame(self.game.currentPlayerState['width'],
+                                   self.game.currentPlayerState['height'],
+                                   self.game.currentPlayerState['sprites'],
+                                   self.game.currentPlayerState['time'],
+                                   self.game.playerName, currLvl, self.game.gamePoints,
+                                   self.game.currentPlayerState['flag'])
+
+                    if self.game.gameLevel > 1:
+                        self.game.gameLevel = 1
 
             if self.state == 'No':
                 self.runDisplay = False
@@ -1536,8 +1542,25 @@ class ResumeSavedGameMenu(Menu):
 
             self.mapArray.clear()
 
-            logic.startTheGame(self.game.window, self.chosenMap,
-                               self.game, self.game.gamePoints, RESTORE)
+            if self.game.restoreDetails['flag'] == MODULE_II:
+                self.game.gameLevel = self.game.restoreDetails['lvlName']
+
+                logic.startTheGame(self.game.window, self.chosenMap,
+                                   self.game, self.game.gamePoints, RESTORE)
+
+                if self.game.gameLevel > self.game.restoreDetails['lvlName']:
+                    while self.game.gameLevel <= 20 and self.game.START_KEY:
+                        self.game.currentLevel = self.game.gameLevel
+                        boardName = str(self.game.currentLevel) + '.txt'
+
+                        logic.startTheGame(self.game.window, boardName, self.game,
+                                           self.game.gamePoints, MODULE_II)
+
+                        self.game.logicState = True
+
+            elif self.game.restoreDetails['flag'] == MODULE_III:
+                logic.startTheGame(self.game.window, self.chosenMap,
+                                   self.game, self.game.gamePoints, RESTORE)
 
             self.game.restoreDetails.clear()
 

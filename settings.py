@@ -7,6 +7,7 @@ from pathlib import Path
 BASE_DIR = os.path.split(os.path.abspath(__file__))[0]
 IMAGES_DIR = Path(BASE_DIR, 'src/img')
 SAVES_DIR = Path(BASE_DIR, 'src/saves')
+FONTS_DIR = Path(BASE_DIR, 'src/fonts')
 
 # Game settings
 FPS = 60
@@ -56,8 +57,8 @@ BOARD_HEIGHT = BLOCK_SIZE * 20
 TOOLBOX_WIDTH = 200
 
 # Fonts
-# GOMARINCE_16 = pygame.font.Font('src/fonts/gomarice_no_continue.ttf', 16)
-
+GOMARINCE = os.path.join(FONTS_DIR, 'gomarice_no_continue.ttf')
+TIME_SPLITTERS = os.path.join(FONTS_DIR, 'Future TimeSplitters.otf')
 # Utilities
 SCORE_BASE = 100
 
