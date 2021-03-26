@@ -35,7 +35,7 @@ class Game:
         self.fontName = GOMARINCE
 
         self.mainMenu = MainMenu(self)
-        self.levelMenu = LevelMenu(self)
+        self.moduleMenu = ModuleMenu(self)
         self.instructionsMenu = InstructionsMenu(self)
         self.legendMenu = LegendMenu(self)
         self.rankMenu = RankMenu(self)

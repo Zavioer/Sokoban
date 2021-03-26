@@ -52,7 +52,7 @@ class MainMenu(Menu):
         self.state = "Start"
         self.logoMenuX, self.logoMenuY = midWidth, midHeight - 220
         self.startMenuX, self.startMenuY = midWidth, midHeight - 40
-        self.levelMenuX, self.levelMenuY = midWidth, midHeight + 30
+        self.moduleMenuX, self.moduleMenuY = midWidth, midHeight + 30
         self.instructionsMenuX, self.instructionsMenuY = midWidth, midHeight + 100
         self.rankingMenuX, self.rankingMenuY = midWidth, midHeight + 170
         self.creditsMenuX, self.creditsMenuY = midWidth, midHeight + 240
@@ -76,7 +76,7 @@ class MainMenu(Menu):
                                WHITE, self.game.fontTitle)
             self.game.drawText('Start Game', 70, self.startMenuX, self.startMenuY,
                                WHITE, self.game.fontName)
-            self.game.drawText('Load Game', 70, self.levelMenuX, self.levelMenuY,
+            self.game.drawText('Load Game', 70, self.moduleMenuX, self.moduleMenuY,
                                WHITE, self.game.fontName)
             self.game.drawText('Instructions', 70, self.instructionsMenuX, self.instructionsMenuY,
                                WHITE, self.game.fontName)
@@ -97,8 +97,8 @@ class MainMenu(Menu):
         """
         if self.game.DOWN_KEY or self.game.S_KEY:
             if self.state == 'Start':
-                self.pointerRect.midtop = (self.levelMenuX + self.offset,
-                                           self.levelMenuY)
+                self.pointerRect.midtop = (self.moduleMenuX + self.offset,
+                                           self.moduleMenuY)
                 self.state = 'Level'
             elif self.state == 'Level':
                 self.pointerRect.midtop = (self.instructionsMenuX + self.offset,
@@ -138,8 +138,8 @@ class MainMenu(Menu):
                                            self.instructionsMenuY)
                 self.state = 'Instructions'
             elif self.state == 'Instructions':
-                self.pointerRect.midtop = (self.levelMenuX + self.offset,
-                                           self.levelMenuY)
+                self.pointerRect.midtop = (self.moduleMenuX + self.offset,
+                                           self.moduleMenuY)
                 self.state = 'Level'
             elif self.state == 'Level':
                 self.pointerRect.midtop = (self.startMenuX + self.offset,
@@ -159,7 +159,7 @@ class MainMenu(Menu):
                 self.game.currentMenu = self.game.inputMenu
             elif self.state == 'Start' and len(self.game.playerName) > 0:
                 self.game.START_KEY = False
-                self.game.currentMenu = self.game.levelMenu
+                self.game.currentMenu = self.game.moduleMenu
             elif self.state == 'Level' and len(self.game.playerName) == 0:
                 self.game.previousMenu = 'Level'
                 self.game.currentMenu = self.game.inputMenu
@@ -178,7 +178,7 @@ class MainMenu(Menu):
             self.runDisplay = False
 
 
-class LevelMenu(Menu):
+class ModuleMenu(Menu):
     def __init__(self, game):
         """
         Class which represents the module menu, inheriting from the Menu class.
@@ -200,6 +200,7 @@ class LevelMenu(Menu):
         It also draws the pointer and blits the screen every single frame.
         """
         self.runDisplay = True
+        self.resetPointer()
 
         while self.runDisplay:
             self.game.resetKeys()
@@ -286,6 +287,13 @@ class LevelMenu(Menu):
                 self.pointerRect.midtop = (self.secondModuleX + self.offset,
                                            self.secondModuleY)
                 self.state = 'Two'
+
+    def resetPointer(self):
+        """
+        Utility function for reset pointer position after selected action.
+        """
+        self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
+        self.state = 'One'
 
 
 class CreditsMenu(Menu):
@@ -501,6 +509,7 @@ class DiffMenu(Menu):
         It also blits the screen every single frame.
         """
         self.runDisplay = True
+        self.resetPointer()
 
         while self.runDisplay:
             self.game.resetKeys()
@@ -591,6 +600,13 @@ class DiffMenu(Menu):
                 self.pointerRect.midtop = (self.mediumX + self.offset, self.mediumY)
                 self.state = 'Medium'
 
+    def resetPointer(self):
+        """
+        Utility function for reset pointer position after selected action.
+        """
+        self.pointerRect.midtop = (self.easyX + self.offset, self.easyY)
+        self.state = 'Easy'
+
 
 class InputName(Menu):
     def __init__(self, game):
@@ -615,7 +631,7 @@ class InputName(Menu):
             self.game.running = True
 
             if self.game.previousMenu == 'Start':
-                self.game.currentMenu = self.game.levelMenu
+                self.game.currentMenu = self.game.moduleMenu
             elif self.game.previousMenu == 'Level':
                 self.game.currentMenu = self.game.loadSaveMenu
 
@@ -721,7 +737,7 @@ class RankMenu(Menu):
                 table = [json.loads(line) for line in scoreFile]
                 counter = 1
 
-                table.sort(key=getScore, reverse = True)
+                table.sort(key=getScore, reverse=True)
 
                 for row in table:
                     name = table[counter - 1]['userNameVar']
@@ -757,6 +773,7 @@ class SaveGameMenu(Menu):
         It also blits the screen every single frame.
         """
         self.runDisplay = True
+        self.resetPointer()
 
         while self.runDisplay:
             self.game.resetKeys()
@@ -803,6 +820,8 @@ class SaveGameMenu(Menu):
                     if self.game.gameLevel > 1:
                         self.game.gameLevel = 1
 
+                    self.game.gamePoints = 0
+
             if self.state == 'No':
                 self.runDisplay = False
                 self.game.currentMenu = self.game.mainMenu
@@ -829,6 +848,13 @@ class SaveGameMenu(Menu):
             elif self.state == 'No':
                 self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
                 self.state = 'Yes'
+
+    def resetPointer(self):
+        """
+        utility method for reset pointer to default position after action.
+        """
+        self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
+        self.state = 'Yes'
 
 
 class WidthHeightMenu(Menu):
@@ -1157,9 +1183,10 @@ class LoadMapMenu(Menu):
         day = date[9: 19]
         day = day.replace('_', '/')
 
-        result = ''.join((mapName, '        ', hours, '   ', day))
+        result = ''.join((mapName.ljust(20, ' '), hours, '    ', day))
 
         return result
+
 
 class DeleteMapMenu(Menu):
     def __init__(self, game):
@@ -1189,7 +1216,7 @@ class DeleteMapMenu(Menu):
         """
         self.runDisplay = True
 
-        for map in os.listdir('./src/boards/own/'):
+        for map in os.listdir(OWN_BOARDS_DIR):
             if map.find(self.game.playerName) > -1:
                 self.mapArray.append(map)
 
@@ -1292,12 +1319,15 @@ class DeleteMapMenu(Menu):
             self.counter = 0
             self.game.currentMenu = self.game.mainMenu
 
+            self.mapArray.clear()
+
         if self.game.START_KEY and len(self.mapArray) > 0:
             self.runDisplay = False
             self.removeMap(self.chosenMap)
             self.counter = 0
             self.successfullMonit()
             self.game.currentMenu = self.game.mainMenu
+            self.mapArray.clear()
 
         elif self.game.START_KEY and len(self.mapArray) <= 0:
             self.runDisplay = False

@@ -125,8 +125,6 @@ def startTheGame(screen, lvlName, game, points, flag):
                 game.currentPlayerState['sprites'] = allSprites
                 game.currentPlayerState['time'] = hud.timer.endTime
 
-                print(f'END TIME {hud.timer.endTime}')
-
                 if flag == RESTORE:
                     game.currentPlayerState['flag'] = game.restoreDetails['flag']
                 else:

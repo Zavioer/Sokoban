@@ -8,6 +8,7 @@ BASE_DIR = os.path.split(os.path.abspath(__file__))[0]
 IMAGES_DIR = Path(BASE_DIR, 'src/img')
 SAVES_DIR = Path(BASE_DIR, 'src/saves')
 FONTS_DIR = Path(BASE_DIR, 'src/fonts')
+OWN_BOARDS_DIR = Path(BASE_DIR, 'src/boards/own')
 
 # Game settings
 FPS = 60
