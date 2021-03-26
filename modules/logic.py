@@ -31,8 +31,6 @@ def startTheGame(screen, lvlName, game, points, flag):
         Flag that allows to discriminate between module I, II and III.
     :type flag: str, required
     """
-    myFont = pygame.font.SysFont('Montserrat', 30)
-
     # Initial sprites groups and map floor
     walls = pygame.sprite.Group()
     boxes = pygame.sprite.Group()
@@ -103,9 +101,10 @@ def startTheGame(screen, lvlName, game, points, flag):
     destinationsAmount = len(destinations.sprites())
 
     if flag == RESTORE:
-        gamerTimer = Timer(game.restoreDetails['endTime'], myFont)
+        gamerTimer = Timer(pygame.time.get_ticks(), game.restoreDetails['endTime'])
     else:
-        gamerTimer = Timer(pygame.time.get_ticks(), myFont)
+        gamerTimer = Timer(pygame.time.get_ticks())
+
     hud = HUD(gamerTimer)
 
     allSprites = pygame.sprite.Group(floors, walls, destinations, boxes, storekeeper)
@@ -124,6 +123,8 @@ def startTheGame(screen, lvlName, game, points, flag):
                 game.currentPlayerState['height'] = mapHeight
                 game.currentPlayerState['sprites'] = allSprites
                 game.currentPlayerState['time'] = hud.timer.endTime
+
+                print(f'END TIME {hud.timer.endTime}')
 
                 if flag == RESTORE:
                     game.currentPlayerState['flag'] = game.restoreDetails['flag']
@@ -179,18 +180,19 @@ def startTheGame(screen, lvlName, game, points, flag):
         if len(placedBoxes) == destinationsAmount:
             game.display.fill(BLACK)
             game.drawText('You passed the level!', 65, midWidth, midHeight,
-                               WHITE, game.fontName)
+                          WHITE, game.fontName)
             game.window.blit(game.display, (0, 0))
             pygame.display.update()
             game.resetKeys()
             time.sleep(0.6)
 
-            if flag == MODULE_I or flag == MODULE_III:
+            if flag == MODULE_I or flag == MODULE_III or \
+                    (flag == RESTORE and game.restoreDetails['flag'] == MODULE_III):
                 game.logicState = False
                 game.currentMenu = game.mainMenu
                 game.currentMenu.displayMenu()
 
-            if flag == MODULE_II:
+            if flag == MODULE_II or (flag == RESTORE and game.restoreDetails['flag'] == MODULE_II):
                 game.logicState = False
                 game.gameLevel += 1
 
@@ -218,7 +220,7 @@ def startTheGame(screen, lvlName, game, points, flag):
         else:
             hud.displayLvl(lvlName)
 
-        if flag == MODULE_II:
+        if flag == MODULE_II or flag == RESTORE:
             hud.displayPoints(points)
 
         hud.displayPlayerName(game.playerName)
@@ -229,7 +231,7 @@ def startTheGame(screen, lvlName, game, points, flag):
         pygame.display.flip()
 
 
-def saveBoard(width, height, sprites, endTime, playerName, lvlName, gamePoints, flag):
+def saveGame(width, height, sprites, endTime, playerName, lvlName, gamePoints, flag):
     """
     Function for saving current playing lvl and additional information in to
     shelve file.
