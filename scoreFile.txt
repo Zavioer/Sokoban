@@ -1,0 +1,4 @@
+{"userNameVar": "melchior", "userScore": 50}
+{"userNameVar": "julia", "userScore": 300}
+{"userNameVar": "jurek", "userScore": 300}
+{"userNameVar": "stefan", "userScore": 300}

@@ -2,6 +2,7 @@ import shelve
 import math
 import time
 import json
+import os
 from pygame.locals import *
 from .blocks import Floor, Box, Destination, Wall
 from .player import Player
@@ -291,23 +292,38 @@ def saveGame(width, height, sprites, endTime, playerName, lvlName, gamePoints, f
         'userScore': gamePoints
     }
 
-    with open('scoreFile.txt', 'a+') as scoreFile:
-        table = [json.loads(line) for line in scoreFile]
-        for line in table:
-            str(line).replace('\'', '\"')
-            name = line['userNameVar']
-            score = line['userScore']
-            if name == playerName:
-                if score > gamePoints:
-                    pass
-                elif score <= gamePoints:
-                    del table[line]
-                    table.append(data)
-                else:
-                    table.append(data)
+    nameCounter = 0
 
+    with open('scoreFile.txt', 'r+') as scoreFile:
+        table = [json.loads(line) for line in scoreFile]
+        tableLength = len(table)
+        x = 0
+        if len(table) == 0:
+            table.append(data)
+        else:
+            for line in table:
+                name = line['userNameVar']
+                score = line['userScore']
+                if name == playerName:
+                    nameCounter += 1
+                    if score > gamePoints:
+                        pass
+                    elif score <= gamePoints:
+                        table.pop(x)
+                        table.append(data)
+                x += 1
+
+            if nameCounter == 0:
+                table.append(data)
+            x = 0
+
+    os.remove('scoreFile.txt')
+    
+    with open('scoreFile.txt', 'a') as scoreFile:
         for line in table:
-            scoreFile.write(str(line) + "\n")
+            scoreFile.write(str(line).replace('\'', '\"') + '\n')
+
+    nameCounter = 0
 
 def createMap(screen, width, height, game):
     """
