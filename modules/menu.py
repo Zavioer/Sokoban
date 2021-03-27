@@ -1046,6 +1046,19 @@ class WidthHeightMenu(Menu):
         self.blitScreen()
         time.sleep(2)
 
+    def tooManyBoardsMonit(self):
+        """
+        Utility method for displaying short monit if amount of player's own boards,
+        exceed MAX_BOARD value.
+        """
+        self.game.display.fill(BLACK)
+        self.game.drawText(f'You already have {MAX_BOARDS} maps. This is limit.',
+                           45, midWidth, midHeight - 45, WHITE, self.game.fontName)
+        self.game.drawText('Remove old one to save new.',
+                           45, midWidth, midHeight + 45, WHITE, self.game.fontName)
+        self.blitScreen()
+        time.sleep(2)
+
 
 class LoadMapMenu(Menu):
     def __init__(self, game):

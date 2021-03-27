@@ -2,6 +2,8 @@ import shelve
 import math
 import time
 import json
+import re
+from datetime import datetime
 from pygame.locals import *
 from .blocks import Floor, Box, Destination, Wall
 from .player import Player
@@ -251,7 +253,7 @@ def saveGame(width, height, sprites, endTime, playerName, lvlName, gamePoints, f
         Current playing player nick name.
     :type lvlName: str, required
     :param flag:
-        Flago of current playing module.
+        Flag of current playing module.
     :type flag: str, required
     """
     emptyBoard = []
@@ -271,6 +273,21 @@ def saveGame(width, height, sprites, endTime, playerName, lvlName, gamePoints, f
         additional = 'One'
     elif flag == MODULE_III:
         additional = 'Three'
+
+    saves = []
+
+    # Check if total saves amount is under MAX_SAVES
+    for file in os.scandir(SAVES_DIR):
+        if re.search(rf'\b{playerName}(_)(.*)\b', file.name):
+            if re.search(rf'\b(.*)(_){additional}\b', file.name):
+                saves.append(file)
+
+    saves.sort(key=lambda x: datetime.fromtimestamp(x.stat().st_ctime))
+
+    if len(saves) >= MAX_SAVES * 3:
+        os.remove(Path(SAVES_DIR, saves[0].name))
+        os.remove(Path(SAVES_DIR, saves[1].name))
+        os.remove(Path(SAVES_DIR, saves[2].name))
 
     fileName = ''.join((playerName, '_', formatedDate, '_', additional))
 
@@ -308,6 +325,7 @@ def saveGame(width, height, sprites, endTime, playerName, lvlName, gamePoints, f
 
         for line in table:
             scoreFile.write(str(line) + "\n")
+
 
 def createMap(screen, width, height, game):
     """
@@ -383,6 +401,11 @@ def createMap(screen, width, height, game):
     while game.logicState:
         clock.tick(FPS)
 
+        if not playerBoard.canSave(game.playerName):
+            game.logicState = False
+            game.currentMenu.tooManyBoardsMonit()
+            game.currentMenu = game.mainMenu
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 return
@@ -393,10 +416,12 @@ def createMap(screen, width, height, game):
                 if saveRect.collidepoint(mousex, mousey):
                     if playerBoard.checkAssets():
                         if playerBoard.destinationsEqualsBoxes():
-                            playerBoard.saveBoard(game.passedMapName, game.playerName)
-                            game.logicState = False
-                            game.passedMapName = ''
-                            game.currentMenu = game.mainMenu
+                            if playerBoard.canSave(game.playerName):
+                                playerBoard.saveBoard(game.passedMapName, game.playerName)
+                                game.logicState = False
+                                game.passedMapName = ''
+                                game.currentMenu = game.mainMenu
+
                         else:
                             game.logicState = False
                             game.currentMenu.boxesDestinationInvalidMonit()

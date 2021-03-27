@@ -51,7 +51,7 @@ class SaveGameLogicTestCase(unittest.TestCase):
         saved = False
 
         saveGame(self.width, self.height, self.allSprites, self.endTime, self.playerName,
-                  self.lvlName, self.gamePoints, MODULE_II)
+                 self.lvlName, self.gamePoints, MODULE_II)
 
         saves = os.listdir(self.path)
 
@@ -84,7 +84,6 @@ class SaveGameLogicTestCase(unittest.TestCase):
         self.assertEqual(self.endTime, results['endTime'], 'EndTime parameters is wrong!')
         self.assertEqual(self.board, results['emptyBoard'], 'EmptyBoard parameters is wrong!')
 
-        print(results)
         print('> (test 2) All parameters were saved correctly.')
 
 

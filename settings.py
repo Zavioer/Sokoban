@@ -60,10 +60,11 @@ TOOLBOX_WIDTH = 200
 # Fonts
 GOMARINCE = os.path.join(FONTS_DIR, 'gomarice_no_continue.ttf')
 TIME_SPLITTERS = os.path.join(FONTS_DIR, 'Future TimeSplitters.otf')
+
 # Utilities
 SCORE_BASE = 100
-
-# EMPTY_IMG = pygame.Surface((1, 1)).fill(GREEN)
+MAX_SAVES = 12
+MAX_BOARDS = 12
 
 # Flags
 MODULE_I = 'MODULEI'

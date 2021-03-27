@@ -1,4 +1,5 @@
 import time
+import re
 from collections import Counter
 from settings import *
 
@@ -43,6 +44,28 @@ class Board:
         """
         self.map[y][x] = tileChar
 
+    def canSave(self, userName):
+        """
+        Method for checking if user has under 12 boards.
+
+        :param userName:
+            Nick name of the map creator.
+        :type userName: str, required
+        :return:
+            True if can be saved or False if not.
+        :rtype: bool
+        """
+        boards = []
+
+        for file in os.scandir(OWN_BOARDS_DIR):
+            if re.search(rf'(.*)(_){userName}(\.)txt', file.name):
+                boards.append(boards)
+
+        if len(boards) >= MAX_BOARDS:
+            return False
+        else:
+            return True
+
     def saveBoard(self, mapName, userName):
         """
         Method for saving the new created map to .txt file.
@@ -55,7 +78,7 @@ class Board:
         formatedDate = time.strftime('%H_%M_%S_%d_%m_%Y', currentDate)
         fileName = ''.join((mapName, '_', formatedDate, '_', userName, '.txt'))
 
-        with open(os.path.join('./src/boards/own/', fileName), 'w') as fd:
+        with open(os.path.join(OWN_BOARDS_DIR, fileName), 'w') as fd:
             fd.write(str(self.width) + '\n')
             fd.write(str(self.height) + '\n')
 
