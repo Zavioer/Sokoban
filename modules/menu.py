@@ -65,6 +65,7 @@ class MainMenu(Menu):
         It also draws the pointer and blits the screen every single frame.
         """
         self.runDisplay = True
+        self.resetPointer()
 
         while self.runDisplay:
             self.game.resetKeys()
@@ -89,6 +90,13 @@ class MainMenu(Menu):
 
             self.drawPointer()
             self.blitScreen()
+
+    def resetPointer(self):
+        """
+        Utility function for reset pointer position after selected action.
+        """
+        self.pointerRect.midtop = (self.startMenuX + self.offset, self.startMenuY)
+        self.state = 'Start'
 
     def movePointer(self):
         """
@@ -295,7 +303,6 @@ class ModuleMenu(Menu):
         self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
         self.state = 'One'
 
-
 class CreditsMenu(Menu):
     def __init__(self, game):
         """
@@ -444,7 +451,7 @@ class LegendMenu(Menu):
             self.game.display.fill(BLACK)
             self.game.drawText('RULES', 100, self.legendTextX, self.legendTextY,
                                WHITE, self.game.fontName)
-            self.game.drawText('IT IS A LOGICAL GAME WHOSE AIM IS TO MOVE', 45,
+            self.game.drawText('THE GOAL OF THIS GAME IS TO MOVE', 45,
                                self.legendTextX, self.legendTextY + 150, WHITE, self.game.fontName)
             self.game.drawText('AND CORRECTLY POSITION THE', 45, self.legendTextX - 180,
                                self.legendTextY + 220, WHITE, self.game.fontName)
@@ -484,7 +491,6 @@ class LegendMenu(Menu):
 
         self.runDisplay = False
 
-
 class DiffMenu(Menu):
     def __init__(self, game):
         """
@@ -502,6 +508,7 @@ class DiffMenu(Menu):
         self.hardX, self.hardY = midWidth, midHeight + 200
         self.pointerRect.midtop = (self.easyX + self.offset, self.easyY)
         self.state = 'Easy'
+        self.moved = 'No'
 
     def displayMenu(self):
         """
@@ -509,7 +516,8 @@ class DiffMenu(Menu):
         It also blits the screen every single frame.
         """
         self.runDisplay = True
-        self.resetPointer()
+        if self.moved == 'No':
+            self.resetPointer()
 
         while self.runDisplay:
             self.game.resetKeys()
@@ -534,12 +542,15 @@ class DiffMenu(Menu):
 
         if self.game.BACK_KEY:
             self.game.currentMenu = self.game.mainMenu
+            self.moved = 'No'
 
         if self.game.ESC_PRESSED:
             self.game.currentMenu = self.game.mainMenu
+            self.moved = 'No'
 
         if self.game.START_KEY:
             self.game.currentMenu = self.game.mainMenu
+            self.moved = 'No'
 
         self.runDisplay = False
 
@@ -549,6 +560,7 @@ class DiffMenu(Menu):
         Depending on the chosen difficulty, the player draws a map from three fields.
         """
         if self.game.START_KEY:
+            self.moved = 'No'
             if self.state == 'Easy':
                 self.runDisplay = False
                 self.game.logicState = True
@@ -577,7 +589,7 @@ class DiffMenu(Menu):
                                    self.game.gamePoints, MODULE_I)
 
         if self.game.DOWN_KEY or self.game.S_KEY:
-
+            self.moved = 'Yes'
             if self.state == 'Easy':
                 self.pointerRect.midtop = (self.mediumX + self.offset, self.mediumY)
                 self.state = 'Medium'
@@ -589,7 +601,7 @@ class DiffMenu(Menu):
                 self.state = 'Easy'
 
         elif self.game.UP_KEY or self.game.W_KEY:
-
+            self.moved = 'Yes'
             if self.state == 'Easy':
                 self.pointerRect.midtop = (self.hardX + self.offset, self.hardY)
                 self.state = 'Hard'
@@ -606,7 +618,6 @@ class DiffMenu(Menu):
         """
         self.pointerRect.midtop = (self.easyX + self.offset, self.easyY)
         self.state = 'Easy'
-
 
 class InputName(Menu):
     def __init__(self, game):
@@ -727,8 +738,6 @@ class RankMenu(Menu):
 
             self.game.display.fill(BLACK)
             self.game.drawText('RANKING', 90, self.headerX, self.headerY, WHITE, self.game.fontName)
-            self.game.drawText('NAME', 60, self.headerX - 300, self.headerY + 100, WHITE, self.game.fontName)
-            self.game.drawText('POINTS', 60, self.headerX + 300, self.headerY + 100, WHITE, self.game.fontName)
 
             def getScore(table):
                 return table.get('userScore')
@@ -736,16 +745,20 @@ class RankMenu(Menu):
             with open('scoreFile.txt', 'r') as scoreFile:
                 table = [json.loads(line) for line in scoreFile]
                 counter = 1
+                if len(table) == 0:
+                    self.game.drawText('EMPTY RANKING', 100, self.headerX, self.itemY + 100, RED, self.game.fontName)
+                else:
+                    table.sort(key=getScore, reverse=True)
 
-                table.sort(key=getScore, reverse=True)
-
-                for row in table:
-                    name = table[counter - 1]['userNameVar']
-                    points = table[counter - 1]['userScore']
-                    if counter <= 5:
-                        self.game.drawText(str(counter) + '. ' + str(name), 50, self.headerX - 300, self.itemY + (counter * 60), WHITE, self.game.fontName)
-                        self.game.drawText(str(points), 50, self.headerX + 300, self.itemY + (counter * 60), RED, self.game.fontName)
-                    counter += 1
+                    for row in table:
+                        name = table[counter - 1]['userNameVar']
+                        points = table[counter - 1]['userScore']
+                        self.game.drawText('NAME', 60, self.headerX - 300, self.headerY + 100, WHITE, self.game.fontName)
+                        self.game.drawText('POINTS', 60, self.headerX + 300, self.headerY + 100, WHITE, self.game.fontName)
+                        if counter <= 5:
+                            self.game.drawText(str(counter) + '. ' + str(name), 50, self.headerX - 300, self.itemY + (counter * 60), WHITE, self.game.fontName)
+                            self.game.drawText(str(points), 50, self.headerX + 300, self.itemY + (counter * 60), RED, self.game.fontName)
+                        counter += 1
 
                 self.blitScreen()
         scoreFile.close()
@@ -851,7 +864,7 @@ class SaveGameMenu(Menu):
 
     def resetPointer(self):
         """
-        utility method for reset pointer to default position after action.
+        Utility method for reset pointer to default position after action.
         """
         self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
         self.state = 'Yes'
@@ -1088,6 +1101,7 @@ class LoadMapMenu(Menu):
         screen every single frame.
         """
         self.runDisplay = True
+        self.resetPointer()
 
         for map in os.listdir('./src/boards/own/'):
             if map.find(self.game.playerName) > -1:
@@ -1123,6 +1137,13 @@ class LoadMapMenu(Menu):
                 self.game.drawText('YOU HAVE NOT CREATED A MAP YET', 65, midWidth, midHeight,
                                    WHITE, self.game.fontName)
                 self.blitScreen()
+
+    def resetPointer(self):
+        """
+        Utility function for reset pointer position after selected action.
+        """
+        self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + 10)
+        self.chosenMap = ''
 
     def movePointer(self):
         """
@@ -1228,6 +1249,7 @@ class DeleteMapMenu(Menu):
         It also draws the pointer and blits the screen every single frame.
         """
         self.runDisplay = True
+        self.resetPointer()
 
         for map in os.listdir(OWN_BOARDS_DIR):
             if map.find(self.game.playerName) > -1:
@@ -1262,6 +1284,13 @@ class DeleteMapMenu(Menu):
                                    WHITE, self.game.fontName)
 
                 self.blitScreen()
+
+    def resetPointer(self):
+        """
+        Utility function for reset pointer position after selected action.
+        """
+        self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + 10)
+        self.chosenMap = ''
 
     def prepareSaveName(self, filename):
         """
@@ -1373,6 +1402,7 @@ class LoadSaveMenu(Menu):
         self.fourthModuleX, self.fourthModuleY = midWidth, midHeight + 300
         self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
         self.state = 'One'
+        self.moved = 'No'
 
     def displayMenu(self):
         """
@@ -1380,6 +1410,8 @@ class LoadSaveMenu(Menu):
         It also draws the pointer and blits the screen every single frame.
         """
         self.runDisplay = True
+        if self.moved == 'No':
+            self.resetPointer()
 
         while self.runDisplay:
             self.game.resetKeys()
@@ -1404,8 +1436,10 @@ class LoadSaveMenu(Menu):
 
         if self.game.BACK_KEY or self.game.ESC_PRESSED:
             self.game.currentMenu = self.game.mainMenu
+            self.moved = 'No'
 
         if self.game.START_KEY:
+            self.moved = 'No'
             if self.state == 'One':
                 self.game.currentMenu = self.game.resumeSavedGameMenu
                 self.game.previousMenu = self.state
@@ -1422,11 +1456,19 @@ class LoadSaveMenu(Menu):
 
         self.runDisplay = False
 
+    def resetPointer(self):
+        """
+        Utility function for reset pointer position after selected action.
+        """
+        self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
+        self.state = 'One'
+
     def movePointer(self):
         """
         Method that includes pointer's movement logic. Moreover, it includes an end event handler.
         """
         if self.game.DOWN_KEY or self.game.S_KEY:
+            self.moved = 'Yes'
             if self.state == 'One':
                 self.pointerRect.midtop = (self.secondModuleX + self.offset, self.secondModuleY)
                 self.state = 'Two'
@@ -1440,6 +1482,7 @@ class LoadSaveMenu(Menu):
                 self.pointerRect.midtop = (self.firstModuleX + self.offset, self.firstModuleY)
                 self.state = 'One'
         elif self.game.UP_KEY or self.game.W_KEY:
+            self.moved = 'Yes'
             if self.state == 'One':
                 self.pointerRect.midtop = (self.fourthModuleX + self.offset, self.fourthModuleY)
                 self.state = 'Four'
@@ -1487,10 +1530,10 @@ class ResumeSavedGameMenu(Menu):
 
         self.cleanMaps(maps, self.game.previousMenu)
         self.game.previousMenu = ''
+        self.resetPointer()
 
         if len(self.mapArray) > 0:
             self.chosenMap = self.mapArray[0]
-
             while self.runDisplay:
                 self.game.resetKeys()
                 self.game.checkEvents()
@@ -1519,6 +1562,13 @@ class ResumeSavedGameMenu(Menu):
                                    WHITE, self.game.fontName)
 
                 self.blitScreen()
+
+    def resetPointer(self):
+        """
+        Utility function for reset pointer position after selected action.
+        """
+        self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + 10)
+        self.chosenMap = ''
 
     def prepareSaveName(self, filename):
         """
