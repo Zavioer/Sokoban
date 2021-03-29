@@ -1,4 +1,5 @@
 import json
+import re
 import os
 import time
 import pygame
@@ -1103,9 +1104,8 @@ class LoadMapMenu(Menu):
         self.runDisplay = True
         self.resetPointer()
 
-        for map in os.listdir('./src/boards/own/'):
-            if map.find(self.game.playerName) > -1:
-                self.mapArray.append(map)
+        maps = os.listdir(OWN_BOARDS_DIR)
+        self.cleanMaps(maps)
 
         if len(self.mapArray) > 0:
             self.chosenMap = self.mapArray[0]
@@ -1167,7 +1167,6 @@ class LoadMapMenu(Menu):
             self.pointerRect.midtop = (self.itemMapX + self.offset, self.itemMapY + self.counter * 45)
             self.chosenMap = self.mapArray[self.counter]
 
-
     def checkInput(self):
         """
         Method that handles changing the currently displayed menu.
@@ -1220,6 +1219,20 @@ class LoadMapMenu(Menu):
         result = ''.join((mapName.ljust(20, ' '), hours, '    ', day))
 
         return result
+
+    def cleanMaps(self, maps):
+        """
+        Utility function for select only current playing player.
+
+        :param maps:
+            Name of maps to search in.
+        :type maps: list, required
+        """
+
+        for file in maps:
+            if re.search(rf'(.*)(_){self.game.playerName}\b(.*)', file):
+                print(file)
+                self.mapArray.append(file)
 
 
 class DeleteMapMenu(Menu):
@@ -1690,7 +1703,7 @@ class ResumeSavedGameMenu(Menu):
 
     def cleanMaps(self, maps, previousState):
         """
-        Method for chosing map based on before selected menu.
+        Method for choosing map based on before selected menu.
 
         :param maps:
             List of game saves in folder SAVES_DIR.
@@ -1700,6 +1713,7 @@ class ResumeSavedGameMenu(Menu):
         :type previousState: str, required
         """
         for file in maps:
-            if file.find('.bak') > -1 and file.find(self.game.playerName) > -1 \
-                    and file.find(previousState) > -1:
-                self.mapArray.append(file)
+            if file.find('.bak') > -1 and \
+                    re.search(rf'\b{self.game.playerName}(_)(.*)\b', file):
+                if re.search(rf'\b(.*)(_){previousState}\b', file):
+                    self.mapArray.append(file)
