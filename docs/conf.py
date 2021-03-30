@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath('../src'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Sokoban Cyklohexylony Sokoban - Motorola Science Cup'
+project = 'Sokoban Cykloheksylony Sokoban - Motorola Science Cup'
 copyright = '2021, Gabriel Brzoskwinia, Piotr Bator'
 author = 'Gabriel Brzoskwinia, Piotr Bator'
 
