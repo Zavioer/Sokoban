@@ -40,9 +40,6 @@ class SaveGameLogicTestCase(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        if 'scoreFile.txt' in os.listdir(os.getcwd()):
-            os.remove('scoreFile.txt')
-
         for file in os.listdir(SAVES_DIR):
             if file.find('gc33k2DD1dsd') > -1:
                 os.remove(Path(SAVES_DIR, file))

@@ -1231,7 +1231,6 @@ class LoadMapMenu(Menu):
 
         for file in maps:
             if re.search(rf'(.*)(_){self.game.playerName}\b(.*)', file):
-                print(file)
                 self.mapArray.append(file)
 
 
